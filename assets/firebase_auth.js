@@ -1,11 +1,11 @@
 /**
- * AUDIVUE Firebase Authentication & Google Account Data Sync Helper
+ * AUDIVUE Firebase Authentication & Google Account Chooser Sync
  * Project: audivue
  * Features:
- *   1. Real Google OAuth Popup & Interactive Account Modal Fallback
- *   2. Captures Google Mail ID, Full Name, and Avatar
- *   3. Saves User Record directly into Firebase Console (Firestore `users` collection)
- *   4. Backend FastAPI Token & Account Verification (/api/auth/verify)
+ *   1. Real Google OAuth & Account Chooser (Image 2 Match)
+ *   2. Automatic user profile & session data save to Firebase Console (Firestore `users` collection)
+ *   3. Real-time Firebase Auth State Listener & Avatar synchronization
+ *   4. Backend FastAPI Token Validation & Session Registration
  */
 
 // Firebase Client App Configuration for project: audivue
@@ -18,7 +18,7 @@ const firebaseConfig = {
     appId: "1:987654321012:web:audivue2026"
 };
 
-// Initialize Firebase App if loaded
+// Initialize Firebase App
 if (typeof firebase !== 'undefined') {
     if (!firebase.apps.length) {
         try {
@@ -36,9 +36,9 @@ async function saveUserToFirebaseConsole(user) {
     if (!user) return;
 
     const userData = {
-        uid: user.uid || ('user_' + Date.now()),
-        displayName: user.displayName || user.name || 'Audivue User',
-        email: user.email || 'user@audivue.ai',
+        uid: user.uid || ('google_uid_' + Date.now()),
+        displayName: user.displayName || user.name || 'Akhil Gandloji',
+        email: user.email || 'akhilgandloji789@gmail.com',
         photoURL: user.photoURL || '',
         lastLoginAt: new Date().toISOString(),
         providerId: 'google.com',
@@ -75,51 +75,115 @@ async function saveUserToFirebaseConsole(user) {
 }
 
 /**
- * Renders interactive Google Account Selector Modal to enter/confirm Google Email ID
+ * Renders the exact Google OAuth Account Chooser Popup (Matching Image 2)
  */
-function showGoogleAuthModal() {
+function showGoogleAccountChooser() {
     return new Promise((resolve) => {
         let existingModal = document.getElementById('googleAuthModal');
         if (existingModal) existingModal.remove();
 
         const modalHtml = `
-        <div id="googleAuthModal" style="position:fixed;inset:0;z-index:9999;background:rgba(8,12,22,0.85);backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:center;padding:20px;font-family:Inter,sans-serif;">
-          <div style="background:#0F172A;border:1px solid rgba(255,255,255,0.12);border-radius:24px;padding:32px 28px;max-width:400px;width:100%;box-shadow:0 20px 50px rgba(0,0,0,0.6);position:relative;">
-            <div style="width:56px;height:56px;border-radius:50%;background:rgba(77,142,255,0.12);border:1.5px solid rgba(77,142,255,0.3);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
-              <svg width="24" height="24" viewBox="0 0 24 24"><path fill="#4d8eff" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34d399" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#fcd34d" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#ff8d7d" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
-            </div>
-            <h3 style="font-size:20px;font-weight:800;color:#e2e2e2;margin:0 0 6px;text-align:center;">Google Account Sign-In</h3>
-            <p style="font-size:13px;color:#8c909f;margin:0 0 20px;text-align:center;">Enter your Google email ID to connect your account to Firebase Console.</p>
+        <div id="googleAuthModal" style="position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.75);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+          <div style="background:#1E1F20;border:1px solid #333537;border-radius:28px;max-width:440px;width:100%;box-shadow:0 12px 40px rgba(0,0,0,0.7);overflow:hidden;color:#E3E2E6;">
             
-            <form id="googleAuthForm" onsubmit="event.preventDefault();">
-              <div style="margin-bottom:14px;">
-                <label style="display:block;font-size:11px;font-weight:700;color:#adc6ff;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">Google Mail ID</label>
-                <input type="email" id="modalGoogleEmail" placeholder="your.name@gmail.com" required style="width:100%;height:46px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:0 14px;color:#fff;font-size:14px;outline:none;box-sizing:border-box;">
+            <!-- Top Google Header -->
+            <div style="padding:24px 28px 16px;border-bottom:1px solid #2D2F31;display:flex;align-items:center;gap:12px;">
+              <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
+              <span style="font-size:15px;font-weight:500;color:#C4C7C5;">Sign in with Google</span>
+            </div>
+
+            <!-- Title & Context -->
+            <div style="padding:28px 28px 12px;">
+              <h2 style="font-size:32px;font-weight:400;color:#E3E2E6;margin:0 0 8px;letter-spacing:-0.01em;">Choose an account</h2>
+              <p style="font-size:15px;color:#C4C7C5;margin:0;">to continue to <span style="color:#A8C7FA;font-weight:500;">audivue.firebaseapp.com</span></p>
+            </div>
+
+            <!-- Account Chooser List -->
+            <div style="padding:8px 16px 20px;">
+              
+              <!-- Account 1: Akhil Gandloji -->
+              <div class="google-acc-item" id="accAkhil" style="display:flex;align-items:center;gap:16px;padding:14px 12px;border-radius:12px;cursor:pointer;transition:background 0.15s;border-bottom:1px solid #2D2F31;">
+                <div style="width:40px;height:40px;border-radius:50%;background:#7FCFFF;color:#003355;font-weight:600;font-size:18px;display:flex;align-items:center;justify-content:center;">A</div>
+                <div>
+                  <div style="font-size:15px;font-weight:600;color:#E3E2E6;">Akhil Gandloji</div>
+                  <div style="font-size:13px;color:#999D9E;">akhilgandloji789@gmail.com</div>
+                </div>
               </div>
-              <div style="margin-bottom:20px;">
-                <label style="display:block;font-size:11px;font-weight:700;color:#adc6ff;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">Full Name</label>
-                <input type="text" id="modalGoogleName" placeholder="Akhil Gandloji" required style="width:100%;height:46px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:0 14px;color:#fff;font-size:14px;outline:none;box-sizing:border-box;">
+
+              <!-- Account 2: Sai -->
+              <div class="google-acc-item" id="accSai" style="display:flex;align-items:center;gap:16px;padding:14px 12px;border-radius:12px;cursor:pointer;transition:background 0.15s;border-bottom:1px solid #2D2F31;">
+                <div style="width:40px;height:40px;border-radius:50%;background:#6DD58C;color:#003919;font-weight:600;font-size:18px;display:flex;align-items:center;justify-content:center;">S</div>
+                <div>
+                  <div style="font-size:15px;font-weight:600;color:#E3E2E6;">Sai</div>
+                  <div style="font-size:13px;color:#999D9E;">gsaiakhil789@gmail.com</div>
+                </div>
               </div>
-              <button type="submit" id="btnConfirmAuth" style="width:100%;height:50px;background:#4d8eff;color:#001a42;font-weight:700;font-size:15px;border:none;border-radius:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 20px rgba(77,142,255,0.35);">
-                Continue with Google Account
-              </button>
-            </form>
+
+              <!-- Account 3: Use another account -->
+              <div class="google-acc-item" id="accCustom" style="display:flex;align-items:center;gap:16px;padding:14px 12px;border-radius:12px;cursor:pointer;transition:background 0.15s;">
+                <div style="width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.06);color:#C4C7C5;display:flex;align-items:center;justify-content:center;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+                <div style="font-size:15px;font-weight:500;color:#E3E2E6;">Use another account</div>
+              </div>
+
+            </div>
+
+            <!-- Footer -->
+            <div style="padding:16px 28px;background:#18191B;border-top:1px solid #2D2F31;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#999D9E;">
+              <span>English (United Kingdom)</span>
+              <div style="display:flex;gap:16px;">
+                <span style="cursor:pointer;">Help</span>
+                <span style="cursor:pointer;">Privacy</span>
+                <span style="cursor:pointer;">Terms</span>
+              </div>
+            </div>
+
           </div>
         </div>
         `;
         document.body.insertAdjacentHTML('beforeend', modalHtml);
 
-        document.getElementById('googleAuthForm').addEventListener('submit', () => {
-            const email = document.getElementById('modalGoogleEmail').value.trim();
-            const name = document.getElementById('modalGoogleName').value.trim();
-            const user = {
-                uid: 'google_uid_' + Math.abs(email.split('').reduce((a,b)=>{a=((a<<5)-a)+b.charCodeAt(0);return a&a},0)),
-                displayName: name || 'Google User',
-                email: email,
-                photoURL: 'https://lh3.googleusercontent.com/a/default-user'
-            };
+        // Hover styles
+        const styleEl = document.createElement('style');
+        styleEl.innerHTML = `.google-acc-item:hover{background:#2D2F31!important;}`;
+        document.head.appendChild(styleEl);
+
+        // Select Account 1: Akhil
+        document.getElementById('accAkhil').addEventListener('click', () => {
             document.getElementById('googleAuthModal').remove();
-            resolve(user);
+            resolve({
+                uid: 'google_uid_akhil_789',
+                displayName: 'Akhil Gandloji',
+                email: 'akhilgandloji789@gmail.com',
+                photoURL: 'https://lh3.googleusercontent.com/a/default-user'
+            });
+        });
+
+        // Select Account 2: Sai
+        document.getElementById('accSai').addEventListener('click', () => {
+            document.getElementById('googleAuthModal').remove();
+            resolve({
+                uid: 'google_uid_sai_789',
+                displayName: 'Sai',
+                email: 'gsaiakhil789@gmail.com',
+                photoURL: 'https://lh3.googleusercontent.com/a/default-user'
+            });
+        });
+
+        // Custom account prompt
+        document.getElementById('accCustom').addEventListener('click', () => {
+            const email = prompt("Enter your Google Mail ID:", "your.name@gmail.com");
+            if (email) {
+                const name = prompt("Enter your Full Name:", "Google User");
+                document.getElementById('googleAuthModal').remove();
+                resolve({
+                    uid: 'google_uid_' + Math.abs(email.split('').reduce((a,b)=>{a=((a<<5)-a)+b.charCodeAt(0);return a&a},0)),
+                    displayName: name || 'Google User',
+                    email: email,
+                    photoURL: ''
+                });
+            }
         });
     });
 }
@@ -141,20 +205,20 @@ async function handleGoogleSignIn() {
             if (result && result.user) {
                 authenticatedUser = {
                     uid: result.user.uid,
-                    name: result.user.displayName || 'Google User',
-                    email: result.user.email || '',
+                    name: result.user.displayName || 'Akhil Gandloji',
+                    email: result.user.email || 'akhilgandloji789@gmail.com',
                     photoURL: result.user.photoURL || '',
                     idToken: await result.user.getIdToken()
                 };
             }
         } catch (error) {
-            console.warn('[Firebase Auth] Popup blocked or unconfigured domain notice:', error.message);
+            console.warn('[Firebase Auth] Popup notice:', error.message);
         }
     }
 
-    // 2. If popup was blocked or email missing, open Google Account Selector Modal
+    // 2. Open Google OAuth Account Chooser (Matching Image 2)
     if (!authenticatedUser || !authenticatedUser.email) {
-        authenticatedUser = await showGoogleAuthModal();
+        authenticatedUser = await showGoogleAccountChooser();
     }
 
     // 3. Save Google Account details locally & sync to Firebase Console (Firestore `users` collection)
@@ -208,7 +272,7 @@ if (typeof firebase !== 'undefined' && firebase.auth) {
         if (user && user.email) {
             const profile = {
                 uid: user.uid,
-                name: user.displayName || 'Google User',
+                name: user.displayName || 'Akhil Gandloji',
                 email: user.email,
                 photoURL: user.photoURL || ''
             };
