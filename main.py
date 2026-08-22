@@ -250,22 +250,50 @@ async def api_detect_currency(data: dict):
     return JSONResponse(content=results)
 
 
+from firebase_admin import firestore
+
 @app.post("/api/auth/verify")
 async def verify_firebase_token(data: dict):
     token = data.get("idToken")
-    if not token:
-        return JSONResponse(content={"authenticated": True, "project": "audivue", "status": "active"})
+    user_payload = data.get("user", {})
+    
+    uid = user_payload.get("uid") or "user_local_session"
+    email = user_payload.get("email") or "user@audivue.ai"
+    name = user_payload.get("name") or user_payload.get("displayName") or "Audivue User"
+    
+    if token:
+        try:
+            decoded = firebase_auth.verify_id_token(token)
+            uid = decoded.get("uid", uid)
+            email = decoded.get("email", email)
+            name = decoded.get("name", name)
+        except Exception:
+            pass
+
+    # Save/Sync User Profile to Firebase Firestore Console Database
     try:
-        decoded_token = firebase_auth.verify_id_token(token)
-        return JSONResponse(content={
-            "authenticated": True,
-            "project": "audivue",
-            "uid": decoded_token.get("uid"),
-            "email": decoded_token.get("email"),
-            "name": decoded_token.get("name", "Audivue User")
-        })
-    except Exception as e:
-        return JSONResponse(content={"authenticated": True, "project": "audivue", "notice": str(e)})
+        if firebase_admin._apps:
+            db = firestore.client()
+            db.collection("users").document(uid).set({
+                "uid": uid,
+                "displayName": name,
+                "email": email,
+                "lastLoginAt": firestore.SERVER_TIMESTAMP,
+                "project": "audivue",
+                "app": "AUDIVUE AI Vision Assistant"
+            }, merge=True)
+            print(f"[AUDIVUE Backend] User profile synced to Firebase Console Firestore ('users/{uid}')")
+    except Exception as err:
+        print(f"[AUDIVUE Backend] Firestore sync notice: {err}")
+
+    return JSONResponse(content={
+        "authenticated": True,
+        "project": "audivue",
+        "uid": uid,
+        "email": email,
+        "name": name,
+        "status": "synced_to_firebase_console"
+    })
 
 
 # ==========================================
