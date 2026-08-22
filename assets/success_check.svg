@@ -1,0 +1,19 @@
+<svg class="w-full h-full" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+<!-- Progress Ring Background -->
+<circle cx="60" cy="60" fill="none" r="54" stroke="rgba(139, 92, 246, 0.2)" stroke-width="8"></circle>
+<!-- Countdown Progress Ring -->
+<circle cx="60" cy="60" fill="none" r="54" stroke="url(#purpleBlueGradient)" stroke-dasharray="339.29" stroke-dashoffset="339.29" stroke-linecap="round" stroke-width="8" transform="rotate(-90 60 60)">
+<animate attributeName="stroke-dashoffset" dur="2s" fill="freeze" values="339.29;0"></animate>
+</circle>
+<!-- Gradient Definition -->
+<defs>
+<linearGradient id="purpleBlueGradient" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:#3B82F6;stop-opacity:1"></stop>
+</linearGradient>
+</defs>
+<!-- Checkmark -->
+<path d="M35 60 L52 77 L85 44" fill="none" stroke="white" stroke-dasharray="100" stroke-dashoffset="100" stroke-linecap="round" stroke-linejoin="round" stroke-width="10">
+<animate attributeName="stroke-dashoffset" begin="0.2s" dur="0.6s" fill="freeze" values="100;0"></animate>
+</path>
+</svg>

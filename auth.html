@@ -150,23 +150,27 @@
 <!-- Main Content -->
 <main class="flex-grow flex flex-col items-center justify-center p-gutter relative z-10 pb-[120px]">
 <!-- Faded Logo -->
-<div class="mb-12 opacity-80 transition-opacity duration-1000 ease-in-out">
-<img alt="AUDIVUE Logo" class="h-28 w-auto object-contain drop-shadow-2xl" src="assets/logo.png"/>
+<div class="mb-8 opacity-80 transition-opacity duration-1000 ease-in-out">
+<img alt="AUDIVUE Logo" class="h-24 w-auto object-contain drop-shadow-2xl" src="assets/logo.png"/>
 </div>
-<!-- Spinner -->
-<div class="spinner mb-stack-gap shadow-[0_0_30px_rgba(173,198,255,0.2)]"></div>
-<!-- Text -->
-<h1 class="font-headline-md text-headline-md text-on-background mt-gutter">Signing you in...</h1>
-<p class="font-body-md text-body-md text-on-surface-variant mt-2 max-w-sm text-center">
-            Connecting securely with Google.
-        </p>
+
+<!-- Indicator Container (Spinner -> Success SVG Checkmark) -->
+<div id="authIndicator" class="w-24 h-24 mb-stack-gap flex items-center justify-center">
+    <div class="spinner shadow-[0_0_30px_rgba(173,198,255,0.2)]"></div>
+</div>
+
+<!-- Text Status -->
+<h1 id="authTitle" class="font-headline-md text-headline-md text-on-background mt-gutter">Signing you in...</h1>
+<p id="authSubtitle" class="font-body-md text-body-md text-on-surface-variant mt-2 max-w-sm text-center">
+    Connecting securely with Google.
+</p>
 </main>
 
 <!-- Bottom Navigation Shell & Progress -->
 <div class="fixed bottom-0 left-0 w-full z-50">
 <!-- Progress Bar (above nav) -->
 <div class="relative w-full h-1 bg-surface-container-highest">
-<div class="progress-bar-fill"></div>
+<div class="progress-bar-fill" id="progressFill"></div>
 </div>
 <!-- BottomNavBar -->
 <nav class="flex justify-around items-center px-margin-mobile py-4 bg-surface-container dark:bg-surface-container backdrop-blur-xl shadow-lg border-t-2 border-white/10 rounded-t-xl">
@@ -189,10 +193,21 @@
 </div>
 
 <script>
-    // Automatic transition to voice assistant after authentication simulation
+    // Transition spinner to Animated Success SVG checkmark
+    setTimeout(() => {
+        const indicator = document.getElementById('authIndicator');
+        const title = document.getElementById('authTitle');
+        const subtitle = document.getElementById('authSubtitle');
+        
+        indicator.innerHTML = '<img src="assets/success_check.svg" alt="Success Checkmark" class="w-full h-full object-contain drop-shadow-[0_0_20px_rgba(59,130,246,0.5)]">';
+        title.innerText = 'Authenticated!';
+        subtitle.innerText = 'Redirecting to Voice Assistant Dashboard...';
+    }, 1800);
+
+    // Automatic transition to voice assistant dashboard
     setTimeout(() => {
         window.location.href = 'voice_assistant/index.html';
-    }, 2500);
+    }, 3200);
 </script>
 </body>
 </html>
