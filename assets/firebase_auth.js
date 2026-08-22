@@ -226,15 +226,16 @@ async function handleGoogleSignIn() {
     if (authenticatedUser) {
         const profile = {
             uid: authenticatedUser.uid,
-            name: authenticatedUser.name || authenticatedUser.displayName,
+            name: authenticatedUser.name || authenticatedUser.displayName || 'Akhil Gandloji',
             email: authenticatedUser.email,
             photoURL: authenticatedUser.photoURL || ''
         };
         localStorage.setItem('audivue_user', JSON.stringify(profile));
 
-        // Save directly to Firebase Firestore & FastAPI Backend
-        await saveUserToFirebaseConsole(authenticatedUser);
+        // Background sync to Firebase Console & FastAPI Backend (non-blocking)
+        saveUserToFirebaseConsole(authenticatedUser).catch(e => console.warn(e));
 
+        // Immediate instant navigation to Vision UI
         window.location.href = 'env_mode.html';
     }
 }

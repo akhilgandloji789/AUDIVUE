@@ -94,12 +94,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   // Check if user is already logged in
   const user = typeof getAudivueUser === 'function' ? getAudivueUser() : null;
   if (user && user.email) {
-    const googleBtn = document.querySelector('.btn-google');
-    if (googleBtn) {
-      googleBtn.innerHTML = `<span class="material-symbols-outlined" style="font-size:22px;">arrow_forward</span> Continue as ${user.name || 'User'}`;
-      googleBtn.onclick = () => { window.location.href = 'env_mode.html'; };
-    }
-    setTimeout(() => { window.location.href = 'env_mode.html'; }, 400);
+    window.location.href = 'env_mode.html';
     return;
   }
 
