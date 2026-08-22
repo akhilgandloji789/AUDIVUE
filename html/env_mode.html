@@ -10,8 +10,7 @@
 <style>
   body{margin:0;background:#000;overflow:hidden;height:100dvh;}
   .viewfinder{position:fixed;inset:0;z-index:0;}
-  .viewfinder video{width:100%;height:100%;object-fit:cover;opacity:0.45;display:block;}
-  .viewfinder::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(11,18,32,0.72) 0%,transparent 33%,transparent 55%,rgba(11,18,32,0.93) 100%);pointer-events:none;}
+  .viewfinder video{width:100%;height:100%;object-fit:cover;opacity:1;display:block;}
   .ar-layer{position:fixed;inset:0;z-index:10;pointer-events:none;}
   .ar-box{position:absolute;border:2.5px solid #4d8eff;border-radius:10px;box-shadow:0 0 18px rgba(77,142,255,0.5);}
   .ar-label{position:absolute;top:-30px;left:0;padding:3px 10px;background:rgba(8,14,28,0.93);border:1px solid rgba(77,142,255,0.5);border-radius:6px 6px 0 0;font-size:12px;font-weight:700;color:#adc6ff;display:flex;align-items:center;gap:5px;white-space:nowrap;backdrop-filter:blur(8px);font-family:Inter,sans-serif;}

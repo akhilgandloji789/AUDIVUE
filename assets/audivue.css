@@ -276,19 +276,7 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.45;
-}
-.viewfinder-frame::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom,
-    rgba(11,18,32,0.75) 0%,
-    rgba(0,0,0,0.1) 40%,
-    rgba(0,0,0,0.1) 60%,
-    rgba(11,18,32,0.9) 100%
-  );
-  pointer-events: none;
+  opacity: 1;
 }
 
 /* ===== SCROLLBAR HIDE ===== */
