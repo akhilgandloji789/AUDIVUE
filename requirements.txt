@@ -4,7 +4,5 @@ websockets>=11.0.3
 opencv-python-headless>=4.8.0
 numpy>=1.24.0
 ultralytics>=8.3.0
-torch>=2.0.0
-torchvision>=0.15.0
 firebase-admin>=6.2.0
 python-multipart>=0.0.6
