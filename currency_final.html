@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AUDIVUE - Currency Final Calculation</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-lowest": "#0c0f0f",
+                      "tertiary-container": "#8a90a3",
+                      "surface-container-high": "#282a2b",
+                      "on-secondary-container": "#c4abff",
+                      "on-secondary": "#3c0091",
+                      "surface-container-highest": "#333535",
+                      "tertiary-fixed": "#dce2f6",
+                      "surface-bright": "#37393a",
+                      "primary-fixed-dim": "#adc6ff",
+                      "on-tertiary-container": "#232a39",
+                      "on-secondary-fixed-variant": "#5516be",
+                      "primary": "#adc6ff",
+                      "on-tertiary": "#2a3040",
+                      "inverse-surface": "#e2e2e2",
+                      "outline-variant": "#424754",
+                      "tertiary": "#c0c6da",
+                      "error": "#ffb4ab",
+                      "secondary-fixed": "#e9ddff",
+                      "surface": "#121414",
+                      "background": "#121414",
+                      "outline": "#8c909f",
+                      "on-tertiary-fixed": "#151b2a",
+                      "surface-variant": "#333535",
+                      "on-secondary-fixed": "#23005c",
+                      "tertiary-fixed-dim": "#c0c6da",
+                      "primary-fixed": "#d8e2ff",
+                      "on-background": "#e2e2e2",
+                      "on-primary-container": "#00285d",
+                      "secondary-container": "#571bc1",
+                      "surface-container": "#1e2020",
+                      "surface-container-low": "#1a1c1c",
+                      "on-primary-fixed-variant": "#004395",
+                      "secondary-fixed-dim": "#d0bcff",
+                      "inverse-on-surface": "#2f3131",
+                      "on-error-container": "#ffdad6",
+                      "on-surface": "#e2e2e2",
+                      "secondary": "#d0bcff",
+                      "surface-dim": "#121414",
+                      "error-container": "#93000a",
+                      "on-primary": "#002e6a",
+                      "on-tertiary-fixed-variant": "#404757",
+                      "on-surface-variant": "#c2c6d6",
+                      "inverse-primary": "#005ac2",
+                      "on-error": "#690005",
+                      "surface-tint": "#adc6ff",
+                      "primary-container": "#4d8eff",
+                      "on-primary-fixed": "#001a42"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "24px",
+                      "margin-mobile": "20px",
+                      "stack-gap": "16px",
+                      "touch-target-min": "64px",
+                      "margin-desktop": "40px"
+              },
+              "fontFamily": {
+                      "label-lg": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "body-md": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "label-md": ["Inter"]
+              },
+              "fontSize": {
+                      "label-lg": ["20px", {"lineHeight": "24px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                      "body-lg": ["20px", {"lineHeight": "30px", "fontWeight": "400"}],
+                      "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                      "body-md": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-md": ["18px", {"lineHeight": "22px", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; min-height: max(884px, 100dvh); }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col relative overflow-hidden">
+<!-- Dimmed Live Camera Feed Background -->
+<div class="absolute inset-0 z-0 flex items-center justify-center bg-[#0B1220]">
+<div class="absolute inset-0 bg-surface/70 z-10 backdrop-blur-[2px]"></div>
+<video id="finalWebcamFeed" autoplay playsinline muted class="object-cover w-full h-full opacity-40 mix-blend-luminosity"></video>
+</div>
+
+<!-- TopAppBar -->
+<header aria-label="Top App Bar" class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile h-touch-target-min bg-surface-container-low backdrop-blur-xl border-b border-outline-variant transition-transform duration-200">
+<div class="flex items-center cursor-pointer" onclick="window.location.href='index.html'">
+<span aria-hidden="true" class="material-symbols-outlined text-primary mr-2 text-[32px]" style="font-variation-settings: 'FILL' 1;">visibility</span>
+<span class="font-headline-lg text-headline-lg font-bold text-primary tracking-tight">AUDIVUE</span>
+</div>
+<div class="flex items-center text-on-surface-variant font-label-lg gap-2">
+<span class="text-emerald-400 animate-pulse text-sm">●</span>
+<span>LIVE</span>
+</div>
+</header>
+
+<!-- Main Content Canvas -->
+<main class="flex-grow z-10 pt-[80px] pb-[160px] flex flex-col items-center justify-center px-margin-mobile md:px-margin-desktop relative">
+<!-- Results Card -->
+<section aria-labelledby="result-title" class="bg-surface-container/60 backdrop-blur-[20px] rounded-[24px] p-8 w-full max-w-md border border-white/10 shadow-2xl flex flex-col items-center justify-center space-y-6">
+<div class="flex items-center space-x-2 text-on-surface-variant">
+<span aria-hidden="true" class="material-symbols-outlined text-[#3b82f6] text-[28px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<h2 class="font-label-lg text-label-lg text-on-surface tracking-wider uppercase font-bold" id="result-title">TOTAL AMOUNT</h2>
+</div>
+
+<!-- Total Value -->
+<div aria-label="800 rupees" class="font-headline-lg text-[64px] leading-none font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-primary to-[#A855F7] tracking-tighter">
+    ₹800
+</div>
+
+<!-- Note Chips Breakdown -->
+<div class="flex flex-wrap justify-center gap-3 pt-4 border-t border-white/10 w-full">
+<div class="bg-surface-container-highest px-4 py-2 rounded-xl border border-white/5 flex items-center h-12 shadow">
+<span class="font-label-md text-label-md text-on-surface font-bold">₹500</span>
+</div>
+<div class="bg-surface-container-highest px-4 py-2 rounded-xl border border-white/5 flex items-center h-12 shadow">
+<span class="font-label-md text-label-md text-on-surface font-bold">₹200</span>
+</div>
+<div class="bg-surface-container-highest px-4 py-2 rounded-xl border border-white/5 flex items-center h-12 shadow">
+<span class="font-label-md text-label-md text-on-surface font-bold">₹100</span>
+</div>
+</div>
+</section>
+
+<!-- Count Again Action Button -->
+<div class="mt-8 w-full max-w-md">
+<button onclick="window.location.href='currency_mode.html'" aria-label="Count Again" class="w-full h-[64px] bg-[#3b82f6] hover:bg-[#2563eb] text-white rounded-[16px] font-label-lg text-label-lg font-bold flex items-center justify-center space-x-3 transition-all focus:outline-none focus:ring-4 focus:ring-[#3b82f6]/50 border-2 border-transparent shadow-xl active:scale-95">
+<span aria-hidden="true" class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">refresh</span>
+<span>Count Again</span>
+</button>
+</div>
+</main>
+
+<!-- Audio Caption Area (Mobile) -->
+<div class="fixed bottom-[110px] left-0 w-full z-40 px-margin-mobile flex justify-center pointer-events-none md:hidden">
+<div class="bg-surface-container-highest/90 backdrop-blur-md px-6 py-4 rounded-[16px] border border-outline-variant max-w-md w-full text-center shadow-lg pointer-events-auto">
+<p aria-live="polite" class="font-body-lg text-body-lg text-on-surface font-bold">Total count finalized: 800 rupees.</p>
+</div>
+</div>
+
+<!-- Audio Caption Area (Desktop) -->
+<div class="fixed bottom-6 left-0 w-full z-40 px-margin-desktop justify-center pointer-events-none hidden md:flex">
+<div class="bg-surface-container-highest/90 backdrop-blur-md px-8 py-5 rounded-[20px] border border-outline-variant max-w-2xl w-full text-center shadow-lg pointer-events-auto flex items-center justify-center space-x-4">
+<span aria-hidden="true" class="material-symbols-outlined text-primary-container text-[32px]" style="font-variation-settings: 'FILL' 1;">volume_up</span>
+<p aria-live="polite" class="font-headline-md text-headline-md text-on-surface font-bold">Total count finalized: 800 rupees.</p>
+</div>
+</div>
+
+<!-- BottomNavBar (Mobile Only) -->
+<nav aria-label="Bottom Navigation" class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-[100px] bg-surface border-t-2 border-outline-variant shadow-lg rounded-t-xl md:hidden">
+<button onclick="window.location.href='env_mode.html'" class="flex flex-col items-center justify-center text-on-surface-variant p-4 hover:bg-surface-bright rounded-xl min-w-[80px]">
+<span aria-hidden="true" class="material-symbols-outlined text-[32px] mb-1">visibility</span>
+<span class="font-label-lg text-[14px] leading-tight">Vision</span>
+</button>
+<button onclick="window.location.href='env_mode.html'" class="flex flex-col items-center justify-center text-on-surface-variant p-4 hover:bg-surface-bright rounded-xl min-w-[80px]">
+<span aria-hidden="true" class="material-symbols-outlined text-[32px] mb-1">explore</span>
+<span class="font-label-lg text-[14px] leading-tight">Explore</span>
+</button>
+<button onclick="window.location.href='currency_mode.html'" class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl p-4 border-2 border-primary min-w-[80px]">
+<span aria-hidden="true" class="material-symbols-outlined text-[32px] mb-1" style="font-variation-settings: 'FILL' 1;">payments</span>
+<span class="font-label-lg text-[14px] leading-tight font-bold">Currency</span>
+</button>
+<button onclick="window.location.href='voice_assistant/index.html'" class="flex flex-col items-center justify-center text-on-surface-variant p-4 hover:bg-surface-bright rounded-xl min-w-[80px]">
+<span aria-hidden="true" class="material-symbols-outlined text-[32px] mb-1">settings</span>
+<span class="font-label-lg text-[14px] leading-tight">Settings</span>
+</button>
+</nav>
+
+<!-- Load Voice Assistant for Finalized Audio Output -->
+<script src="voice_assistant/voice_assistant.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        try {
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+                document.getElementById('finalWebcamFeed').srcObject = stream;
+            }
+        } catch (e) {
+            console.log('Webcam fallback');
+        }
+
+        const assistant = new AudivueVoiceAssistant({ rate: 1.05, pitch: 1.0 });
+        setTimeout(() => {
+            assistant.speak('Total count finalized: 800 rupees.', 'high');
+        }, 500);
+    });
+</script>
+</body>
+</html>
