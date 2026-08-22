@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Permission Denied - AUDIVUE</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#121414",
+                        "surface-dim": "#121414",
+                        "tertiary-fixed": "#dce2f6",
+                        "on-tertiary-fixed": "#151b2a",
+                        "surface-container-low": "#1a1c1c",
+                        "inverse-on-surface": "#2f3131",
+                        "on-primary-fixed": "#001a42",
+                        "background": "#121414",
+                        "surface-bright": "#37393a",
+                        "primary-container": "#4d8eff",
+                        "on-primary": "#002e6a",
+                        "on-secondary-container": "#c4abff",
+                        "on-tertiary-container": "#232a39",
+                        "primary": "#adc6ff",
+                        "on-surface": "#e2e2e2",
+                        "secondary-fixed-dim": "#d0bcff",
+                        "on-secondary-fixed-variant": "#5516be",
+                        "inverse-primary": "#005ac2",
+                        "surface-container-lowest": "#0c0f0f",
+                        "tertiary-container": "#8a90a3",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-highest": "#333535",
+                        "tertiary": "#c0c6da",
+                        "surface-variant": "#333535",
+                        "on-tertiary-fixed-variant": "#404757",
+                        "error-container": "#93000a",
+                        "secondary": "#d0bcff",
+                        "on-primary-container": "#00285d",
+                        "surface-container": "#1e2020",
+                        "on-background": "#e2e2e2",
+                        "outline-variant": "#424754",
+                        "primary-fixed": "#d8e2ff",
+                        "surface-container-high": "#282a2b",
+                        "primary-fixed-dim": "#adc6ff",
+                        "surface-tint": "#adc6ff",
+                        "on-secondary-fixed": "#23005c",
+                        "on-primary-fixed-variant": "#004395",
+                        "on-surface-variant": "#c2c6d6",
+                        "secondary-container": "#571bc1",
+                        "secondary-fixed": "#e9ddff",
+                        "on-error": "#690005",
+                        "inverse-surface": "#e2e2e2",
+                        "error": "#ffb4ab",
+                        "on-tertiary": "#2a3040",
+                        "on-secondary": "#3c0091",
+                        "tertiary-fixed-dim": "#c0c6da",
+                        "outline": "#8c909f",
+                        "brand-navy": "#0B1220",
+                        "brand-blue": "#3B82F6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1.25rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-gap": "16px",
+                        "margin-mobile": "20px",
+                        "touch-target-min": "64px",
+                        "margin-desktop": "40px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["18px", {"lineHeight": "22px", "fontWeight": "600"}],
+                        "body-lg": ["20px", {"lineHeight": "30px", "fontWeight": "400"}],
+                        "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                        "label-lg": ["20px", {"lineHeight": "24px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #0B1220;
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            min-height: max(884px, 100dvh);
+        }
+        
+        .glass-card {
+            background: rgba(18, 20, 20, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .focus-outline:focus {
+            outline: 3px solid #3B82F6;
+            outline-offset: 2px;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="text-on-background flex flex-col min-h-screen relative overflow-x-hidden">
+<!-- Ambient Background Glows -->
+<div class="absolute top-0 left-1/4 w-96 h-96 bg-brand-blue rounded-full mix-blend-screen filter blur-[120px] opacity-10 pointer-events-none z-0"></div>
+<div class="absolute bottom-0 right-1/4 w-96 h-96 bg-error-container rounded-full mix-blend-screen filter blur-[120px] opacity-10 pointer-events-none z-0"></div>
+
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full px-margin-mobile h-touch-target-min bg-surface dark:bg-surface sticky top-0 z-40">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-[28px]">visibility</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tight m-0">AUDIVUE</h1>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-error flex items-center justify-center relative">
+<div class="w-2 h-2 rounded-full bg-error"></div>
+</div>
+<span class="font-label-md text-label-md text-error">DENIED</span>
+<span class="material-symbols-outlined text-error text-[28px] ml-2">sensors_off</span>
+</div>
+</header>
+
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col justify-center items-center px-margin-mobile py-8 z-10 relative pb-[140px]">
+<div class="glass-card rounded-2xl w-full max-w-lg p-8 sm:p-10 flex flex-col items-center text-center shadow-2xl relative overflow-hidden">
+<!-- Subtle top border accent -->
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-error to-transparent opacity-75"></div>
+
+<!-- Icon Group -->
+<div class="flex items-center justify-center mb-8 mt-4">
+<div class="w-24 h-24 rounded-full bg-error-container/20 flex items-center justify-center relative group">
+<div class="absolute inset-0 rounded-full bg-error-container/10 blur-md animate-pulse"></div>
+<span class="material-symbols-outlined text-error text-[48px] relative z-10" style="font-variation-settings: 'FILL' 1;">videocam_off</span>
+</div>
+</div>
+
+<!-- Text Content -->
+<h2 class="font-headline-md text-headline-md text-on-background mb-4">Camera access is needed</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-10 max-w-sm mx-auto">
+    AUDIVUE cannot function without camera and microphone access. Please enable them in your browser or device settings to continue.
+</p>
+
+<!-- Actions -->
+<button id="btnTryAgain" class="w-full min-h-touch-target-min bg-brand-blue hover:bg-inverse-primary text-white font-label-lg text-label-lg rounded-xl transition-colors duration-200 focus-outline flex items-center justify-center gap-3 active:scale-[0.98]">
+    Try Again
+</button>
+
+<button onclick="alert('To enable permissions:\n1. Click the lock/settings icon next to the URL bar.\n2. Allow Camera & Microphone.\n3. Refresh the page.')" class="mt-6 w-full min-h-touch-target-min text-primary hover:text-brand-blue font-label-md text-label-md transition-colors duration-200 focus-outline underline decoration-2 underline-offset-4">
+    How to enable permissions
+</button>
+</div>
+</main>
+
+<!-- BottomNavBar -->
+<nav aria-label="Main Navigation" class="fixed bottom-0 w-full z-50 flex justify-around items-center px-margin-mobile py-4 min-h-[100px] bg-surface-container-low dark:bg-surface-container-low backdrop-blur-md shadow-md rounded-t-xl">
+<button onclick="window.location.href='permissions.html'" class="flex flex-col items-center justify-center bg-error-container text-on-error-container rounded-xl p-2 border-2 border-error scale-95 transition-all duration-300 w-24 h-20 focus-outline">
+<span class="material-symbols-outlined text-[32px] mb-1">warning</span>
+<span class="font-label-md text-label-md text-sm">Denied</span>
+</button>
+<button onclick="window.location.href='env_mode.html'" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-highest rounded-xl scale-95 transition-all duration-300 w-24 h-20 focus-outline">
+<span class="material-symbols-outlined text-[32px] mb-1">visibility</span>
+<span class="font-label-md text-label-md text-sm">Vision</span>
+</button>
+<button onclick="window.location.href='currency_mode.html'" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-highest rounded-xl scale-95 transition-all duration-300 w-24 h-20 focus-outline">
+<span class="material-symbols-outlined text-[32px] mb-1">payments</span>
+<span class="font-label-md text-label-md text-sm">Currency</span>
+</button>
+</nav>
+
+<script>
+    document.getElementById('btnTryAgain').addEventListener('click', async () => {
+        try {
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                window.location.href = 'env_mode.html';
+                return;
+            }
+        } catch (e) {
+            console.log('Permission denied again:', e);
+        }
+        window.location.href = 'permissions.html';
+    });
+</script>
+</body>
+</html>
