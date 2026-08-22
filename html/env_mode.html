@@ -147,15 +147,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Voice assistant
   if (typeof AudivueVoiceAssistant !== 'undefined') {
     va = new AudivueVoiceAssistant({
-      rate: 1.05, pitch: 1.0,
+      rate: 1.05, pitch: 1.0, defaultMode: 'obstacle',
       onModeChange: (mode) => {
         if (mode === 'currency') window.location.href = 'mode_transition.html';
       }
     });
     va.startListening();
-    setTimeout(() => {
-      va.speakObstacleAlert('Chair, Person and Door', 'left, center and right', 'various distances', false);
-    }, 700);
   }
 
   // Mute button

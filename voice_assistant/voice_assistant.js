@@ -150,18 +150,31 @@ class AudivueVoiceAssistant {
 
         utterance.onstart = () => {
             this.isSpeaking = true;
+            if (this.recognition && this.isListening) {
+                try { this.recognition.stop(); } catch(e){}
+            }
             if (this.onSpeechStart) this.onSpeechStart(text);
         };
 
         utterance.onend = () => {
             this.isSpeaking = false;
             if (this.onSpeechEnd) this.onSpeechEnd(text);
+            if (this.shouldListen && this.recognition) {
+                setTimeout(() => {
+                    try { this.recognition.start(); } catch(e){}
+                }, 400);
+            }
             this.processQueue();
         };
 
         utterance.onerror = (err) => {
             console.error('AUDIVUE TTS Error:', err);
             this.isSpeaking = false;
+            if (this.shouldListen && this.recognition) {
+                setTimeout(() => {
+                    try { this.recognition.start(); } catch(e){}
+                }, 400);
+            }
             this.processQueue();
         };
 
@@ -342,6 +355,13 @@ class AudivueVoiceAssistant {
     handleVoiceCommand(commandText) {
         console.log('Recognized Voice Command:', commandText);
 
+        const now = Date.now();
+        if (this.lastCommandText === commandText && (now - (this.lastCommandTime || 0)) < 4000) {
+            return;
+        }
+        this.lastCommandText = commandText;
+        this.lastCommandTime = now;
+
         if (this.onCommandRecognized) {
             this.onCommandRecognized(commandText);
         }
@@ -378,6 +398,7 @@ class AudivueVoiceAssistant {
      */
     setMode(mode) {
         if (mode !== 'obstacle' && mode !== 'currency') return;
+        if (this.activeMode === mode) return; // Do not re-announce if already in this mode!
 
         this.activeMode = mode;
         const modeName = mode === 'obstacle' ? 'Obstacle Detection Mode' : 'Currency Detection & Counting Mode';
