@@ -2,21 +2,21 @@
 
 ---
 
-## 1. What to Use
+## 1. Core Engineering Directives
 
-- **Real Computer Vision Architectures:** Use **YOLOv8** (PyTorch / Ultralytics) as the primary object detection framework for both pipelines.
-- **Pretrained Weights for General Objects:** Use pretrained COCO weights (`yolov8n.pt` / `yolov8s.pt`) for Pipeline 1 (Obstacle & Object Awareness) to save build time.
-- **Custom Fine-Tuned Weights for Currency:** Use fine-tuned YOLOv8 model weights trained on Indian currency datasets (₹10 to ₹2000) for Pipeline 2 (Currency Detection & Counting).
-- **Quantifiable Telemetry Output:** Extract real bounding box coordinates $(x, y, w, h)$, class confidence scores, spatial quadrants (*left, center, right*), distance vectors (*close, medium, far*), and calculated currency totals ($\sum \text{denominations}$).
-- **Live Stream Input Processing:** Use OpenCV (`cv2.VideoCapture`) or WebRTC for real-time video frame ingestion.
-- **Non-Blocking Execution:** Run vision pipelines asynchronously so video processing loops never freeze or drop frames.
-- **Modular Code Architecture:** Keep vision inference logic, spatial math, and currency summation strictly decoupled in separate modules.
+- **Real Computer Vision Frameworks:** Strictly use real CV architectures (**Ultralytics YOLO11** in PyTorch & **TensorFlow.js COCO-SSD** in-browser).
+- **Zero Black-Box APIs for Core Vision:** **DO NOT** use third-party multimodal LLM APIs (GPT-4V, Gemini Vision, Claude Multimodal) as the primary object detection engine.
+- **Dual-Engine Fault Tolerance:** Maintain both a server-side PyTorch YOLO11 binary WebSocket stream (`/ws/detect`) AND an in-browser TensorFlow.js engine for offline fallback.
+- **Quantifiable Output Validation:** Every detection payload must provide bounding box coordinates $(x, y, w, h)$, class labels, confidence scores, spatial position (`Left`, `Center`, `Right`), and distance proximity (`Close`, `Medium`, `Far`).
+- **Speech Cooldown & Loop Prevention:** Voice Assistant MUST enforce speech deduplication and an **8-second cooldown** to prevent repetitive speech loops on stationary objects.
+- **Empty Frame Clearing:** When no objects are detected in frame, canvas overlays MUST be cleared immediately, and spoken telemetry MUST pause.
+- **Firebase Authentication Integrity:** All user logins MUST use official Firebase Auth credentials for project `audivue-258930` and sync user records to Firestore collection `users`.
 
 ---
 
-## 2. What to Avoid
+## 2. Technical Stack Constraints
 
-- **Black-Box Vision APIs as Primary Pipeline:** **DO NOT** use third-party multimodal LLMs or vision APIs (OpenAI GPT-4V, Google Cloud Vision, AWS Rekognition) as the core vision detection pipeline (violates Track 03 rules).
-- **Non-Quantifiable / Plain Text Descriptions:** **DO NOT** rely on unstructured text descriptions without underlying bounding boxes, labels, and computed numerical totals.
-- **Mocked or Hardcoded Telemetry:** **DO NOT** use hardcoded bounding box coordinates or dummy money totals in production pipelines.
-- **Cloud-Only Infrastructure Dependencies:** **DO NOT** build inference logic that fails when internet connectivity is lost; local edge processing is required.
+- **Backend:** FastAPI + Uvicorn (ASGI) running Python 3.11+.
+- **Frontend:** Glassmorphism UI hosted on Firebase Hosting (`https://audivue-258930.web.app`).
+- **Cloud Backend:** Hosted on Render.com (`https://audivue-backend-kray.onrender.com`).
+- **CV Models:** `yolo11n.pt` / `yolo11x.pt` (Ultralytics) + `@tensorflow-models/coco-ssd`.

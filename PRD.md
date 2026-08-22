@@ -2,43 +2,47 @@
 
 ---
 
-## 1. What to Build
+## 1. Product Vision & Overview
 
-**AUDIVUE** is a real-time AI Vision Assistant that processes live camera feeds (smartphone or webcam) using local computer vision to perceive the environment on behalf of visually impaired users and delivers immediate spoken audio feedback and voice commands via an integrated **Web Voice Assistant Module**.
-
-The system is built around two focused vision pipelines powered by local YOLOv8 architectures:
-
-1. **Pipeline 1: Obstacle & Object Detection**
-   - Ingests live video streams frame-by-frame.
-   - Detects obstacles, hazards, doors, stairs, vehicles, and people using a pretrained YOLOv8 model.
-   - Maps bounding box coordinates to spatial position (*left, right, center*) and distance proximity (*close, medium, far*).
-   - Produces immediate spatial obstacle alerts (e.g., *"Chair ahead, slightly left, close"*).
-
-2. **Pipeline 2: Currency Detection & Counting**
-   - Analyzes camera frames focused on paper currency notes.
-   - Uses a fine-tuned YOLOv8 model trained on Indian currency denominations (₹10 to ₹2000).
-   - Detects multiple notes simultaneously in a single frame, identifies individual denominations, and automatically calculates the total monetary sum (e.g., *"500, 200, and 100 rupees detected — total 800 rupees"*).
-
-3. **Web Voice Assistant Module (`voice_assistant/`)**
-   - Provides text-to-speech output using top-rated natural female voices (e.g., Google US English Female, MS Jenny/Zira, Apple Samantha).
-   - High-priority safety interrupts: Critical obstacle warnings immediately preempt lower-priority speech.
-   - Hands-free voice commands: Listens for commands like *"obstacle mode"*, *"currency mode"*, *"repeat"*, *"status"*, and *"stop"*.
+**AUDIVUE** is a real-time assistive Computer Vision web application designed to empower visually impaired and blind individuals by transforming live camera feeds into actionable **spatial obstacle telemetry**, **automated currency calculation**, and **hands-free voice guidance**.
 
 ---
 
-## 2. Target Users
+## 2. Core Functional Requirements
 
-- **Primary Users:** Blind and visually impaired individuals seeking independence in daily physical navigation and handling paper currency.
-- **Secondary Users:** Caregivers, family members, educators at schools for the blind, and assistive technology NGOs.
+### 2.1 Obstacle & Spatial Awareness Pipeline
+- **Real-Time Stream Processing:** Accepts camera feeds at 12–15 FPS via binary WebSockets or client canvas.
+- **Object Recognition:** Identifies everyday physical hazards (people, chairs, doors, stairs, vehicles, obstacles).
+- **Spatial Quadrant Mapping:** Calculates relative horizontal position (`Left`, `Center`, `Right`).
+- **Distance Proximity Estimation:** Categorizes object distance into `Close`, `Medium`, and `Far` based on relative bounding box surface area.
+- **Empty Frame Handling:** Instantly clears canvas overlays and resets captions when no objects are present in the camera field of view.
+
+### 2.2 Currency Detection & Summation Pipeline
+- **Multi-Note Detection:** Recognizes multiple paper banknotes simultaneously in a single camera view.
+- **Automated Summation:** Computes the total monetary sum ($\sum \text{notes}$) of all detected banknotes and provides spoken audio confirmation.
+
+### 2.3 Firebase Authentication & User Profile Management
+- **Google OAuth Sign-In:** Allows users to log in securely using their Google account.
+- **Firestore Console Data Sync:** Automatically stores user profile documents (`uid`, `email`, `displayName`, `lastLoginAt`) in Firebase Console **Firestore Database collection `users`**.
+- **Session Management:** Automatically redirects logged-in users to Vision Mode and provides a glassmorphic top-right profile dropdown with single-click logout.
+
+### 2.4 Voice Assistant & Audio Telemetry
+- **Priority Speech Synthesis:** Speaks spatial telemetry using natural Web Speech voices.
+- **Deduplication & Cooldown:** Enforces an **8-second speech cooldown** for stationary objects to eliminate repetitive speech loops.
+- **Safety Interrupts:** Critical obstacle warnings immediately preempt non-urgent audio playback.
 
 ---
 
-## 3. Features
+## 3. Target Users
 
-- **Real-Time Stream Ingestion:** Continuous frame-by-frame video processing.
-- **Obstacle & Hazard Detection:** Identifies obstacles (chairs, doors, stairs, vehicles, people) with relative spatial quadrant and distance estimation.
-- **Multi-Note Currency Recognition:** Identifies multiple banknotes simultaneously in a single camera view.
-- **Automated Money Summation:** Dynamically aggregates detected banknote values into a total calculated sum ($\sum \text{notes}$).
-- **Web Voice Assistant & Female TTS:** Top-rated natural female voice synthesis with priority interrupts and hands-free voice control (STT).
-- **Quantifiable CV Output:** Produces exact bounding box coordinates $(x, y, w, h)$, class labels, confidence scores, and computed currency totals (fulfilling Track 03 requirements).
-- **Local Edge Inference:** Operates locally on YOLOv8 without third-party vision API dependencies.
+- **Primary Users:** Blind and visually impaired individuals requiring real-time assistance during physical navigation and cash transactions.
+- **Secondary Users:** Assistive tech developers, caregivers, NGOs, and educational institutions for the visually impaired.
+
+---
+
+## 4. Track 03 // Computer Vision Technical Compliance
+
+- **Input Stream:** Frame-by-frame live video processing.
+- **CV Pipeline Architecture:** Ultralytics YOLO11 (PyTorch) + TensorFlow.js Client Engine (Zero black-box APIs).
+- **Automated Understanding:** Real-time object recognition, spatial quadrant mapping, and distance estimation.
+- **Measurable Output:** Bounding box coordinates $(x, y, w, h)$, class labels, confidence scores, and computed currency totals.

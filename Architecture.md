@@ -2,106 +2,113 @@
 
 ---
 
-## 1. System Overview
+## 1. Executive Summary
 
-**AUDIVUE** is engineered around a high-performance dual-pipeline computer vision architecture coupled with a browser-native Voice Assistant Module:
-1. **Pipeline 1 (Obstacle & Object Detection):** Runs continuously on live frames to identify physical hazards, spatial quadrants, and distance proximity.
-2. **Pipeline 2 (Currency Detection & Counting):** Triggered on-demand to perform multi-note recognition and automatically compute the total monetary sum.
-3. **Voice Assistant Module (`voice_assistant/`):** Manages Text-to-Speech (TTS) using top-rated natural female voices, priority queueing with safety interrupts, and hands-free Speech-to-Text (STT) voice commands.
+**AUDIVUE** is an accessible, real-time Computer Vision application engineered to assist visually impaired individuals in spatial navigation and daily monetary transactions.
+
+The system combines:
+1. **Low-Latency Binary WebSocket Vision Stream:** FastAPI + Uvicorn server running Ultralytics YOLO11 (PyTorch) for server-side object and currency detection.
+2. **In-Browser Client AI Engine:** Integrated TensorFlow.js COCO-SSD running directly inside the client browser for zero-downtime, offline-capable fallback inference.
+3. **Spatial Quadrant & Distance Telemetry:** Bounding box spatial analysis dividing the camera frame into 3 Horizontal Quadrants (`Left`, `Center`, `Right`) and 3 Distance Proximity Zones (`Close`, `Medium`, `Far`).
+4. **Firebase Authentication & Console Persistence:** Google OAuth authentication synced with Firebase Firestore Database collection `users/{uid}` under project `audivue-258930`.
+5. **Web Voice Assistant Engine:** Priority-queued Web Speech Text-to-Speech (TTS) synthesis with smart deduplication and 8-second speech cooldowns.
+
+---
+
+## 2. End-to-End System Dataflow
 
 ```mermaid
 flowchart TD
-    A[Camera Feed Ingestion] --> B{Stream Processor}
-    
-    subgraph Pipeline 1: Obstacle & Object Detection - Continuous
-        B -->|Live Video Stream| C[YOLOv8 Pretrained Model]
-        C --> D[Bounding Box & Class Extraction]
-        D --> E[Spatial & Distance Estimator]
-        E --> F[Obstacle Telemetry Alerts]
+    subgraph Client Application Layer - Firebase Hosting
+        A[Camera Stream / Video Feed] --> B[HTML5 Hidden Canvas Sampler]
+        B --> C{Transport Router}
+        
+        subgraph In-Browser AI Engine - Client Fallback
+            C -->|Offline / Connecting| D[TensorFlow.js COCO-SSD Engine]
+            D --> E[In-Browser Object Detection & Bbox Calculation]
+        end
     end
 
-    subgraph Pipeline 2: Currency Detection & Counting - On-Demand
-        B -->|Trigger / Currency Mode| G[YOLOv8 Fine-Tuned Currency Model]
-        G --> H[Multi-Note Denomination Detection]
-        H --> I[Automated Summation Engine]
-        I --> J[Currency Total Generator]
+    subgraph Cloud Backend Layer - Render.com
+        C -->|Active WebSocket Stream wss://...| F[FastAPI /ws/detect Endpoint]
+        F --> G[Decoders & OpenCV BGR Matrix Conversion]
+        G --> H[Ultralytics YOLO11 PyTorch Inference Engine]
+        H --> I[Spatial Quadrant & Distance Telemetry Engine]
+        I --> J[JSON Detection Payload Response]
     end
 
-    subgraph Voice Assistant Module - voice_assistant/
-        F --> K[Speech Synthesizer - Female TTS]
+    subgraph Telemetry & User Interface Layer
+        E --> K[AR Bounding Box Canvas Renderer]
         J --> K
-        L[Mic Input / STT Voice Listener] -->|Voice Commands| M[Command Handler & Mode Switcher]
-        M -->|Switch Mode / Mute / Repeat| K
+        K --> L{Spoken Alert Filter}
+        L -->|New Object / Cooldown Elapsed| M[Voice Assistant Speech Engine - TTS]
+        L -->|Empty Frame / Duplicate| N[Silently Clear Overlay & Caption]
+    end
+
+    subgraph Authentication & Console Persistence
+        O[Google OAuth Sign-In] --> P[Firebase Auth SDK]
+        P --> Q[Firestore Database Collection 'users']
+        P --> R[FastAPI Token Verification Endpoint /api/auth/verify]
     end
 ```
 
 ---
 
-## 2. Voice Assistant Module Architecture
+## 3. Core Technical Modules
 
-Located in `voice_assistant/`, the Voice Assistant handles hands-free speech interaction:
+### 3.1 Binary WebSocket Streamer (`main.py` -> `/ws/detect`)
+- **Transport Format:** Raw binary JPEG bytes sent over WebSockets at 12–15 FPS.
+- **Decoding:** Decoded asynchronously off the main ASGI loop via `cv2.imdecode` and `asyncio.to_thread`.
+- **Inference Execution:** Runs Ultralytics YOLO11 (`yolo11n.pt` / `yolo11x.pt`) yielding class IDs, confidence scores, and bounding box percentages.
 
-### 🔊 1. Top-Rated Female Voice Picker & TTS Engine
-- **Voice Selection:** Automatically selects top-rated natural female English voices (e.g., Google US English Female, MS Jenny/Zira, Apple Samantha).
-- **Priority Queueing & Interrupts:**
-  - Normal alerts (e.g. general object descriptions) are queued smoothly.
-  - Critical obstacle alerts (e.g., *"Warning! Obstacle directly ahead, close!"*) immediately interrupt ongoing speech (`speechSynthesis.cancel()`).
+### 3.2 Spatial Telemetry & Quadrant Calculator
+Given bounding box normalized coordinates $(x, y, w, h)$:
+$$\text{Center}_X = x + \frac{w}{2}, \quad \text{Area}_{\%} = w \times h$$
 
-### 🎙️ 2. Speech-to-Text (STT) Voice Command Recognition
-- **Supported Voice Commands:**
-  - `"obstacle mode"` / `"walk mode"` $\rightarrow$ Switches active pipeline to Obstacle Detection.
-  - `"currency mode"` / `"count money"` $\rightarrow$ Switches active pipeline to Currency Counting.
-  - `"repeat"` $\rightarrow$ Repeats the last spoken alert.
-  - `"stop"` / `"mute"` $\rightarrow$ Immediately stops active speech output.
-  - `"status"` $\rightarrow$ Speaks current system mode and selected voice.
+- **Spatial Quadrant Mapping:**
+  - $\text{Center}_X < 0.38 \implies \textbf{Left Quadrant}$
+  - $0.38 \le \text{Center}_X \le 0.62 \implies \textbf{Center Quadrant}$
+  - $\text{Center}_X > 0.62 \implies \textbf{Right Quadrant}$
+- **Distance Proximity Estimation:**
+  - $\text{Area}_{\%} > 0.12 \implies \textbf{Close Proximity}$ (Triggers critical alert highlight)
+  - $0.03 \le \text{Area}_{\%} \le 0.12 \implies \textbf{Medium Proximity}$
+  - $\text{Area}_{\%} < 0.03 \implies \textbf{Far Proximity}$
+
+### 3.3 Firebase Authentication & Data Sync (`assets/firebase_auth.js`)
+- Authenticates users via Google OAuth Provider.
+- Saves/upserts JSON profile document to Firestore Database:
+  ```json
+  {
+    "uid": "google_user_uid",
+    "displayName": "User Name",
+    "email": "user@gmail.com",
+    "photoURL": "https://lh3.googleusercontent.com/...",
+    "lastLoginAt": "2026-08-23T05:00:00Z",
+    "providerId": "google.com",
+    "app": "AUDIVUE AI Vision Assistant"
+  }
+  ```
 
 ---
 
-## 3. Tech Stack
+## 4. Technology Stack Matrix
 
-| Layer | Technology | Purpose |
+| Module | Component | Technology |
 | :--- | :--- | :--- |
-| **Voice Assistant Module** | Web Speech API (`SpeechSynthesis` & `SpeechRecognition`) | Top-rated female TTS output, priority interrupts, and voice control |
-| **Obstacle Detection CV Model** | PyTorch, Ultralytics YOLOv8 (`yolov8n.pt`) | Real-time object & hazard detection |
-| **Currency Detection CV Model** | Custom Fine-Tuned YOLOv8 (`currency_v8.pt`) | Multi-note denomination identification |
-| **Summation Engine** | Python NumPy / Aggregator | Automated currency calculation |
-| **Spatial Math Module** | Custom Bounding Box Analyzer | Calculates spatial quadrants (*left/right/center*) and distance proximity |
+| **Frontend UI** | Client Interface | HTML5, CSS3 Glassmorphism, JavaScript ES6 |
+| **Client AI** | In-Browser Engine | TensorFlow.js, COCO-SSD (`@tensorflow-models/coco-ssd`) |
+| **Backend Server** | ASGI Server | FastAPI 0.100+, Uvicorn 0.22+ |
+| **Vision Model** | Object Detection | PyTorch, Ultralytics YOLO11 (v8.3+) |
+| **Auth & DB** | User Management | Firebase Auth & Firestore Console (`audivue-258930`) |
+| **Voice Engine** | Speech Synthesis | Web Speech API (`SpeechSynthesisUtterance`) |
+| **Hosting** | CDN & Cloud Server | Firebase Hosting (`web.app`) & Render.com |
 
 ---
 
-## 4. Folder & File Structure
+## 5. Deployment Topology
 
-```
-AUDIVUE/
-├── README.md
-├── PRD.md
-├── RULES.md
-├── Architecture.md
-├── assets/
-│   └── logo.png
-├── voice_assistant/               # Dedicated Voice Assistant Module
-│   ├── voice_assistant.js         # Core Voice Assistant Class (TTS + STT + Female Voice Picker)
-│   └── index.html                 # Interactive Web Test & Verification Page
-├── config/
-│   ├── settings.py                # Configuration settings & detection thresholds
-│   └── classes.py                 # COCO & Currency denomination mappings
-├── models/
-│   ├── weights/
-│   │   ├── yolov8n.pt             # Pretrained obstacle detection weights
-│   │   └── currency_v8.pt         # Fine-tuned Indian currency weights
-│   └── model_loader.py            # YOLOv8 model loading & inference manager
-├── src/
-│   ├── main.py                    # Main application entry point
-│   ├── camera/
-│   │   ├── stream.py              # Camera stream capture module
-│   │   └── preprocessor.py        # Frame resizing & normalization
-│   ├── pipelines/
-│   │   ├── obstacle_detection.py  # Pipeline 1: Obstacle & object detection
-│   │   └── currency_detection.py  # Pipeline 2: Currency detection & summation
-│   └── utils/
-│       ├── spatial_math.py        # Spatial quadrant & distance calculation
-│       └── logger.py              # Telemetry & metric logger
-└── tests/
-    ├── test_obstacle_detection.py # Tests for obstacle detection pipeline
-    └── test_currency_detection.py # Tests for currency detection & summation
-```
+- **Frontend Application:** Deployed to **Firebase Hosting** CDN:
+  - Domain: `https://audivue-258930.web.app`
+- **Backend Service:** Deployed to **Render.com Cloud Python ASGI Service**:
+  - Domain: `https://audivue-backend-kray.onrender.com`
+  - WebSocket: `wss://audivue-backend-kray.onrender.com/ws/detect`

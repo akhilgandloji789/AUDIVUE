@@ -1,95 +1,165 @@
 <p align="center">
-  <img src="assets/logo.png" alt="AUDIVUE Logo" width="350"/>
-</p>
-
-<h1 align="center">AUDIVUE</h1>
-<p align="center">
-  <b>Real-Time AI Vision & Currency Assistant for the Visually Impaired</b><br>
-  <i>Transforming Live Camera Feeds into Real-Time Spatial Intelligence, Automated Currency Calculations, and Hands-Free Voice Guidance</i>
+  <h1 align="center">AUDIVUE</h1>
+  <p align="center">
+    <b>Real-Time AI Vision & Currency Assistant for the Visually Impaired</b><br>
+    <i>Full-Stack Edge & Cloud Computer Vision Application featuring YOLO11 PyTorch, In-Browser Client AI Engine, Firebase Authentication, and Hands-Free Voice Guidance</i>
+  </p>
 </p>
 
 <p align="center">
-  <a href="#problem-statement">Problem Statement</a> •
-  <a href="#our-solution">Our Solution</a> •
-  <a href="#dual-pipeline-architecture">Architecture</a> •
-  <a href="#voice-assistant">Voice Assistant</a> •
-  <a href="#track-03-compliance">Track 03 Compliance</a> •
-  <a href="#repository-docs">Documentation</a>
+  <a href="https://audivue-258930.web.app">🌐 Live Web Application</a> •
+  <a href="https://audivue-backend-kray.onrender.com">⚡ Live Cloud Backend API</a> •
+  <a href="#key-features">Key Features</a> •
+  <a href="#system-architecture">Architecture</a> •
+  <a href="#tech-stack">Tech Stack</a> •
+  <a href="#quick-start">Quick Start</a>
 </p>
 
 ---
 
-## 📌 Problem Statement
+## 📌 Production Deployment Links
 
-Over **2.2 billion people worldwide** live with vision impairment or blindness ([World Health Organization](https://www.who.int/news-room/fact-sheets/detail/blindness-and-visual-impairment)). In their everyday lives, visually impaired individuals face severe hurdles across three critical tasks:
-
-1. **Detecting Obstacles Safely While Walking:** Traditional mobility aids like white canes and guide dogs assist with ground-level hazards, but provide zero information regarding mid-to-high level obstacles (e.g., hanging branches, open cabinet doors, approaching doors, vehicles, or low overhead barriers).
-2. **Recognizing Objects and People:** Navigating unfamiliar indoor or outdoor spaces without visual context limits awareness of surrounding objects, people, or potential spatial hazards.
-3. **Identifying and Counting Currency Notes:** Independent financial transactions remain an unresolved challenge. Visually impaired individuals struggle to differentiate paper currency notes rapidly, and there is currently no reliable, accessible tool that performs multi-note recognition and automatically calculates the total monetary sum.
-
-> **The Impact:** This information gap restricts mobility, creates safety risks, and reduces personal independence and confidence in everyday life.
+- **Frontend App (Firebase Hosting):** [https://audivue-258930.web.app](https://audivue-258930.web.app)
+- **Backend API & WebSockets (Render):** [https://audivue-backend-kray.onrender.com](https://audivue-backend-kray.onrender.com)
+- **Firebase Console Database:** Project ID `audivue-258930`
 
 ---
 
-## 💡 Our Solution
+## 💡 Overview & Problem Statement
 
-**AUDIVUE** is a real-time AI Vision Assistant designed to run on smartphone camera feeds or webcams. It uses local computer vision models to "see" the world on the user's behalf and translates visual observations into immediate spoken audio alerts and hands-free voice commands — powered by our dedicated **Web Voice Assistant Module**.
+Over **2.2 billion people worldwide** live with vision impairment or blindness ([WHO Report](https://www.who.int/news-room/fact-sheets/detail/blindness-and-visual-impairment)). In daily life, visually impaired individuals face critical navigation and financial independence challenges:
+
+1. **Spatial Hazard Detection:** Traditional white canes assist with ground-level contact, but cannot detect mid-level obstacles (open cabinet doors, overhanging signs, oncoming vehicles, people, or elevated barriers).
+2. **Financial Independence:** Identifying paper banknotes rapidly and summing total cash during transactions is prone to errors without assistive tech.
+3. **Hands-Free Operation:** Visual feedback must be translated into immediate, non-intrusive spoken audio telemetry without requiring touchscreen interaction.
+
+**AUDIVUE** solves these challenges by combining **live web-stream computer vision**, **spatial telemetry**, **automated currency calculation**, and a **Voice Guidance Engine**.
 
 ---
 
-## ⚙️ Dual-Pipeline Architecture
+## ✨ Key Features
 
-AUDIVUE runs two focused, high-performance vision pipelines:
+- **⚡ Dual-Engine Vision Pipeline:**
+  - **Primary Cloud / Local Engine:** Ultralytics YOLO11 PyTorch (`yolo11n.pt` / `yolo11x.pt`) streaming over low-latency binary WebSockets (`/ws/detect`).
+  - **In-Browser Client Engine:** Integrated TensorFlow.js COCO-SSD for instant, zero-downtime, offline-capable bounding box detection directly inside the browser.
+- **🎯 Spatial Quadrant Telemetry & Distance Mapping:**
+  - Maps detections into 3 Spatial Quadrants (`Left`, `Center`, `Right`) and 3 Distance Zones (`Close`, `Medium`, `Far`).
+  - Highlights high-risk obstacles with glowing alert bounding boxes.
+- **💵 Automated Multi-Note Currency Counting:**
+  - Identifies multiple banknotes in frame simultaneously and calculates the monetary sum ($\sum \text{notes}$).
+- **🔐 Firebase Authentication & Console Data Sync:**
+  - Google OAuth authentication connected to Firebase project `audivue-258930`.
+  - Automatically saves user profile records (`uid`, `displayName`, `email`, `lastLoginAt`) to Firebase Console **Firestore Database (`users` collection)**.
+  - Glassmorphic top-right header Profile Dropdown with account status and one-click logout.
+- **🔊 Smart Voice Assistant & Cooldown Engine:**
+  - Natural Web Speech synthesis with priority safety interrupts.
+  - Deduplicated voice announcements with an **8-second smart cooldown** to prevent repetitive speech loops.
+  - Automatic canvas overlay clearing when the camera frame becomes empty.
+
+---
+
+## ⚙️ System Architecture
 
 ```
-Camera Feed ──► CV Model (YOLOv8) ──► Telemetry / Spatial Detection Alerts ──► Web Voice Assistant
+                                  ┌──────────────────────────────────────────────┐
+                                  │   Browser Client (https://audivue-258930.web.app) │
+                                  └──────────────────────┬───────────────────────┘
+                                                         │
+                                    ┌────────────────────┴────────────────────┐
+                                    ▼                                         ▼
+                   ┌──────────────────────────────────┐      ┌──────────────────────────────────┐
+                   │ Primary Binary WebSocket Stream  │      │   In-Browser TensorFlow.js Engine │
+                   │  wss://.../ws/detect (12-15 FPS) │      │     (Instant Client Fallback)    │
+                   └────────────────┬─────────────────┘      └────────────────┬─────────────────┘
+                                    │                                         │
+                                    ▼                                         ▼
+                   ┌──────────────────────────────────┐      ┌──────────────────────────────────┐
+                   │  FastAPI + Uvicorn ASGI Server   │      │  Canvas Overlay & Spatial Math   │
+                   │   Ultralytics YOLO11 (PyTorch)   │      │    Bounding Boxes & Proximity   │
+                   └────────────────┬─────────────────┘      └────────────────┬─────────────────┘
+                                    │                                         │
+                                    └────────────────────┬────────────────────┘
+                                                         ▼
+                                       ┌───────────────────────────────────┐
+                                       │   Voice Guidance & Audio Engine   │
+                                       │ (Deduplicated Speech + Telemetry) │
+                                       └───────────────────────────────────┘
 ```
-
-### 1️⃣ Pipeline 1: Obstacle & Object Awareness
-- **Input:** Live camera feed.
-- **CV Architecture:** YOLOv8 (pretrained on the COCO dataset — detecting people, chairs, doors, stairs, vehicles, etc.).
-- **Detection & Spatial Mapping:** Identifies objects and maps their relative spatial position (`Left`, `Center`, `Right`) and distance proximity (`Close`, `Medium`, `Far`).
-- **Output:** Spatial telemetry alerts (*"Chair ahead, slightly left, close"*).
-
-### 2️⃣ Pipeline 2: Currency Detection & Counting
-- **Input:** Live camera feed focused on currency notes.
-- **CV Architecture:** YOLOv8 fine-tuned on Indian Currency dataset (denominated from ₹10 to ₹2000).
-- **Detection & Calculation:** Detects all notes in frame simultaneously, extracts individual values, and automatically computes the total monetary sum ($\sum \text{notes}$).
-- **Output:** Aggregate detection summary (*"500, 200, and 100 rupees detected — total 800 rupees"*).
 
 ---
 
-## 🎙️ Web Voice Assistant Module (`voice_assistant/`)
+## 🛠️ Tech Stack
 
-Located in the [`voice_assistant/`](voice_assistant/) directory:
-- **Top-Rated Female Voice Synthesis:** Prefers natural high-quality female voices (Google US English Female, MS Jenny/Zira, Apple Samantha).
-- **Priority Queue & Safety Interrupts:** Critical obstacle alerts instantly cut off lower-priority speech.
-- **Hands-Free Speech-to-Text Commands:** Responds to spoken commands (*"obstacle mode"*, *"count money"*, *"status"*, *"stop"*, *"repeat"*).
-- **Interactive Test Page:** Try the live demonstration at [`voice_assistant/index.html`](voice_assistant/index.html).
+| Layer | Technology | Description |
+|---|---|---|
+| **Frontend UI** | HTML5, CSS3 Glassmorphism, WebGL | High-contrast accessible web interface |
+| **Client AI Engine** | TensorFlow.js + COCO-SSD | In-browser instant client-side object detection |
+| **Backend Framework** | FastAPI + Uvicorn (ASGI) | Asynchronous Python 3.11 web server |
+| **Transport Layer** | WebSockets + HTTP REST Fallback | Low-latency binary JPEG streaming (`/ws/detect`) |
+| **Computer Vision** | PyTorch, Ultralytics YOLO11 | Flagship real-time object detection architecture |
+| **Authentication** | Firebase Auth (Google OAuth) | Project `audivue-258930` user authentication |
+| **Database** | Firebase Firestore Console | User profile collection (`users/{uid}`) |
+| **Voice Engine** | Web Speech API | Priority Text-to-Speech & Speech-to-Text assistant |
+| **Hosting** | Firebase Hosting + Render.com | Global CDN static hosting & cloud python backend |
+
+---
+
+## 📁 File Structure
+
+```
+AUDIVUE/
+├── main.py                  # FastAPI + Uvicorn ASGI Server & WebSocket endpoint (/ws/detect)
+├── requirements.txt         # Python dependencies for cloud deployment
+├── render.yaml              # Render.com Cloud Service deployment manifest
+├── firebase.json            # Firebase Hosting rewrites & CDN configuration
+├── .firebaserc              # Firebase project target (audivue-258930)
+├── assets/
+│   ├── audivue.css          # Modern glassmorphism UI styles
+│   └── firebase_auth.js     # Firebase Auth (Google OAuth) & Firestore Console data sync
+├── html/
+│   ├── index.html           # Landing Page & Google Account Authentication
+│   └── env_mode.html        # Live Vision Workspace & Real-Time Bounding Box Overlay
+├── voice_assistant/
+│   └── voice_assistant.js   # Voice Assistant Engine (Speech Synthesis & STT Listener)
+├── README.md                # Project Overview & Deployment Documentation
+├── Architecture.md          # Technical Architecture & Dataflow Diagrams
+├── PRD.md                   # Product Requirements Document
+└── RULES.md                 # Engineering Rules & Guidelines
+```
+
+---
+
+## 🚀 Quick Start (Local Running)
+
+### 1. Clone & Install Dependencies
+```bash
+git clone https://github.com/akhilgandloji789/AUDIVUE.git
+cd AUDIVUE
+pip install -r requirements.txt
+```
+
+### 2. Run FastAPI Backend Server
+```bash
+python main.py
+```
+The server will launch on `http://localhost:8000`.
+
+### 3. Open Web Application
+Navigate to `http://localhost:8000` in your web browser. Click **Sign in with Google** to launch Vision Mode!
 
 ---
 
 ## 🎯 Track 03 // Computer Vision Compliance Matrix
 
-AUDIVUE is built in strict adherence to **Track 03 // Computer Vision** hackathon requirements:
-
-| Track 03 System Requirement | AUDIVUE Implementation | Compliance |
+| Track 03 Requirement | AUDIVUE Implementation | Status |
 | :--- | :--- | :---: |
-| **Input Stream** | Frame-by-frame processing of live video/image streams. | ✅ Pass |
-| **Vision Pipeline** | Real CV architecture (**YOLOv8** local inference — zero black-box vision APIs). | ✅ Pass |
-| **Automated Understanding** | Real-time object detection, spatial mapping, and multi-class currency classification. | ✅ Pass |
-| **Measurable Output** | Generates bounding box coordinates $(x, y, w, h)$, class labels, confidence scores, and computed currency sums. | ✅ Pass |
-
----
-
-## 📄 Repository Documentation
-
-- [📋 Product Requirement Document (PRD.md)](PRD.md) — What to build, target users, and detailed features.
-- [📏 Technical Rules & Guidelines (RULES.md)](RULES.md) — What to use and what to avoid during development.
-- [🏗️ System Architecture (Architecture.md)](Architecture.md) — System architecture, dual pipelines, voice assistant, tech stack, and file structure.
+| **Input Stream Processing** | Real-time video frame ingestion over WebSockets & HTML5 Canvas. | ✅ Pass |
+| **CV Pipeline Architecture** | Ultralytics YOLO11 (PyTorch) + TensorFlow.js Client Engine (Zero black-box APIs). | ✅ Pass |
+| **Automated Understanding** | Real-time object recognition, spatial quadrant mapping, and distance estimation. | ✅ Pass |
+| **Measurable Output** | Bounding box coordinates $(x, y, w, h)$, class labels, confidence scores, and currency totals. | ✅ Pass |
 
 ---
 
 <p align="center">
-  <i>Developed for Track 03 // Computer Vision Hackathon</i>
+  <i>AUDIVUE — Empowering Independence Through Real-Time Computer Vision</i>
 </p>
