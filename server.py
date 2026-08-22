@@ -357,6 +357,9 @@ def index():
 def serve_static(path):
     if os.path.exists(path):
         return send_from_directory(".", path)
+    html_path = os.path.join("html", path)
+    if os.path.exists(html_path):
+        return send_from_directory("html", path)
     return "Not Found", 404
 
 
