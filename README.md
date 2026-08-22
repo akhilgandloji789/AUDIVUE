@@ -75,7 +75,7 @@ AUDIVUE is built in strict adherence to **Track 03 // Computer Vision** hackatho
 
 - [📋 Product Requirement Document (PRD.md)](PRD.md) — What to build, target users, and detailed features.
 - [📏 Technical Rules & Guidelines (RULES.md)](RULES.md) — What to use and what to avoid during development.
-- [🏗️ System Architecture & App Flow (Architecture.md)](Architecture.md) — User perspective flow, gesture triggers, safety interrupts, tech stack, and file structure.
+- [🏗️ System Architecture (Architecture.md)](Architecture.md) — System architecture, dual pipelines, tech stack, and file structure.
 
 ---
 
