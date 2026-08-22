@@ -282,7 +282,7 @@ async def verify_firebase_token(data: dict):
                 "project": "audivue",
                 "app": "AUDIVUE AI Vision Assistant"
             }, merge=True)
-            print(f"[AUDIVUE Backend] User profile synced to Firebase Console Firestore ('users/{uid}')")
+            print(f"[AUDIVUE Backend] Saved User Google Account: Name='{name}' | Email='{email}' | UID='{uid}' to Firebase Console Firestore ('users/{uid}')")
     except Exception as err:
         print(f"[AUDIVUE Backend] Firestore sync notice: {err}")
 
