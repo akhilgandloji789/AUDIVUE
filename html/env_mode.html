@@ -164,70 +164,75 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   // Live Real-Time YOLOv8 Detection Loop from Extracted Repo
+  // High-Speed FastAPI WebSocket Connection for Real-Time YOLO11 Inference
   const videoEl = document.getElementById('camFeed');
   const arLayer = document.getElementById('arLayer');
   const captionEl = document.getElementById('captionText');
   const hiddenCanvas = document.createElement('canvas');
   const hiddenCtx = hiddenCanvas.getContext('2d');
   let lastSpokenText = "";
-  let isDetecting = false;
 
-  async function captureAndDetect() {
-    if (isDetecting || !videoEl || videoEl.paused || videoEl.ended || !videoEl.videoWidth) return;
-    isDetecting = true;
-
-    try {
-      hiddenCanvas.width = 480;
-      hiddenCanvas.height = Math.round(480 * (videoEl.videoHeight / videoEl.videoWidth));
-      hiddenCtx.drawImage(videoEl, 0, 0, hiddenCanvas.width, hiddenCanvas.height);
-      const base64Image = hiddenCanvas.toDataURL('image/jpeg', 0.6);
-
-      const response = await fetch('/api/detect_obstacle', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ image: base64Image })
+  function handleDetectionData(data) {
+    if (data.engine && document.getElementById('engineBadge')) {
+      document.getElementById('engineBadge').textContent = data.engine;
+    }
+    if (data.status === 'success' && Array.isArray(data.detections)) {
+      arLayer.innerHTML = '';
+      data.detections.forEach(det => {
+        const box = document.createElement('div');
+        box.className = 'ar-box';
+        box.style.top = det.bbox_pct.top + '%';
+        box.style.left = det.bbox_pct.left + '%';
+        box.style.width = det.bbox_pct.width + '%';
+        box.style.height = det.bbox_pct.height + '%';
+        if (det.proximity === 'Close') {
+          box.style.borderColor = '#ffb4ab';
+          box.style.boxShadow = '0 0 18px rgba(255,180,171,0.6)';
+        }
+        box.innerHTML = `<div class="ar-label"><span class="ar-dot"></span>${det.label} — ${Math.round(det.confidence * 100)}% (${det.position}, ${det.proximity})</div>`;
+        arLayer.appendChild(box);
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        if (data.engine && document.getElementById('engineBadge')) {
-          document.getElementById('engineBadge').textContent = data.engine;
+      if (data.spoken_summary && data.spoken_summary !== lastSpokenText) {
+        captionEl.textContent = `"${data.spoken_summary}"`;
+        if (va && !isMuted) {
+          va.speak(data.spoken_summary, 'normal');
         }
-        if (data.status === 'success' && Array.isArray(data.detections)) {
-          arLayer.innerHTML = '';
-          data.detections.forEach(det => {
-            const box = document.createElement('div');
-            box.className = 'ar-box';
-            box.style.top = det.bbox_pct.top + '%';
-            box.style.left = det.bbox_pct.left + '%';
-            box.style.width = det.bbox_pct.width + '%';
-            box.style.height = det.bbox_pct.height + '%';
-            if (det.proximity === 'Close') {
-              box.style.borderColor = '#ffb4ab';
-              box.style.boxShadow = '0 0 18px rgba(255,180,171,0.6)';
-            }
-            box.innerHTML = `<div class="ar-label"><span class="ar-dot"></span>${det.label} — ${Math.round(det.confidence * 100)}% (${det.position}, ${det.proximity})</div>`;
-            arLayer.appendChild(box);
-          });
-
-          if (data.spoken_summary && data.spoken_summary !== lastSpokenText) {
-            captionEl.textContent = `"${data.spoken_summary}"`;
-            if (va && !isMuted) {
-              va.speak(data.spoken_summary, 'normal');
-            }
-            lastSpokenText = data.spoken_summary;
-          }
-        }
+        lastSpokenText = data.spoken_summary;
       }
-    } catch (err) {
-      // Backend offline or loading - keep default AR view
-    } finally {
-      isDetecting = false;
     }
   }
 
-  // Poll backend YOLO model every 400ms
-  setInterval(captureAndDetect, 400);
+  // Connect WebSocket
+  const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+  const wsUrl = `${wsProtocol}//${location.host}/ws/detect`;
+  let ws = null;
+
+  function initWebSocket() {
+    ws = new WebSocket(wsUrl);
+    ws.onopen = () => console.log('[AUDIVUE] Connected to FastAPI WebSocket AI Stream');
+    ws.onmessage = (evt) => {
+      try {
+        const data = JSON.parse(evt.data);
+        handleDetectionData(data);
+      } catch(e){}
+    };
+    ws.onclose = () => setTimeout(initWebSocket, 2000);
+  }
+  initWebSocket();
+
+  // Binary Frame Streamer @ 12 FPS
+  setInterval(() => {
+    if (!ws || ws.readyState !== WebSocket.OPEN || !videoEl || !videoEl.videoWidth || videoEl.paused) return;
+    hiddenCanvas.width = 480;
+    hiddenCanvas.height = Math.round(480 * (videoEl.videoHeight / videoEl.videoWidth));
+    hiddenCtx.drawImage(videoEl, 0, 0, hiddenCanvas.width, hiddenCanvas.height);
+    hiddenCanvas.toBlob((blob) => {
+      if (blob && ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(blob);
+      }
+    }, 'image/jpeg', 0.6);
+  }, 90);
 });
 </script>
 </body>
