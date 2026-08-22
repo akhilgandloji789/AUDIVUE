@@ -13,103 +13,34 @@
             theme: {
                 extend: {
                     "colors": {
-                        "primary-fixed-dim": "#adc6ff",
-                        "tertiary": "#c0c6da",
-                        "inverse-on-surface": "#2f3131",
-                        "error-container": "#93000a",
-                        "background": "#121414",
-                        "surface-bright": "#37393a",
-                        "on-error": "#690005",
-                        "surface": "#121414",
-                        "tertiary-fixed": "#dce2f6",
-                        "on-primary-container": "#00285d",
-                        "secondary-fixed-dim": "#d0bcff",
-                        "on-tertiary-container": "#232a39",
-                        "on-primary-fixed-variant": "#004395",
-                        "secondary-fixed": "#e9ddff",
-                        "on-primary-fixed": "#001a42",
-                        "tertiary-container": "#8a90a3",
-                        "primary-fixed": "#d8e2ff",
-                        "on-surface": "#e2e2e2",
-                        "on-secondary-container": "#c4abff",
-                        "primary-container": "#4d8eff",
-                        "surface-tint": "#adc6ff",
-                        "surface-container-lowest": "#0c0f0f",
-                        "secondary-container": "#571bc1",
-                        "on-tertiary": "#2a3040",
-                        "surface-dim": "#121414",
-                        "error": "#ffb4ab",
-                        "outline": "#8c909f",
-                        "surface-container-high": "#282a2b",
-                        "tertiary-fixed-dim": "#c0c6da",
-                        "surface-variant": "#333535",
                         "primary": "#adc6ff",
+                        "primary-container": "#4d8eff",
                         "secondary": "#d0bcff",
-                        "on-tertiary-fixed": "#151b2a",
-                        "on-secondary": "#3c0091",
-                        "inverse-surface": "#e2e2e2",
-                        "on-primary": "#002e6a",
-                        "on-error-container": "#ffdad6",
-                        "surface-container-highest": "#333535",
+                        "secondary-container": "#571bc1",
+                        "background": "#0B1220",
+                        "surface": "#121414",
                         "surface-container": "#1e2020",
-                        "on-background": "#e2e2e2",
-                        "on-secondary-fixed": "#23005c",
-                        "outline-variant": "#424754",
-                        "on-surface-variant": "#c2c6d6",
-                        "inverse-primary": "#005ac2",
-                        "on-tertiary-fixed-variant": "#404757",
-                        "surface-container-low": "#1a1c1c",
-                        "on-secondary-fixed-variant": "#5516be"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "0.25rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "full": "9999px"
-                    },
-                    "spacing": {
-                        "margin-mobile": "20px",
-                        "gutter": "24px",
-                        "stack-gap": "16px",
-                        "touch-target-min": "64px",
-                        "margin-desktop": "40px"
-                    },
-                    "fontFamily": {
-                        "label-lg": ["Inter", "sans-serif"],
-                        "headline-lg": ["Inter", "sans-serif"],
-                        "label-md": ["Inter", "sans-serif"],
-                        "body-md": ["Inter", "sans-serif"],
-                        "headline-md": ["Inter", "sans-serif"],
-                        "body-lg": ["Inter", "sans-serif"]
-                    },
-                    "fontSize": {
-                        "label-lg": ["20px", { "lineHeight": "24px", "letterSpacing": "0.01em", "fontWeight": "600" }],
-                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
-                        "label-md": ["18px", { "lineHeight": "22px", "fontWeight": "600" }],
-                        "body-md": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
-                        "headline-md": ["28px", { "lineHeight": "36px", "fontWeight": "700" }],
-                        "body-lg": ["20px", { "lineHeight": "30px", "fontWeight": "400" }]
-                    },
-                    "animation": {
-                        "slide-up": "slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards",
-                        "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite"
-                    },
-                    "keyframes": {
-                        "slideUp": {
-                            "0%": { transform: "translateY(100%)", opacity: "0" },
-                            "100%": { transform: "translateY(0)", opacity: "1" }
-                        }
+                        "on-surface": "#e2e2e2",
+                        "on-surface-variant": "#c2c6d6"
                     }
                 }
             }
         }
     </script>
 <style>
-        body { font-family: 'Inter', sans-serif; min-height: max(884px, 100dvh); }
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        body { font-family: 'Inter', sans-serif; background-color: #0B1220; min-height: max(884px, 100dvh); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass-card {
+            background: rgba(18, 20, 20, 0.9);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
-</style>
+        @keyframes slideUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .slide-up-card { animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    </style>
 </head>
 <body class="bg-background text-on-background h-screen w-screen overflow-hidden relative">
 
@@ -117,47 +48,43 @@
 <div class="absolute inset-0 z-0 bg-[#0B1220] flex items-center justify-center">
     <video id="autoDetectWebcamFeed" autoplay playsinline muted class="w-full h-full object-cover opacity-40"></video>
     <div class="absolute inset-0 bg-background/80 backdrop-blur-sm"></div>
-
-    <!-- Simulated Environment Detections -->
-    <div class="absolute top-1/4 left-1/4 w-32 h-48 border-2 border-primary-container rounded-lg opacity-40 animate-pulse-slow"></div>
-    <div class="absolute bottom-1/3 right-1/4 w-24 h-24 border-2 border-primary-container rounded-lg opacity-30"></div>
 </div>
 
 <!-- TopAppBar -->
-<header class="fixed top-0 flex justify-between items-center px-margin-mobile h-[touch-target-min] w-full z-50 bg-background backdrop-blur-md border-b-2 border-white/10">
-<div class="flex items-center gap-4 cursor-pointer" onclick="window.location.href='index.html'">
-<span aria-hidden="true" class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">visibility</span>
-<h1 class="font-headline-lg text-headline-lg font-black tracking-tight text-primary m-0">AUDIVUE</h1>
+<header class="fixed top-0 flex justify-between items-center px-6 h-16 w-full z-50 bg-background/90 backdrop-blur-md border-b border-white/10">
+<div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
+<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">visibility</span>
+<h1 class="font-black text-2xl tracking-tight text-primary m-0">AUDIVUE</h1>
 </div>
 <div class="flex items-center gap-2">
-<span class="font-label-lg text-label-lg text-emerald-400 uppercase tracking-wider font-bold">● AUTO DETECT</span>
+<span class="text-xs font-extrabold text-emerald-400 uppercase tracking-wider bg-emerald-400/20 px-3 py-1.5 rounded-full border border-emerald-400/40">● AUTO DETECT</span>
 </div>
 </header>
 
 <!-- Main Content Area -->
 <main class="absolute inset-0 z-10 flex flex-col justify-end pb-32">
 <!-- Smart Mode Suggestion Modal Card -->
-<div class="mx-margin-mobile mb-gutter bg-surface-container/95 backdrop-blur-xl rounded-2xl p-gutter border border-white/10 shadow-2xl animate-slide-up relative overflow-hidden max-w-lg mx-auto w-full">
-<!-- Subtle accent glow -->
-<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-secondary-container to-transparent opacity-75"></div>
-<div class="flex flex-col items-center text-center space-y-stack-gap">
+<div class="mx-6 mb-6 glass-card rounded-3xl p-8 border border-white/10 shadow-2xl slide-up-card relative overflow-hidden max-w-lg mx-auto w-full">
+<!-- Top Glow Accent -->
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-secondary via-primary to-secondary"></div>
+<div class="flex flex-col items-center text-center space-y-4">
 <!-- Icon -->
 <div class="w-16 h-16 rounded-full bg-secondary-container/30 flex items-center justify-center border border-secondary-container/50 shadow-lg">
-<span aria-hidden="true" class="material-symbols-outlined text-secondary-fixed-dim text-4xl" style="font-variation-settings: 'FILL' 1;">payments</span>
+<span class="material-symbols-outlined text-secondary text-4xl" style="font-variation-settings: 'FILL' 1;">payments</span>
 </div>
 
 <!-- Text Content -->
-<div class="space-y-2">
-<h2 class="font-headline-md text-headline-md text-on-surface">Currency detected</h2>
-<p class="font-body-lg text-body-lg text-on-surface-variant">Switch to Currency Mode?</p>
+<div class="space-y-1">
+<h2 class="text-2xl font-extrabold text-on-surface">Currency Detected</h2>
+<p class="text-base text-on-surface-variant">Switch to Currency Detection Mode?</p>
 </div>
 
 <!-- Action Buttons -->
 <div class="w-full flex flex-col gap-3 mt-4">
-<button onclick="window.location.href='currency_mode.html'" class="h-[touch-target-min] w-full bg-primary-container text-on-primary-container font-label-lg text-label-lg font-bold rounded-xl flex justify-center items-center hover:brightness-110 active:scale-95 transition-all shadow-lg">
-    Switch
+<button onclick="window.location.href='mode_transition.html'" class="py-4 w-full bg-primary-container text-on-primary-container font-extrabold rounded-2xl flex justify-center items-center hover:brightness-110 active:scale-95 transition-all shadow-xl text-lg border border-primary/40">
+    Switch Now
 </button>
-<button onclick="window.location.href='env_mode.html'" class="h-[touch-target-min] w-full bg-transparent text-primary-fixed border-2 border-primary-fixed/50 font-label-lg text-label-lg font-semibold rounded-xl flex justify-center items-center hover:bg-primary-fixed/10 active:scale-95 transition-all">
+<button onclick="window.location.href='env_mode.html'" class="py-3.5 w-full bg-transparent text-on-surface border border-white/20 font-bold rounded-xl flex justify-center items-center hover:bg-white/5 active:scale-95 transition-all text-sm">
     Stay in Environment Mode
 </button>
 </div>
@@ -165,33 +92,30 @@
 </div>
 
 <!-- Audio Status Caption Area -->
-<div class="mx-margin-mobile mb-8 bg-surface-container-highest/90 backdrop-blur-md rounded-xl p-4 flex items-center gap-4 border border-outline/20 max-w-lg mx-auto w-full shadow-lg">
-<span aria-hidden="true" class="material-symbols-outlined text-primary-fixed animate-pulse" style="font-variation-settings: 'FILL' 1;">volume_up</span>
-<p class="font-body-md text-body-md text-on-surface-variant m-0 font-semibold">Currency detected. Switch to Currency Mode?</p>
+<div class="mx-6 mb-8 bg-surface-container/90 backdrop-blur-md rounded-2xl p-4 flex items-center gap-4 border border-outline/20 max-w-lg mx-auto w-full shadow-lg">
+<span class="material-symbols-outlined text-primary animate-pulse" style="font-variation-settings: 'FILL' 1;">volume_up</span>
+<p class="text-sm text-on-surface-variant m-0 font-bold">Currency detected. Switch to Currency Mode?</p>
 </div>
 </main>
 
-<!-- BottomNavBar -->
-<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-margin-mobile py-4 bg-surface-container backdrop-blur-xl shadow-lg rounded-t-xl border-t-2 border-white/10">
-<!-- Tab 1: Ready (Inactive) -->
-<button onclick="window.location.href='voice_assistant/index.html'" class="flex flex-col items-center justify-center text-on-surface-variant h-[touch-target-min] px-6 hover:bg-surface-bright transition-colors rounded-xl flex-1">
-<span aria-hidden="true" class="material-symbols-outlined text-3xl mb-1">mic</span>
-<span class="font-label-md text-label-md">Ready</span>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-24 bg-surface/95 backdrop-blur-xl border-t border-white/10 shadow-2xl rounded-t-2xl">
+<button onclick="window.location.href='../voice_assistant/index.html'" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container rounded-xl flex-1">
+<span class="material-symbols-outlined text-2xl mb-1">mic</span>
+<span class="text-xs font-semibold">Ready</span>
 </button>
-<!-- Tab 2: Processing (Active) -->
-<button onclick="window.location.href='env_mode.html'" class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl h-[touch-target-min] px-6 border-2 border-primary scale-98 transition-transform duration-100 flex-1">
-<span aria-hidden="true" class="material-symbols-outlined text-3xl mb-1" style="font-variation-settings: 'FILL' 1;">settings_suggest</span>
-<span class="font-label-md text-label-md font-bold">Auto Detect</span>
+<!-- Active Auto Detect -->
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl p-2 px-5 border border-primary flex-1 shadow-lg">
+<span class="material-symbols-outlined text-2xl mb-1" style="font-variation-settings: 'FILL' 1;">settings_suggest</span>
+<span class="text-xs font-bold">Auto Detect</span>
 </button>
-<!-- Tab 3: Speaking (Inactive) -->
-<button onclick="window.location.href='currency_mode.html'" class="flex flex-col items-center justify-center text-on-surface-variant h-[touch-target-min] px-6 hover:bg-surface-bright transition-colors rounded-xl flex-1">
-<span aria-hidden="true" class="material-symbols-outlined text-3xl mb-1">payments</span>
-<span class="font-label-md text-label-md">Currency</span>
+<button onclick="window.location.href='currency_mode.html'" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container rounded-xl flex-1">
+<span class="material-symbols-outlined text-2xl mb-1">payments</span>
+<span class="text-xs font-semibold">Currency</span>
 </button>
 </nav>
 
-<!-- Load Voice Assistant for Smart Suggestion Voice Prompt -->
-<script src="voice_assistant/voice_assistant.js"></script>
+<script src="../voice_assistant/voice_assistant.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', async () => {
         try {

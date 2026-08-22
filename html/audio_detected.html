@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1.0" name="viewport"/>
-<title>AUDIVUE - Audio Waveform & Speech Monitor</title>
+<title>AUDIVUE - WebGL Audio Equalizer & Speech Listener</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet"/>
@@ -13,18 +13,14 @@
             theme: {
                 extend: {
                     "colors": {
-                        "primary-container": "#4d8eff",
                         "primary": "#adc6ff",
+                        "primary-container": "#4d8eff",
+                        "secondary": "#d0bcff",
                         "background": "#0B1220",
                         "surface": "#121414",
                         "surface-container": "#1e2020",
                         "on-surface": "#e2e2e2",
                         "on-surface-variant": "#c2c6d6"
-                    },
-                    "fontFamily": {
-                        "headline-lg": ["Inter", "sans-serif"],
-                        "headline-md": ["Inter", "sans-serif"],
-                        "body-lg": ["Inter", "sans-serif"]
                     }
                 }
             }
@@ -39,8 +35,11 @@
       background: #0B1220;
       font-family: 'Inter', sans-serif;
     }
-    .material-symbols-outlined {
-        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    .glass-card {
+        background: rgba(18, 20, 20, 0.85);
+        backdrop-filter: blur(24px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
     }
 </style>
 </head>
@@ -52,7 +51,6 @@
 <script>
 (function() {
   const canvas = document.getElementById('shader-canvas-ANIMATION_20');
-
   function syncSize() {
     const w = canvas.clientWidth  || 1280;
     const h = canvas.clientHeight || 720;
@@ -68,93 +66,46 @@
 
   const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
   if (!gl) return;
-  const vs = `attribute vec2 a_position;
-varying vec2 v_texCoord;
-void main() {
-  v_texCoord = a_position * 0.5 + 0.5;
-  gl_Position = vec4(a_position, 0.0, 1.0);
-}`;
+  const vs = `attribute vec2 a_position; varying vec2 v_texCoord;
+void main() { v_texCoord = a_position * 0.5 + 0.5; gl_Position = vec4(a_position, 0.0, 1.0); }`;
   const fs = `precision highp float;
-varying vec2 v_texCoord;
-uniform float u_time;
-uniform vec2 u_resolution;
-
+varying vec2 v_texCoord; uniform float u_time; uniform vec2 u_resolution;
 void main() {
     vec2 uv = v_texCoord;
-    
-    // Equalizer bar logic
-    float barCount = 12.0;
-    float spacing = 0.2;
-    float barWidth = (1.0 - spacing) / barCount;
-    
+    float barCount = 12.0; float spacing = 0.2;
     float barIndex = floor(uv.x * barCount);
     float localX = fract(uv.x * barCount);
-    
-    // Gap between bars
-    if (localX < spacing) {
-        discard;
-    }
-    
-    // Animated bar heights
+    if (localX < spacing) discard;
     float height = 0.3 + 0.5 * sin(u_time * 4.0 + barIndex * 0.8) * cos(u_time * 2.5 - barIndex * 0.4);
-    height = abs(height); // Ensure positive
-    
-    // Center bars vertically
+    height = abs(height);
     float distToCenter = abs(uv.y - 0.5);
-    
-    if (distToCenter > height * 0.45) {
-        discard;
-    }
-    
-    // Gradient: Electric Blue to Purple (AUDIVUE Palette)
-    vec3 colorBlue = vec3(0.23, 0.51, 0.96); // #3b82f6
-    vec3 colorPurple = vec3(0.66, 0.33, 0.97); // #a855f7
+    if (distToCenter > height * 0.45) discard;
+    vec3 colorBlue = vec3(0.23, 0.51, 0.96);
+    vec3 colorPurple = vec3(0.66, 0.33, 0.97);
     vec3 color = mix(colorBlue, colorPurple, uv.x);
-    
-    // Glow effect
     float glow = 0.02 / (distToCenter + 0.01);
     color += color * glow * 0.5;
-    
     gl_FragColor = vec4(color, 1.0);
 }`;
   function cs(type, src) {
-    const s = gl.createShader(type);
-    gl.shaderSource(s, src);
-    gl.compileShader(s);
-    return s;
+    const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return s;
   }
   const prog = gl.createProgram();
   gl.attachShader(prog, cs(gl.VERTEX_SHADER, vs));
   gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, fs));
-  gl.linkProgram(prog);
-  gl.useProgram(prog);
-  const buf = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.linkProgram(prog); gl.useProgram(prog);
+  const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
   const pos = gl.getAttribLocation(prog, 'a_position');
-  gl.enableVertexAttribArray(pos);
-  gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+  gl.enableVertexAttribArray(pos); gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
   const uTime = gl.getUniformLocation(prog, 'u_time');
   const uRes = gl.getUniformLocation(prog, 'u_resolution');
-  const uMouse = gl.getUniformLocation(prog, 'u_mouse');
-
-  let mouse = { x: canvas.width / 2, y: canvas.height / 2 };
-  window.addEventListener('mousemove', (event) => {
-    const rect = canvas.getBoundingClientRect();
-    if (rect.width && rect.height) {
-      const nx = (event.clientX - rect.left) / rect.width;
-      const ny = 1.0 - (event.clientY - rect.top) / rect.height;
-      mouse.x = nx * canvas.width;
-      mouse.y = ny * canvas.height;
-    }
-  });
 
   function render(t) {
     if (typeof ResizeObserver === 'undefined') syncSize();
     gl.viewport(0, 0, canvas.width, canvas.height);
     if (uTime) gl.uniform1f(uTime, t * 0.001);
     if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
-    if (uMouse) gl.uniform2f(uMouse, mouse.x, mouse.y);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     requestAnimationFrame(render);
   }
@@ -167,9 +118,9 @@ void main() {
 <header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-background/80 backdrop-blur-md border-b border-white/10">
 <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
 <span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">visibility</span>
-<h1 class="font-headline-lg text-2xl font-black text-primary tracking-tight">AUDIVUE</h1>
+<h1 class="font-black text-2xl text-primary tracking-tight">AUDIVUE</h1>
 </div>
-<div class="flex items-center gap-2 bg-surface-container/80 px-4 py-1.5 rounded-full border border-white/10">
+<div class="flex items-center gap-2 bg-surface-container px-4 py-1.5 rounded-full border border-white/10">
 <span class="w-2.5 h-2.5 bg-purple-400 rounded-full animate-ping"></span>
 <span class="text-xs font-bold text-primary tracking-wider uppercase">AUDIO LISTENING</span>
 </div>
@@ -177,7 +128,7 @@ void main() {
 
 <!-- Main Overlay Content -->
 <main class="relative z-10 flex-grow flex flex-col items-center justify-center px-6 py-20 text-center">
-<div class="bg-surface/80 backdrop-blur-xl border border-white/10 rounded-3xl p-8 max-w-md w-full shadow-2xl flex flex-col items-center space-y-6">
+<div class="glass-card rounded-3xl p-8 max-w-md w-full shadow-2xl flex flex-col items-center space-y-6">
 <!-- Glowing Equalizer Icon -->
 <div class="w-20 h-20 rounded-full bg-primary-container/20 flex items-center justify-center border border-primary/40 shadow-[0_0_30px_rgba(77,142,255,0.4)]">
 <span class="material-symbols-outlined text-primary text-4xl animate-pulse" style="font-variation-settings: 'FILL' 1;">graphic_eq</span>
@@ -185,19 +136,19 @@ void main() {
 
 <!-- Speech Status Title -->
 <div class="space-y-2">
-<h2 class="font-headline-md text-2xl text-on-surface font-bold">Audio Equalizer Active</h2>
-<p id="audioStatusText" class="font-body-lg text-on-surface-variant text-base">Listening for voice commands...</p>
+<h2 class="text-2xl font-bold text-on-surface">Audio Equalizer Active</h2>
+<p id="audioStatusText" class="text-on-surface-variant text-base">Listening for voice commands...</p>
 </div>
 
 <!-- Recognized Command Pill -->
-<div class="w-full bg-background/80 p-4 rounded-2xl border border-white/10 text-left">
+<div class="w-full bg-surface-container-lowest p-4 rounded-2xl border border-white/10 text-left">
     <div class="text-xs text-primary font-bold uppercase tracking-wider mb-1">Live Audio Feedback</div>
     <div id="liveAudioCaption" class="text-sm font-semibold text-on-surface italic">"Voice commands active. Say obstacle mode or currency mode."</div>
 </div>
 
 <!-- Action Control Buttons -->
 <div class="w-full flex gap-3 pt-2">
-<button onclick="window.location.href='env_mode.html'" class="flex-1 py-3 bg-primary-container text-on-primary-container font-bold rounded-xl text-sm hover:brightness-110 active:scale-95 transition-all shadow-lg">
+<button onclick="window.location.href='env_mode.html'" class="flex-1 py-3 bg-primary-container text-on-primary-container font-bold rounded-xl text-sm hover:brightness-110 active:scale-95 transition-all shadow-lg border border-primary/30">
     Vision Mode
 </button>
 <button onclick="window.location.href='currency_mode.html'" class="flex-1 py-3 bg-surface-container text-on-surface font-bold rounded-xl text-sm border border-white/10 hover:bg-surface-bright active:scale-95 transition-all">
@@ -208,28 +159,27 @@ void main() {
 </main>
 
 <!-- Bottom Navigation Bar -->
-<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-20 bg-surface/90 backdrop-blur-xl border-t border-white/10 shadow-2xl rounded-t-2xl">
-<button onclick="window.location.href='env_mode.html'" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container rounded-xl">
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-24 bg-surface/95 backdrop-blur-xl border-t border-white/10 shadow-2xl rounded-t-2xl">
+<button onclick="window.location.href='env_mode.html'" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container rounded-xl flex-1">
 <span class="material-symbols-outlined text-2xl mb-1">visibility</span>
 <span class="text-xs font-semibold">Vision</span>
 </button>
-<button onclick="window.location.href='currency_mode.html'" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container rounded-xl">
+<button onclick="window.location.href='currency_mode.html'" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container rounded-xl flex-1">
 <span class="material-symbols-outlined text-2xl mb-1">payments</span>
 <span class="text-xs font-semibold">Currency</span>
 </button>
 <!-- Active Tab: Audio -->
-<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl p-2 px-5 border border-primary">
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl p-2 px-5 border border-primary flex-1 shadow-lg">
 <span class="material-symbols-outlined text-2xl mb-1" style="font-variation-settings: 'FILL' 1;">graphic_eq</span>
 <span class="text-xs font-bold">Audio</span>
 </button>
-<button onclick="window.location.href='voice_assistant/index.html'" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container rounded-xl">
+<button onclick="window.location.href='../voice_assistant/index.html'" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container rounded-xl flex-1">
 <span class="material-symbols-outlined text-2xl mb-1">settings</span>
 <span class="text-xs font-semibold">Settings</span>
 </button>
 </nav>
 
-<!-- Load Voice Assistant Core -->
-<script src="voice_assistant/voice_assistant.js"></script>
+<script src="../voice_assistant/voice_assistant.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const assistant = new AudivueVoiceAssistant({

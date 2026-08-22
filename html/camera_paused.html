@@ -2,180 +2,106 @@
 <html class="dark" lang="en">
 <head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>AUDIVUE - Camera Paused</title>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
             theme: {
                 extend: {
                     "colors": {
-                        "on-background": "#e2e2e2",
-                        "surface-container-high": "#282a2b",
-                        "on-primary-fixed-variant": "#004395",
-                        "on-secondary": "#3c0091",
-                        "on-secondary-fixed-variant": "#5516be",
-                        "on-tertiary-fixed-variant": "#404757",
-                        "on-surface": "#e2e2e2",
-                        "secondary-container": "#571bc1",
-                        "tertiary-fixed-dim": "#c0c6da",
-                        "on-tertiary": "#2a3040",
-                        "background": "#121414",
-                        "surface-container-lowest": "#0c0f0f",
-                        "outline": "#8c909f",
-                        "tertiary-container": "#8a90a3",
-                        "primary-fixed": "#d8e2ff",
-                        "inverse-surface": "#e2e2e2",
-                        "tertiary-fixed": "#dce2f6",
-                        "inverse-on-surface": "#2f3131",
-                        "inverse-primary": "#005ac2",
-                        "surface-tint": "#adc6ff",
                         "primary": "#adc6ff",
-                        "surface": "#121414",
-                        "on-surface-variant": "#c2c6d6",
-                        "on-secondary-container": "#c4abff",
-                        "on-tertiary-fixed": "#151b2a",
-                        "on-tertiary-container": "#232a39",
-                        "on-primary": "#002e6a",
                         "primary-container": "#4d8eff",
-                        "on-primary-container": "#00285d",
-                        "surface-variant": "#333535",
-                        "error": "#ffb4ab",
-                        "primary-fixed-dim": "#adc6ff",
-                        "surface-dim": "#121414",
-                        "on-error-container": "#ffdad6",
-                        "on-secondary-fixed": "#23005c",
-                        "surface-container-highest": "#333535",
-                        "on-error": "#690005",
-                        "secondary": "#d0bcff",
+                        "background": "#0B1220",
+                        "surface": "#121414",
                         "surface-container": "#1e2020",
-                        "outline-variant": "#424754",
-                        "surface-bright": "#37393a",
-                        "on-primary-fixed": "#001a42",
-                        "surface-container-low": "#1a1c1c",
-                        "secondary-fixed-dim": "#d0bcff",
-                        "tertiary": "#c0c6da",
-                        "secondary-fixed": "#e9ddff",
-                        "error-container": "#93000a"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "0.25rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "full": "9999px"
-                    },
-                    "spacing": {
-                        "stack-gap": "16px",
-                        "margin-desktop": "40px",
-                        "margin-mobile": "20px",
-                        "touch-target-min": "64px",
-                        "gutter": "24px"
-                    },
-                    "fontFamily": {
-                        "body-lg": ["Inter"],
-                        "label-lg": ["Inter"],
-                        "body-md": ["Inter"],
-                        "label-md": ["Inter"],
-                        "headline-lg": ["Inter"],
-                        "headline-md": ["Inter"]
-                    },
-                    "fontSize": {
-                        "body-lg": ["20px", { "lineHeight": "30px", "fontWeight": "400" }],
-                        "label-lg": ["20px", { "lineHeight": "24px", "letterSpacing": "0.01em", "fontWeight": "600" }],
-                        "body-md": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
-                        "label-md": ["18px", { "lineHeight": "22px", "fontWeight": "600" }],
-                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
-                        "headline-md": ["28px", { "lineHeight": "36px", "fontWeight": "700" }]
+                        "on-surface": "#e2e2e2",
+                        "on-surface-variant": "#c2c6d6"
                     }
                 }
             }
         }
     </script>
 <style>
-    body {
-      min-height: max(884px, 100dvh);
-      background-color: #0B1220;
-    }
-    .material-symbols-outlined {
-        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-    }
-</style>
+        body { font-family: 'Inter', sans-serif; background-color: #0B1220; min-height: max(884px, 100dvh); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass-card {
+            background: rgba(18, 20, 20, 0.85);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
 </head>
-<body class="bg-background text-on-background font-body-lg text-body-lg min-h-screen flex flex-col overflow-hidden antialiased">
+<body class="bg-background text-on-background font-body-lg min-h-screen flex flex-col overflow-hidden antialiased">
 <!-- TopAppBar -->
-<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile h-touch-target-min bg-surface-container-low backdrop-blur-xl border-b border-outline-variant transition-all duration-200">
-<div class="flex items-center gap-2 cursor-pointer" onclick="window.location.href='index.html'">
-<span class="material-symbols-outlined text-primary font-bold text-[32px]" style="font-variation-settings: 'FILL' 1;">visibility</span>
-<span class="font-headline-lg text-headline-lg font-bold text-primary tracking-tight">AUDIVUE</span>
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-surface-container/90 backdrop-blur-xl border-b border-white/10">
+<div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
+<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">visibility</span>
+<h1 class="font-extrabold text-2xl text-primary tracking-tight">AUDIVUE</h1>
 </div>
 <div class="flex items-center">
-<div class="flex items-center gap-1.5 bg-surface-variant text-on-surface px-4 py-2 rounded-full font-label-md text-label-md border border-outline-variant/50 shadow">
-<span class="material-symbols-outlined text-[20px]">pause</span>
+<div class="flex items-center gap-2 bg-surface-variant text-on-surface px-4 py-1.5 rounded-full text-xs font-bold border border-white/10 shadow">
+<span class="material-symbols-outlined text-lg">pause</span>
 <span>PAUSED</span>
 </div>
 </div>
 </header>
 
 <!-- Main Content: Paused Camera Canvas -->
-<main class="flex-1 relative mt-[64px] mb-[164px] bg-surface-container-lowest flex items-center justify-center overflow-hidden">
+<main class="flex-1 relative mt-16 mb-24 bg-surface-container-lowest flex items-center justify-center overflow-hidden px-6">
 <!-- Large Background Icon -->
 <div class="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
 <span class="material-symbols-outlined text-[240px] text-on-surface">videocam_off</span>
 </div>
 
 <!-- Foreground Card -->
-<div class="relative z-10 bg-surface-container-high/90 backdrop-blur-2xl rounded-2xl p-8 max-w-[90%] w-[400px] flex flex-col items-center text-center border border-outline-variant shadow-2xl">
-<div class="w-20 h-20 bg-surface-variant/80 rounded-full flex items-center justify-center mb-6 shadow-inner border border-white/10">
-<span class="material-symbols-outlined text-[40px] text-on-surface-variant">videocam_off</span>
+<div class="relative z-10 glass-card rounded-3xl p-8 max-w-md w-full flex flex-col items-center text-center border border-white/10 shadow-2xl">
+<div class="w-20 h-20 bg-surface-variant/80 rounded-full flex items-center justify-center mb-6 border border-white/10 shadow-inner">
+<span class="material-symbols-outlined text-4xl text-on-surface-variant">videocam_off</span>
 </div>
-<h1 class="font-headline-md text-headline-md text-on-surface mb-2 font-bold">Camera paused</h1>
-<p class="font-body-lg text-body-lg text-on-surface-variant mb-8">Tap resume to continue processing visual information.</p>
+<h1 class="text-3xl font-extrabold text-on-surface mb-2">Camera Paused</h1>
+<p class="text-base text-on-surface-variant mb-8">Tap resume to continue processing visual information.</p>
 
-<button onclick="window.location.href='env_mode.html'" class="w-full h-touch-target-min bg-primary-container text-on-primary-container font-label-lg text-label-lg font-bold rounded-xl flex items-center justify-center gap-3 hover:bg-primary hover:text-on-primary transition-all focus:outline-none focus:ring-4 focus:ring-primary/50 active:scale-95 duration-200 shadow-xl">
-<span class="material-symbols-outlined text-[28px]">replay</span>
+<button onclick="window.location.href='env_mode.html'" class="w-full py-4 bg-primary-container text-on-primary-container font-extrabold text-lg rounded-2xl flex items-center justify-center gap-3 hover:bg-primary-fixed transition-all shadow-xl active:scale-95 border border-primary/40">
+<span class="material-symbols-outlined text-2xl">replay</span>
 <span>Resume Camera</span>
 </button>
 </div>
 </main>
 
-<!-- Audio Status Bar (Persistent) -->
-<div class="fixed bottom-[100px] left-0 w-full h-[64px] bg-surface-container z-40 border-t border-outline-variant/30 flex items-center justify-between px-margin-mobile shadow-lg">
+<!-- Audio Status Bar -->
+<div class="fixed bottom-[96px] left-0 w-full h-16 bg-surface-container z-40 border-t border-white/10 flex items-center justify-between px-6 shadow-lg">
 <div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-primary">volume_up</span>
-<span class="font-label-md text-label-md text-on-surface font-semibold">Camera Paused — Ready</span>
+<span class="material-symbols-outlined text-primary text-2xl">volume_up</span>
+<span class="text-sm text-on-surface font-bold">Camera Paused — Ready</span>
 </div>
 <div class="flex-1 max-w-[120px] ml-4">
-<div class="w-full h-1 bg-surface-variant rounded-full overflow-hidden">
+<div class="w-full h-1.5 bg-surface-variant rounded-full overflow-hidden">
 <div class="h-full w-full bg-outline rounded-full opacity-50"></div>
 </div>
 </div>
 </div>
 
-<!-- BottomNavBar -->
-<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-[100px] pb-safe bg-surface dark:bg-surface-container-lowest border-t-2 border-outline-variant rounded-t-xl shadow-lg">
-<!-- Active Tab: Vision -->
-<button onclick="window.location.href='env_mode.html'" class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl p-4 border-2 border-primary min-w-[80px] h-[80px] scale-98 transition-transform shadow-lg">
-<span class="material-symbols-outlined text-[28px] mb-1" style="font-variation-settings: 'FILL' 1;">visibility</span>
-<span class="font-label-md text-label-md text-[14px] font-bold">Vision</span>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-24 bg-surface/95 backdrop-blur-xl border-t border-white/10 shadow-2xl rounded-t-2xl">
+<button onclick="window.location.href='env_mode.html'" class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl p-2 px-5 border border-primary flex-1 shadow-lg">
+<span class="material-symbols-outlined text-2xl mb-1" style="font-variation-settings: 'FILL' 1;">visibility</span>
+<span class="text-xs font-bold">Vision</span>
 </button>
-<button onclick="window.location.href='env_mode.html'" class="flex flex-col items-center justify-center text-on-surface-variant p-4 hover:bg-surface-bright rounded-xl min-w-[80px] h-[80px] transition-colors">
-<span class="material-symbols-outlined text-[28px] mb-1">explore</span>
-<span class="font-label-md text-label-md text-[14px]">Explore</span>
+<button onclick="window.location.href='currency_mode.html'" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container rounded-xl flex-1">
+<span class="material-symbols-outlined text-2xl mb-1">payments</span>
+<span class="text-xs font-semibold">Currency</span>
 </button>
-<button onclick="window.location.href='currency_mode.html'" class="flex flex-col items-center justify-center text-on-surface-variant p-4 hover:bg-surface-bright rounded-xl min-w-[80px] h-[80px] transition-colors">
-<span class="material-symbols-outlined text-[28px] mb-1">payments</span>
-<span class="font-label-md text-label-md text-[14px]">Currency</span>
-</button>
-<button onclick="window.location.href='voice_assistant/index.html'" class="flex flex-col items-center justify-center text-on-surface-variant p-4 hover:bg-surface-bright rounded-xl min-w-[80px] h-[80px] transition-colors">
-<span class="material-symbols-outlined text-[28px] mb-1">settings</span>
-<span class="font-label-md text-label-md text-[14px]">Settings</span>
+<button onclick="window.location.href='../voice_assistant/index.html'" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container rounded-xl flex-1">
+<span class="material-symbols-outlined text-2xl mb-1">settings</span>
+<span class="text-xs font-semibold">Settings</span>
 </button>
 </nav>
 
-<script src="voice_assistant/voice_assistant.js"></script>
+<script src="../voice_assistant/voice_assistant.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const assistant = new AudivueVoiceAssistant({ rate: 1.05, pitch: 1.0 });

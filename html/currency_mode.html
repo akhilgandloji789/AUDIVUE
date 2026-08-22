@@ -2,8 +2,8 @@
 <html class="dark" lang="en">
 <head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
-<title>AUDIVUE - Currency Mode</title>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AUDIVUE - Currency Mode (Pipeline 2)</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
@@ -13,94 +13,23 @@
             theme: {
                 extend: {
                     "colors": {
-                            "error": "#ffb4ab",
-                            "secondary-container": "#571bc1",
-                            "outline": "#8c909f",
-                            "primary-fixed": "#d8e2ff",
-                            "on-tertiary": "#2a3040",
-                            "secondary-fixed-dim": "#d0bcff",
-                            "tertiary": "#c0c6da",
-                            "tertiary-fixed-dim": "#c0c6da",
-                            "on-primary-fixed-variant": "#004395",
-                            "on-error": "#690005",
-                            "tertiary-container": "#8a90a3",
-                            "surface-variant": "#333535",
-                            "on-secondary-container": "#c4abff",
-                            "surface-container-low": "#1a1c1c",
-                            "on-tertiary-fixed": "#151b2a",
-                            "on-surface-variant": "#c2c6d6",
-                            "surface-container-lowest": "#0c0f0f",
-                            "on-primary-container": "#00285d",
-                            "secondary-fixed": "#e9ddff",
-                            "on-surface": "#e2e2e2",
-                            "surface-bright": "#37393a",
-                            "on-primary-fixed": "#001a42",
-                            "on-secondary-fixed-variant": "#5516be",
-                            "background": "#121414",
-                            "surface-dim": "#121414",
-                            "inverse-on-surface": "#2f3131",
-                            "primary-container": "#4d8eff",
-                            "tertiary-fixed": "#dce2f6",
-                            "on-tertiary-fixed-variant": "#404757",
-                            "on-background": "#e2e2e2",
-                            "surface": "#121414",
-                            "surface-container": "#1e2020",
-                            "surface-container-high": "#282a2b",
-                            "secondary": "#d0bcff",
-                            "on-error-container": "#ffdad6",
-                            "on-secondary": "#3c0091",
-                            "on-primary": "#002e6a",
-                            "error-container": "#93000a",
-                            "surface-tint": "#adc6ff",
-                            "primary-fixed-dim": "#adc6ff",
-                            "surface-container-highest": "#333535",
-                            "inverse-surface": "#e2e2e2",
-                            "outline-variant": "#424754",
-                            "on-tertiary-container": "#232a39",
-                            "on-secondary-fixed": "#23005c",
-                            "primary": "#adc6ff",
-                            "inverse-primary": "#005ac2"
-                    },
-                    "borderRadius": {
-                            "DEFAULT": "0.25rem",
-                            "lg": "0.5rem",
-                            "xl": "0.75rem",
-                            "full": "9999px"
-                    },
-                    "spacing": {
-                            "touch-target-min": "64px",
-                            "gutter": "24px",
-                            "margin-desktop": "40px",
-                            "margin-mobile": "20px",
-                            "stack-gap": "16px"
-                    },
-                    "fontFamily": {
-                            "headline-md": ["Inter"],
-                            "label-lg": ["Inter"],
-                            "body-md": ["Inter"],
-                            "headline-lg": ["Inter"],
-                            "label-md": ["Inter"],
-                            "body-lg": ["Inter"]
-                    },
-                    "fontSize": {
-                            "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
-                            "label-lg": ["20px", {"lineHeight": "24px", "letterSpacing": "0.01em", "fontWeight": "600"}],
-                            "body-md": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
-                            "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
-                            "label-md": ["18px", {"lineHeight": "22px", "fontWeight": "600"}],
-                            "body-lg": ["20px", {"lineHeight": "30px", "fontWeight": "400"}]
+                        "primary": "#adc6ff",
+                        "primary-container": "#4d8eff",
+                        "secondary": "#d0bcff",
+                        "secondary-container": "#571bc1",
+                        "background": "#0B1220",
+                        "surface": "#121414",
+                        "surface-container": "#1e2020",
+                        "on-surface": "#e2e2e2",
+                        "on-surface-variant": "#c2c6d6"
                     }
                 }
             }
         }
     </script>
 <style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-    .material-symbols-outlined {
-        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-    }
+    body { font-family: 'Inter', sans-serif; background-color: #0B1220; min-height: max(884px, 100dvh); }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     @keyframes wave {
@@ -109,101 +38,97 @@
     }
 </style>
 </head>
-<body class="bg-background text-on-background h-screen w-screen overflow-hidden selection:bg-primary-container selection:text-on-primary-container font-body-md antialiased touch-pan-y">
+<body class="bg-background text-on-background h-screen w-screen overflow-hidden selection:bg-primary-container font-body-md antialiased">
 
 <!-- Viewfinder Background -->
-<div class="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat bg-[#0B1220] flex items-center justify-center">
+<div class="absolute inset-0 z-0 bg-cover bg-center bg-[#0B1220] flex items-center justify-center">
     <video id="currencyWebcamFeed" autoplay playsinline muted class="w-full h-full object-cover opacity-40"></video>
-    <div class="absolute inset-0 bg-gradient-to-b from-surface-dim/80 via-transparent to-surface-dim/90 pointer-events-none"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-surface/80 via-transparent to-surface/90 pointer-events-none"></div>
 </div>
 
-<!-- Live Bounding Boxes (Simulated AR Overlay for Currency) -->
+<!-- Multi-Note Bounding Boxes AR Overlay -->
 <div class="absolute inset-0 z-10 pointer-events-none">
-    <!-- Box 1 (₹500) -->
-    <div class="absolute top-1/3 left-1/4 w-[160px] h-[80px] border-[3px] border-[#A855F7] rounded-md shadow-[0_0_15px_rgba(168,85,247,0.5)] transform -rotate-6">
-        <div class="absolute -top-[32px] left-0 bg-[#A855F7] text-white px-2 py-1 rounded-t-sm font-label-md text-label-md">
+    <!-- Box 1: ₹500 -->
+    <div class="absolute top-1/3 left-1/4 w-[160px] h-[80px] border-4 border-[#A855F7] rounded-xl shadow-[0_0_20px_rgba(168,85,247,0.6)] transform -rotate-6">
+        <div class="absolute -top-[34px] left-0 bg-[#A855F7] text-white px-3 py-1 rounded-t-lg font-bold text-sm shadow-md">
             ₹500 — 98%
         </div>
     </div>
-    <!-- Box 2 (₹200) -->
-    <div class="absolute top-1/2 left-1/2 w-[150px] h-[75px] border-[3px] border-[#A855F7] rounded-md shadow-[0_0_15px_rgba(168,85,247,0.5)] transform rotate-3">
-        <div class="absolute -top-[32px] left-0 bg-[#A855F7] text-white px-2 py-1 rounded-t-sm font-label-md text-label-md">
+    <!-- Box 2: ₹200 -->
+    <div class="absolute top-1/2 left-1/2 w-[150px] h-[75px] border-4 border-[#A855F7] rounded-xl shadow-[0_0_20px_rgba(168,85,247,0.6)] transform rotate-3">
+        <div class="absolute -top-[34px] left-0 bg-[#A855F7] text-white px-3 py-1 rounded-t-lg font-bold text-sm shadow-md">
             ₹200 — 95%
         </div>
     </div>
-    <!-- Box 3 (₹100) -->
-    <div class="absolute bottom-1/3 right-1/4 w-[140px] h-[70px] border-[3px] border-[#A855F7] rounded-md shadow-[0_0_15px_rgba(168,85,247,0.5)] transform rotate-12">
-        <div class="absolute -top-[32px] left-0 bg-[#A855F7] text-white px-2 py-1 rounded-t-sm font-label-md text-label-md">
+    <!-- Box 3: ₹100 -->
+    <div class="absolute bottom-1/3 right-1/4 w-[140px] h-[70px] border-4 border-[#A855F7] rounded-xl shadow-[0_0_20px_rgba(168,85,247,0.6)] transform rotate-12">
+        <div class="absolute -top-[34px] left-0 bg-[#A855F7] text-white px-3 py-1 rounded-t-lg font-bold text-sm shadow-md">
             ₹100 — 92%
         </div>
     </div>
 </div>
 
-<!-- Main Application Canvas -->
+<!-- Main UI Canvas -->
 <main class="relative z-20 h-full w-full flex flex-col justify-between">
-<!-- TOP SECTION -->
-<div class="flex flex-col gap-4">
+<!-- Top Section -->
+<div class="flex flex-col gap-3">
 <!-- TopAppBar -->
-<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile h-touch-target-min bg-surface-container-low/80 backdrop-blur-xl border-b-0 border-outline-variant">
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-surface-container/90 backdrop-blur-xl border-b border-white/10">
 <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
-<button aria-label="Menu" class="h-touch-target-min w-12 flex items-center justify-center text-primary hover:bg-on-surface-variant/10 rounded-full transition-colors scale-95 duration-200">
-<span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">visibility</span>
-</button>
-<h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tight">AUDIVUE</h1>
+<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">visibility</span>
+<h1 class="font-extrabold text-2xl text-primary tracking-tight">AUDIVUE</h1>
 </div>
 <div class="flex items-center gap-2">
-<div class="flex items-center gap-1.5 bg-surface-bright/50 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10">
-<div class="w-2.5 h-2.5 bg-emerald-400 rounded-full animate-pulse"></div>
-<span class="font-label-md text-[14px] leading-tight text-white font-bold tracking-wider uppercase">LIVE</span>
+<div class="flex items-center gap-1.5 bg-emerald-400/20 border border-emerald-400/50 text-emerald-400 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider">
+<span class="w-2.5 h-2.5 bg-emerald-400 rounded-full animate-pulse"></span> LIVE
 </div>
-<div class="bg-[#A855F7]/20 border border-[#A855F7]/50 text-[#A855F7] px-3 py-1.5 rounded-full font-label-md text-[14px] leading-tight font-bold whitespace-nowrap">
+<div class="bg-[#A855F7]/20 border border-[#A855F7]/50 text-[#A855F7] px-3.5 py-1.5 rounded-full text-xs font-bold">
     Currency Mode
 </div>
 </div>
 </header>
-<!-- Padding for fixed header -->
-<div class="h-touch-target-min"></div>
+<div class="h-16"></div>
 
-<!-- Currency Reference Strip -->
-<div aria-label="Supported Denominations" class="w-full overflow-x-auto px-margin-mobile py-2 no-scrollbar mt-2">
+<!-- Supported Currency Denominations Strip -->
+<div class="w-full overflow-x-auto px-6 py-2 no-scrollbar mt-2">
 <div class="flex gap-3 min-w-max">
-<div class="h-12 px-4 bg-surface-container-highest/80 backdrop-blur-md rounded-xl border border-white/10 flex items-center justify-center font-label-lg text-label-lg text-on-surface-variant">₹10</div>
-<div class="h-12 px-4 bg-surface-container-highest/80 backdrop-blur-md rounded-xl border border-white/10 flex items-center justify-center font-label-lg text-label-lg text-on-surface-variant">₹20</div>
-<div class="h-12 px-4 bg-surface-container-highest/80 backdrop-blur-md rounded-xl border border-white/10 flex items-center justify-center font-label-lg text-label-lg text-on-surface-variant">₹50</div>
-<div class="h-12 px-4 bg-[#A855F7]/30 backdrop-blur-md rounded-xl border border-[#A855F7] flex items-center justify-center font-label-lg text-label-lg text-white font-bold">₹100</div>
-<div class="h-12 px-4 bg-[#A855F7]/30 backdrop-blur-md rounded-xl border border-[#A855F7] flex items-center justify-center font-label-lg text-label-lg text-white font-bold">₹200</div>
-<div class="h-12 px-4 bg-[#A855F7]/30 backdrop-blur-md rounded-xl border border-[#A855F7] flex items-center justify-center font-label-lg text-label-lg text-white font-bold">₹500</div>
-<div class="h-12 px-4 bg-surface-container-highest/80 backdrop-blur-md rounded-xl border border-white/10 flex items-center justify-center font-label-lg text-label-lg text-on-surface-variant">₹2000</div>
+<div class="h-11 px-4 bg-surface-container/80 backdrop-blur-md rounded-xl border border-white/10 flex items-center justify-center text-on-surface-variant font-bold text-sm">₹10</div>
+<div class="h-11 px-4 bg-surface-container/80 backdrop-blur-md rounded-xl border border-white/10 flex items-center justify-center text-on-surface-variant font-bold text-sm">₹20</div>
+<div class="h-11 px-4 bg-surface-container/80 backdrop-blur-md rounded-xl border border-white/10 flex items-center justify-center text-on-surface-variant font-bold text-sm">₹50</div>
+<div class="h-11 px-4 bg-[#A855F7]/30 backdrop-blur-md rounded-xl border border-[#A855F7] flex items-center justify-center text-white font-extrabold text-sm shadow">₹100</div>
+<div class="h-11 px-4 bg-[#A855F7]/30 backdrop-blur-md rounded-xl border border-[#A855F7] flex items-center justify-center text-white font-extrabold text-sm shadow">₹200</div>
+<div class="h-11 px-4 bg-[#A855F7]/30 backdrop-blur-md rounded-xl border border-[#A855F7] flex items-center justify-center text-white font-extrabold text-sm shadow">₹500</div>
+<div class="h-11 px-4 bg-surface-container/80 backdrop-blur-md rounded-xl border border-white/10 flex items-center justify-center text-on-surface-variant font-bold text-sm">₹2000</div>
 </div>
 </div>
 </div>
 
-<!-- BOTTOM SECTION -->
-<div class="flex flex-col w-full pb-[120px] px-margin-mobile gap-4">
-<!-- Floating Action Button (FAB to switch back to Environment/Obstacle Mode) -->
+<!-- Bottom Section: Audio Total Feedback Card -->
+<div class="flex flex-col w-full pb-[120px] px-6 gap-4">
+<!-- Floating Action Button (Switch back to Environment Mode) -->
 <div class="flex justify-end mb-2">
-<button onclick="window.location.href='env_mode.html'" aria-label="Switch Mode" class="w-[64px] h-[64px] bg-[#A855F7] hover:bg-[#9333EA] text-white rounded-2xl flex items-center justify-center shadow-2xl border-2 border-[#A855F7]/50 active:scale-95 transition-all">
-<span class="material-symbols-outlined text-white text-[32px]">sync_alt</span>
+<button onclick="window.location.href='env_mode.html'" aria-label="Switch Mode" class="w-16 h-16 bg-[#A855F7] hover:bg-[#9333EA] text-white rounded-2xl flex items-center justify-center shadow-2xl border-2 border-[#A855F7]/50 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-3xl">sync_alt</span>
 </button>
 </div>
 
 <!-- Audio Feedback Card -->
-<div class="bg-surface-container-highest/95 backdrop-blur-xl border border-[#A855F7]/40 rounded-2xl p-6 shadow-2xl relative overflow-hidden">
+<div onclick="window.location.href='currency_results.html'" class="bg-surface-container/95 backdrop-blur-xl border border-[#A855F7]/50 rounded-2xl p-6 shadow-2xl relative overflow-hidden cursor-pointer hover:border-[#A855F7] transition-all">
 <div class="absolute top-0 left-0 w-1.5 h-full bg-[#A855F7]"></div>
 <div class="flex items-start gap-4">
-<div class="flex-shrink-0 w-12 h-12 bg-[#A855F7]/20 rounded-full flex items-center justify-center">
-<span class="material-symbols-outlined text-[#A855F7] text-[28px] animate-pulse" style="font-variation-settings: 'FILL' 1;">volume_up</span>
+<div class="w-12 h-12 bg-[#A855F7]/20 rounded-full flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[#A855F7] text-3xl animate-pulse" style="font-variation-settings: 'FILL' 1;">volume_up</span>
 </div>
 <div class="flex-1 flex flex-col gap-1">
-<span class="font-label-md text-label-md text-[#A855F7] font-bold uppercase tracking-wider">Currency Total Calculation</span>
-<p id="currencyText" class="font-body-lg text-body-lg text-on-surface leading-snug font-bold">
+<span class="text-xs text-[#A855F7] font-extrabold uppercase tracking-wider">Multi-Note Calculation</span>
+<p id="currencyText" class="text-lg text-on-surface leading-snug font-extrabold">
     "500, 200 and 100 rupees detected. Total is 800 rupees."
 </p>
 </div>
 </div>
 
-<!-- Audio Waveform Decorative -->
-<div class="mt-4 flex gap-1.5 h-8 items-end opacity-80 px-12 justify-center">
+<!-- Audio Equalizer Waveform -->
+<div class="mt-4 flex gap-1.5 h-7 items-end opacity-90 px-10 justify-center">
 <div class="w-1.5 bg-[#A855F7] rounded-full h-1/3 animate-[wave_1s_ease-in-out_infinite]"></div>
 <div class="w-1.5 bg-[#A855F7] rounded-full h-2/3 animate-[wave_1.2s_ease-in-out_infinite_0.1s]"></div>
 <div class="w-1.5 bg-[#A855F7] rounded-full h-full animate-[wave_0.9s_ease-in-out_infinite_0.2s]"></div>
@@ -214,30 +139,29 @@
 </div>
 </div>
 
-<!-- BottomNavBar -->
-<nav aria-label="Main Navigation" class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-[100px] bg-surface-container-high border-t border-white/10 shadow-2xl rounded-t-xl">
-<button onclick="window.location.href='env_mode.html'" class="flex flex-col items-center justify-center text-on-surface-variant p-4 h-touch-target-min hover:bg-surface-bright rounded-xl">
-<span class="material-symbols-outlined text-[28px] mb-1">visibility</span>
-<span class="font-label-lg text-[14px] leading-tight font-bold">Vision</span>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-24 bg-surface/95 backdrop-blur-xl border-t border-white/10 shadow-2xl rounded-t-2xl">
+<button onclick="window.location.href='env_mode.html'" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container rounded-xl flex-1">
+<span class="material-symbols-outlined text-2xl mb-1">visibility</span>
+<span class="text-xs font-semibold">Vision</span>
 </button>
-<button onclick="window.location.href='env_mode.html'" class="flex flex-col items-center justify-center text-on-surface-variant p-4 h-touch-target-min hover:bg-surface-bright rounded-xl">
-<span class="material-symbols-outlined text-[28px] mb-1">explore</span>
-<span class="font-label-lg text-[14px] leading-tight font-bold">Explore</span>
+<button onclick="window.location.href='currency_results.html'" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container rounded-xl flex-1">
+<span class="material-symbols-outlined text-2xl mb-1">receipt_long</span>
+<span class="text-xs font-semibold">Results</span>
 </button>
-<!-- Active Tab: Currency / Audio -->
-<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl p-4 border-2 border-primary h-touch-target-min scale-98">
-<span class="material-symbols-outlined text-[28px] mb-1" style="font-variation-settings: 'FILL' 1;">payments</span>
-<span class="font-label-lg text-[14px] leading-tight font-bold">Currency</span>
+<!-- Active Tab: Currency -->
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl p-2 px-5 border border-primary flex-1 shadow-lg">
+<span class="material-symbols-outlined text-2xl mb-1" style="font-variation-settings: 'FILL' 1;">payments</span>
+<span class="text-xs font-bold">Currency</span>
 </button>
-<button onclick="window.location.href='voice_assistant/index.html'" class="flex flex-col items-center justify-center text-on-surface-variant p-4 h-touch-target-min hover:bg-surface-bright rounded-xl">
-<span class="material-symbols-outlined text-[28px] mb-1">settings</span>
-<span class="font-label-lg text-[14px] leading-tight font-bold">Settings</span>
+<button onclick="window.location.href='../voice_assistant/index.html'" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container rounded-xl flex-1">
+<span class="material-symbols-outlined text-2xl mb-1">settings</span>
+<span class="text-xs font-semibold">Settings</span>
 </button>
 </nav>
 </main>
 
-<!-- Load Voice Assistant for Speech Synthesis -->
-<script src="voice_assistant/voice_assistant.js"></script>
+<script src="../voice_assistant/voice_assistant.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', async () => {
         try {
@@ -252,7 +176,7 @@
         const assistant = new AudivueVoiceAssistant({ rate: 1.05, pitch: 1.0 });
         setTimeout(() => {
             assistant.speakCurrencyAlert([500, 200, 100], 800);
-        }, 800);
+        }, 600);
     });
 </script>
 </body>

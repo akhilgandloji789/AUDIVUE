@@ -14,164 +14,94 @@
                 extend: {
                     "colors": {
                         "primary-container": "#4d8eff",
-                        "primary-fixed-dim": "#adc6ff",
-                        "on-error-container": "#ffdad6",
-                        "surface-container-low": "#1a1c1c",
-                        "on-tertiary": "#2a3040",
-                        "on-surface": "#e2e2e2",
-                        "surface-dim": "#121414",
-                        "surface": "#121414",
-                        "on-primary-fixed": "#001a42",
-                        "on-tertiary-fixed": "#151b2a",
+                        "background": "#0B1220",
                         "surface-container": "#1e2020",
-                        "surface-bright": "#37393a",
-                        "surface-container-highest": "#333535",
-                        "on-tertiary-fixed-variant": "#404757",
-                        "tertiary-container": "#8a90a3",
-                        "outline": "#8c909f",
-                        "tertiary": "#c0c6da",
-                        "on-secondary-fixed": "#23005c",
-                        "outline-variant": "#424754",
-                        "tertiary-fixed": "#dce2f6",
-                        "on-secondary": "#3c0091",
-                        "on-surface-variant": "#c2c6d6",
-                        "inverse-primary": "#005ac2",
-                        "primary-fixed": "#d8e2ff",
-                        "on-tertiary-container": "#232a39",
-                        "inverse-surface": "#e2e2e2",
-                        "primary": "#adc6ff",
-                        "on-error": "#690005",
-                        "on-primary-fixed-variant": "#004395",
-                        "tertiary-fixed-dim": "#c0c6da",
-                        "background": "#121414",
-                        "surface-container-high": "#282a2b",
-                        "surface-variant": "#333535",
-                        "secondary-fixed-dim": "#d0bcff",
-                        "secondary": "#d0bcff",
-                        "error-container": "#93000a",
-                        "secondary-fixed": "#e9ddff",
-                        "on-primary-container": "#00285d",
                         "error": "#ffb4ab",
-                        "secondary-container": "#571bc1",
-                        "on-secondary-container": "#c4abff",
-                        "surface-container-lowest": "#0c0f0f",
-                        "surface-tint": "#adc6ff",
-                        "inverse-on-surface": "#2f3131",
-                        "on-secondary-fixed-variant": "#5516be",
-                        "on-background": "#e2e2e2",
-                        "on-primary": "#002e6a"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "0.25rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "full": "9999px"
-                    },
-                    "spacing": {
-                        "gutter": "24px",
-                        "touch-target-min": "64px",
-                        "stack-gap": "16px",
-                        "margin-mobile": "20px",
-                        "margin-desktop": "40px"
-                    },
-                    "fontFamily": {
-                        "body-md": ["Inter"],
-                        "label-md": ["Inter"],
-                        "body-lg": ["Inter"],
-                        "headline-lg": ["Inter"],
-                        "headline-md": ["Inter"],
-                        "label-lg": ["Inter"]
-                    },
-                    "fontSize": {
-                        "body-md": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
-                        "label-md": ["18px", { "lineHeight": "22px", "fontWeight": "600" }],
-                        "body-lg": ["20px", { "lineHeight": "30px", "fontWeight": "400" }],
-                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
-                        "headline-md": ["28px", { "lineHeight": "36px", "fontWeight": "700" }],
-                        "label-lg": ["20px", { "lineHeight": "24px", "letterSpacing": "0.01em", "fontWeight": "600" }]
+                        "error-container": "#93000a",
+                        "on-error-container": "#ffdad6",
+                        "on-error": "#690005",
+                        "on-surface": "#e2e2e2",
+                        "on-surface-variant": "#c2c6d6"
                     }
                 }
             }
         }
     </script>
 <style>
-.camera-view {
-    background-color: #0B1220;
-    background-image: radial-gradient(circle at 50% 50%, rgba(244, 63, 94, 0.25), transparent 80%), linear-gradient(to bottom, rgba(11, 18, 32, 0.85), rgba(11, 18, 32, 0.98));
-}
-body {
-    min-height: max(884px, 100dvh);
-}
-.material-symbols-outlined {
-    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-}
-</style>
+        body { font-family: 'Inter', sans-serif; background-color: #0B1220; min-height: max(884px, 100dvh); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .alert-view {
+            background-color: #0B1220;
+            background-image: radial-gradient(circle at 50% 50%, rgba(244, 63, 94, 0.3), transparent 80%), linear-gradient(to bottom, rgba(11, 18, 32, 0.85), rgba(11, 18, 32, 0.98));
+        }
+    </style>
 </head>
-<body class="bg-background text-on-background h-screen w-screen overflow-hidden font-body-md relative">
+<body class="bg-background text-on-background h-screen w-screen overflow-hidden relative">
 
-<!-- Background Camera View -->
-<div class="absolute inset-0 camera-view z-0"></div>
+<!-- Background Alert Overlay -->
+<div class="absolute inset-0 alert-view z-0"></div>
 
-<!-- Critical Safety Bounding Box -->
+<!-- Critical Safety Bounding Box Overlay -->
 <div class="absolute inset-0 z-10 pointer-events-none flex items-center justify-center">
-    <div class="border-4 border-error rounded-2xl w-4/5 h-1/2 animate-pulse shadow-[0_0_30px_rgba(255,180,171,0.6)] flex items-start p-4">
-        <div class="bg-error-container text-on-error-container font-headline-md text-xl px-4 py-2 rounded-xl shadow-lg border border-error/50">
-            🚨 CRITICAL HAZARD — IMMINENT OBSTACLE
+    <div class="border-4 border-error rounded-3xl w-4/5 h-1/2 animate-pulse shadow-[0_0_40px_rgba(255,180,171,0.6)] flex items-start p-6">
+        <div class="bg-error-container text-on-error-container font-extrabold text-xl px-5 py-2.5 rounded-2xl shadow-xl border border-error/50 flex items-center gap-2">
+            <span class="material-symbols-outlined text-2xl animate-bounce" style="font-variation-settings: 'FILL' 1;">warning</span>
+            <span>🚨 CRITICAL HAZARD — IMMINENT OBSTACLE</span>
         </div>
     </div>
 </div>
 
 <!-- TopAppBar -->
-<header class="flex justify-between items-center px-margin-mobile h-[touch-target-min] w-full z-50 absolute top-0 bg-background/90 backdrop-blur-md border-b-2 border-error/30">
-<div class="flex items-center gap-4 cursor-pointer" onclick="window.location.href='index.html'">
-<span class="material-symbols-outlined text-error font-headline-lg" style="font-variation-settings: 'FILL' 1;">warning</span>
-<span class="font-headline-lg text-headline-lg font-black tracking-tight text-error">AUDIVUE ALERTS</span>
+<header class="flex justify-between items-center px-6 h-16 w-full z-50 absolute top-0 bg-background/90 backdrop-blur-md border-b-2 border-error/40">
+<div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
+<span class="material-symbols-outlined text-error text-3xl" style="font-variation-settings: 'FILL' 1;">warning</span>
+<span class="font-black text-2xl tracking-tight text-error">AUDIVUE ALERTS</span>
 </div>
-<div class="flex items-center gap-2 bg-error-container/40 px-4 py-2 rounded-full border border-error/40">
-<span class="text-error animate-ping text-sm">●</span>
-<span class="font-label-md text-label-md text-on-error-container font-bold">SAFETY INTERRUPT</span>
+<div class="flex items-center gap-2 bg-error-container/50 px-4 py-1.5 rounded-full border border-error/50">
+<span class="w-2.5 h-2.5 bg-error rounded-full animate-ping"></span>
+<span class="text-xs font-extrabold text-on-error-container">SAFETY INTERRUPT</span>
 </div>
 </header>
 
-<!-- Main Content Canvas -->
-<main class="absolute inset-0 z-10 pointer-events-none flex flex-col justify-end pb-32 px-margin-mobile gap-stack-gap">
-<!-- Critical Safety Interrupt Alert Card -->
-<div class="bg-error-container/95 backdrop-blur-xl border-2 border-error rounded-2xl p-6 shadow-2xl pointer-events-auto w-full max-w-2xl mx-auto mb-4 flex items-center gap-6">
-<div class="bg-error w-14 h-14 rounded-full flex items-center justify-center shrink-0 shadow-lg animate-bounce">
+<!-- Main Safety Alert Card -->
+<main class="absolute inset-0 z-10 pointer-events-none flex flex-col justify-end pb-32 px-6">
+<div class="bg-error-container/95 backdrop-blur-2xl border-2 border-error rounded-3xl p-6 shadow-2xl pointer-events-auto w-full max-w-2xl mx-auto mb-4 flex items-center gap-6">
+<div class="bg-error w-16 h-16 rounded-full flex items-center justify-center shrink-0 shadow-lg animate-bounce border border-white/20">
 <span class="material-symbols-outlined text-on-error text-4xl" style="font-variation-settings: 'FILL' 1;">warning</span>
 </div>
 <div class="flex-1">
     <div class="text-xs text-on-error-container font-black uppercase tracking-wider mb-1">Preemptive Safety Override</div>
-    <p class="font-body-lg text-body-lg text-on-error-container m-0 leading-relaxed font-black">
+    <p class="text-xl text-on-error-container m-0 leading-relaxed font-black">
         "Warning! Open door and obstacle directly ahead, 2 feet!"
     </p>
 </div>
 </div>
 </main>
 
-<!-- BottomNavBar -->
-<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-margin-mobile py-4 bg-surface-container/95 backdrop-blur-xl border-t-2 border-error/30 shadow-lg rounded-t-xl">
-<button onclick="window.location.href='env_mode.html'" class="flex flex-col items-center justify-center text-on-surface-variant h-[touch-target-min] px-6 hover:bg-surface-bright transition-colors rounded-xl">
-<span class="material-symbols-outlined mb-1 text-3xl">visibility</span>
-<span class="font-label-lg text-label-lg text-sm">Vision</span>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-24 bg-surface/95 backdrop-blur-xl border-t-2 border-error/30 shadow-2xl rounded-t-2xl">
+<button onclick="window.location.href='env_mode.html'" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container rounded-xl flex-1">
+<span class="material-symbols-outlined text-2xl mb-1">visibility</span>
+<span class="text-xs font-semibold">Vision</span>
 </button>
-<button class="flex flex-col items-center justify-center bg-error-container text-on-error-container rounded-xl h-[touch-target-min] px-6 border-2 border-error scale-98 transition-transform duration-100">
-<span class="material-symbols-outlined mb-1 text-3xl" style="font-variation-settings: 'FILL' 1;">warning</span>
-<span class="font-label-lg text-label-lg text-sm font-bold">Alerting</span>
+<!-- Active Alerting -->
+<button class="flex flex-col items-center justify-center bg-error-container text-on-error-container rounded-xl p-2 px-5 border border-error flex-1 shadow-lg">
+<span class="material-symbols-outlined text-2xl mb-1" style="font-variation-settings: 'FILL' 1;">warning</span>
+<span class="text-xs font-bold">Alerting</span>
 </button>
-<button onclick="window.location.href='currency_mode.html'" class="flex flex-col items-center justify-center text-on-surface-variant h-[touch-target-min] px-6 hover:bg-surface-bright transition-colors rounded-xl">
-<span class="material-symbols-outlined mb-1 text-3xl">payments</span>
-<span class="font-label-lg text-label-lg text-sm">Currency</span>
+<button onclick="window.location.href='currency_mode.html'" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container rounded-xl flex-1">
+<span class="material-symbols-outlined text-2xl mb-1">payments</span>
+<span class="text-xs font-semibold">Currency</span>
 </button>
 </nav>
 
-<script src="voice_assistant/voice_assistant.js"></script>
+<script src="../voice_assistant/voice_assistant.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const assistant = new AudivueVoiceAssistant({ rate: 1.1, pitch: 1.0 });
         setTimeout(() => {
             assistant.speakObstacleAlert('Open door and obstacle', 'directly center', 'immediate', true);
-        }, 500);
+        }, 400);
     });
 </script>
 </body>

@@ -5,7 +5,7 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>AUDIVUE - Mode Transition</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
         tailwind.config = {
@@ -13,156 +13,89 @@
           theme: {
             extend: {
               "colors": {
-                      "on-background": "#e2e2e2",
-                      "error": "#ffb4ab",
-                      "on-error": "#690005",
-                      "background": "#121414",
-                      "surface-container-lowest": "#0c0f0f",
-                      "on-tertiary-fixed": "#151b2a",
+                      "primary": "#adc6ff",
+                      "primary-container": "#4d8eff",
+                      "background": "#0B1220",
                       "surface": "#121414",
                       "surface-container": "#1e2020",
-                      "surface-dim": "#121414",
-                      "tertiary-fixed-dim": "#c0c6da",
-                      "on-primary": "#002e6a",
-                      "surface-tint": "#adc6ff",
-                      "inverse-primary": "#005ac2",
-                      "primary": "#adc6ff",
-                      "secondary": "#d0bcff",
-                      "tertiary-container": "#8a90a3",
-                      "outline": "#8c909f",
-                      "secondary-fixed-dim": "#d0bcff",
-                      "error-container": "#93000a",
-                      "inverse-surface": "#e2e2e2",
-                      "on-secondary": "#3c0091",
-                      "primary-fixed-dim": "#adc6ff",
-                      "on-secondary-fixed": "#23005c",
-                      "primary-fixed": "#d8e2ff",
-                      "surface-container-low": "#1a1c1c",
-                      "surface-container-highest": "#333535",
-                      "secondary-container": "#571bc1",
-                      "surface-container-high": "#282a2b",
-                      "tertiary": "#c0c6da",
-                      "outline-variant": "#424754",
-                      "on-secondary-fixed-variant": "#5516be",
-                      "on-surface-variant": "#c2c6d6",
-                      "on-secondary-container": "#c4abff",
-                      "surface-bright": "#37393a",
-                      "secondary-fixed": "#e9ddff",
-                      "primary-container": "#4d8eff",
                       "on-surface": "#e2e2e2",
-                      "tertiary-fixed": "#dce2f6",
-                      "on-error-container": "#ffdad6",
-                      "inverse-on-surface": "#2f3131",
-                      "surface-variant": "#333535",
-                      "on-primary-fixed": "#001a42",
-                      "on-tertiary-container": "#232a39",
-                      "on-tertiary-fixed-variant": "#404757",
-                      "on-primary-fixed-variant": "#004395",
-                      "on-primary-container": "#00285d",
-                      "on-tertiary": "#2a3040"
-              },
-              "borderRadius": {
-                      "DEFAULT": "0.25rem",
-                      "lg": "0.5rem",
-                      "xl": "0.75rem",
-                      "full": "9999px"
-              },
-              "spacing": {
-                      "margin-desktop": "40px",
-                      "margin-mobile": "20px",
-                      "gutter": "24px",
-                      "stack-gap": "16px",
-                      "touch-target-min": "64px"
-              },
-              "fontFamily": {
-                      "label-lg": ["Inter"],
-                      "body-lg": ["Inter"],
-                      "headline-md": ["Inter"],
-                      "body-md": ["Inter"],
-                      "headline-lg": ["Inter"],
-                      "label-md": ["Inter"]
-              },
-              "fontSize": {
-                      "label-lg": ["20px", {"lineHeight": "24px", "letterSpacing": "0.01em", "fontWeight": "600"}],
-                      "body-lg": ["20px", {"lineHeight": "30px", "fontWeight": "400"}],
-                      "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
-                      "body-md": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
-                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
-                      "label-md": ["18px", {"lineHeight": "22px", "fontWeight": "600"}]
+                      "on-surface-variant": "#c2c6d6"
               }
-      },
-          },
+            }
+          }
         }
     </script>
 <style>
-        .material-symbols-outlined { font-size: 32px; }
+        body { font-family: 'Inter', sans-serif; background-color: #0B1220; min-height: max(884px, 100dvh); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass-card {
+            background: rgba(18, 20, 20, 0.9);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
         @keyframes dash {
             0% { stroke-dasharray: 1, 150; stroke-dashoffset: 0; }
             50% { stroke-dasharray: 90, 150; stroke-dashoffset: -35; }
             100% { stroke-dasharray: 90, 150; stroke-dashoffset: -124; }
         }
-        .spinner-path {
-            animation: dash 1.5s ease-in-out infinite;
-        }
-        body { min-height: max(884px, 100dvh); background-color: #0B1220; }
+        .spinner-path { animation: dash 1.5s ease-in-out infinite; }
     </style>
 </head>
 <body class="bg-background text-on-background min-h-screen flex flex-col font-sans relative overflow-hidden">
+
 <!-- Background Camera Feed Simulation -->
-<div class="absolute inset-0 z-0 pointer-events-none bg-[#0B1220] flex items-center justify-center">
+<div class="absolute inset-0 z-0 bg-[#0B1220] flex items-center justify-center">
     <video id="transitionWebcamFeed" autoplay playsinline muted class="w-full h-full object-cover opacity-40 blur-sm"></video>
-    <div class="absolute inset-0 bg-background/50 backdrop-blur-sm"></div>
+    <div class="absolute inset-0 bg-background/60 backdrop-blur-sm"></div>
 </div>
 
 <!-- TopAppBar -->
-<header class="bg-surface/90 backdrop-blur-md text-primary flex justify-between items-center w-full px-margin-mobile h-touch-target-min fixed top-0 z-50 border-b border-white/10">
+<header class="bg-surface-container/90 backdrop-blur-md text-primary flex justify-between items-center w-full px-6 h-16 fixed top-0 z-50 border-b border-white/10">
 <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
-<button aria-label="Toggle visual assistance" class="w-[48px] h-[48px] flex items-center justify-center rounded-full hover:bg-surface-bright transition-colors duration-200">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">visibility</span>
-</button>
-<h1 class="font-headline-md text-headline-md font-bold tracking-tight text-primary">AUDIVUE</h1>
+<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">visibility</span>
+<h1 class="font-extrabold text-2xl tracking-tight text-primary">AUDIVUE</h1>
 </div>
-<button aria-label="Sensor settings" class="w-[48px] h-[48px] flex items-center justify-center rounded-full hover:bg-surface-bright transition-colors duration-200">
-<span class="material-symbols-outlined text-primary">sensors</span>
-</button>
+<div class="flex items-center gap-2">
+<span class="text-xs font-bold text-primary uppercase tracking-wider bg-primary-container/20 px-3 py-1 rounded-full border border-primary/30">MODE SWITCH</span>
+</div>
 </header>
 
-<!-- Main Content Canvas -->
-<main class="flex-grow flex items-center justify-center relative z-10 px-margin-mobile pt-touch-target-min pb-[100px]">
-<!-- Minimal Dark Card Overlay -->
-<div aria-live="assertive" class="bg-surface-container-high/95 backdrop-blur-xl rounded-2xl p-8 min-h-touch-target-min border border-white/10 shadow-2xl flex flex-col items-center gap-gutter w-full max-w-sm" role="alert">
-<!-- Loading Spinner -->
-<div class="relative w-16 h-16 flex items-center justify-center">
+<!-- Main Content Area -->
+<main class="flex-grow flex items-center justify-center relative z-10 px-6 pt-16 pb-24">
+<div class="glass-card rounded-3xl p-8 border border-white/10 shadow-2xl flex flex-col items-center gap-6 w-full max-w-sm text-center">
+<!-- SVG Loading Spinner -->
+<div class="relative w-20 h-20 flex items-center justify-center">
 <svg class="animate-spin w-full h-full text-primary" viewbox="0 0 50 50">
 <circle class="opacity-20" cx="25" cy="25" fill="none" r="20" stroke="currentColor" stroke-width="4"></circle>
 <circle class="spinner-path" cx="25" cy="25" fill="none" r="20" stroke="currentColor" stroke-linecap="round" stroke-width="4"></circle>
 </svg>
+<span class="material-symbols-outlined text-primary text-2xl absolute" style="font-variation-settings: 'FILL' 1;">payments</span>
 </div>
 
-<div class="text-center flex flex-col gap-stack-gap">
-<h2 class="font-headline-md text-headline-md text-on-surface font-bold">Switching to Currency Mode...</h2>
-<p class="font-body-lg text-body-lg text-on-surface-variant">Optimizing sensors for denomination recognition.</p>
+<div class="space-y-2">
+<h2 class="text-2xl font-extrabold text-on-surface">Switching to Currency Mode...</h2>
+<p class="text-base text-on-surface-variant">Optimizing vision sensors for denomination recognition.</p>
 </div>
 </div>
 </main>
 
-<!-- BottomNavBar -->
-<nav class="bg-surface-container-low backdrop-blur-md shadow-md fixed bottom-0 w-full z-50 flex justify-around items-center px-margin-mobile py-4 min-h-[100px] rounded-t-xl border-t-2 border-white/10">
-<button onclick="window.location.href='env_mode.html'" aria-label="Status: Ready" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-highest scale-95 transition-all duration-300 w-[80px]">
-<span class="material-symbols-outlined">check_circle</span>
-<span class="font-label-md text-label-md mt-1 text-center">Ready</span>
+<!-- Bottom Navigation Bar -->
+<nav class="bg-surface/95 backdrop-blur-xl fixed bottom-0 w-full z-50 flex justify-around items-center px-4 h-24 rounded-t-2xl border-t border-white/10 shadow-2xl">
+<button onclick="window.location.href='env_mode.html'" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container rounded-xl flex-1">
+<span class="material-symbols-outlined text-2xl mb-1">check_circle</span>
+<span class="text-xs font-semibold">Ready</span>
 </button>
-<button aria-current="page" aria-label="Status: Processing" class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl p-2 border-2 border-primary scale-95 transition-all duration-300 w-[80px] shadow">
-<span class="material-symbols-outlined">settings_slow_motion</span>
-<span class="font-label-md text-label-md mt-1 text-center font-bold">Processing</span>
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl p-2 px-5 border border-primary flex-1 shadow-lg">
+<span class="material-symbols-outlined text-2xl mb-1" style="font-variation-settings: 'FILL' 1;">settings_slow_motion</span>
+<span class="text-xs font-bold">Processing</span>
 </button>
-<button onclick="window.location.href='currency_mode.html'" aria-label="Status: Speaking" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-highest scale-95 transition-all duration-300 w-[80px]">
-<span class="material-symbols-outlined">payments</span>
-<span class="font-label-md text-label-md mt-1 text-center">Currency</span>
+<button onclick="window.location.href='currency_mode.html'" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container rounded-xl flex-1">
+<span class="material-symbols-outlined text-2xl mb-1">payments</span>
+<span class="text-xs font-semibold">Currency</span>
 </button>
 </nav>
 
-<script src="voice_assistant/voice_assistant.js"></script>
+<script src="../voice_assistant/voice_assistant.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', async () => {
         try {
@@ -179,7 +112,7 @@
             assistant.speak("Switching to Currency Mode. Optimizing sensors.", "high");
         }, 300);
 
-        // Auto transition to currency_mode.html after 2.5 seconds
+        // Auto transition to currency_mode.html after 2.5s
         setTimeout(() => {
             window.location.href = 'currency_mode.html';
         }, 2500);
