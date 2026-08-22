@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AUDIVUE - Authenticating</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-on-surface": "#2f3131",
+                        "primary": "#adc6ff",
+                        "on-tertiary-container": "#232a39",
+                        "tertiary-fixed": "#dce2f6",
+                        "inverse-primary": "#005ac2",
+                        "outline-variant": "#424754",
+                        "surface-tint": "#adc6ff",
+                        "surface-dim": "#121414",
+                        "on-surface": "#e2e2e2",
+                        "secondary-fixed": "#e9ddff",
+                        "surface-variant": "#333535",
+                        "tertiary-container": "#8a90a3",
+                        "on-primary-fixed": "#001a42",
+                        "tertiary-fixed-dim": "#c0c6da",
+                        "on-secondary-container": "#c4abff",
+                        "error": "#ffb4ab",
+                        "surface-container-highest": "#333535",
+                        "primary-fixed": "#d8e2ff",
+                        "on-tertiary": "#2a3040",
+                        "primary-container": "#4d8eff",
+                        "tertiary": "#c0c6da",
+                        "on-error-container": "#ffdad6",
+                        "on-primary-container": "#00285d",
+                        "secondary": "#d0bcff",
+                        "inverse-surface": "#e2e2e2",
+                        "on-surface-variant": "#c2c6d6",
+                        "on-secondary-fixed": "#23005c",
+                        "on-tertiary-fixed-variant": "#404757",
+                        "secondary-container": "#571bc1",
+                        "on-error": "#690005",
+                        "on-tertiary-fixed": "#151b2a",
+                        "surface-container-lowest": "#0c0f0f",
+                        "surface-container-high": "#282a2b",
+                        "on-secondary": "#3c0091",
+                        "error-container": "#93000a",
+                        "on-primary": "#002e6a",
+                        "on-secondary-fixed-variant": "#5516be",
+                        "surface-container": "#1e2020",
+                        "primary-fixed-dim": "#adc6ff",
+                        "background": "#121414",
+                        "on-background": "#e2e2e2",
+                        "secondary-fixed-dim": "#d0bcff",
+                        "surface-container-low": "#1a1c1c",
+                        "surface-bright": "#37393a",
+                        "surface": "#121414",
+                        "on-primary-fixed-variant": "#004395",
+                        "outline": "#8c909f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-gap": "16px",
+                        "margin-desktop": "40px",
+                        "margin-mobile": "20px",
+                        "touch-target-min": "64px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter", "sans-serif"],
+                        "body-md": ["Inter", "sans-serif"],
+                        "label-lg": ["Inter", "sans-serif"],
+                        "label-md": ["Inter", "sans-serif"],
+                        "headline-lg": ["Inter", "sans-serif"],
+                        "body-lg": ["Inter", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["28px", { "lineHeight": "36px", "fontWeight": "700" }],
+                        "body-md": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-lg": ["20px", { "lineHeight": "24px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "label-md": ["18px", { "lineHeight": "22px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["20px", { "lineHeight": "30px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .spinner {
+            width: 80px;
+            height: 80px;
+            border: 4px solid rgba(173, 198, 255, 0.1);
+            border-top-color: #adc6ff;
+            border-radius: 50%;
+            animation: spin 1.2s cubic-bezier(0.5, 0.1, 0.4, 0.9) infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 4px;
+            background-color: rgba(255, 255, 255, 0.05);
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background-color: #adc6ff;
+            width: 50%;
+            animation: indeterminate-progress 2s infinite linear;
+            transform-origin: 0% 50%;
+        }
+
+        @keyframes indeterminate-progress {
+            0% { transform: translateX(-100%) scaleX(0.2); }
+            50% { transform: translateX(0%) scaleX(0.5); }
+            100% { transform: translateX(200%) scaleX(0.2); }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md overflow-hidden antialiased">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-margin-mobile h-[touch-target-min] w-full z-50 bg-background backdrop-blur-md border-b-2 border-white/10">
+<div onclick="window.location.href='index.html'" class="flex items-center gap-4 text-primary dark:text-primary-fixed hover:bg-surface-variant transition-colors rounded-full p-2 cursor-pointer">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">visibility</span>
+</div>
+<div class="font-headline-lg text-headline-lg font-black tracking-tight text-primary dark:text-primary-fixed">
+            AUDIVUE
+        </div>
+<div class="flex items-center gap-2 text-primary font-bold px-4 py-2 hover:bg-surface-variant transition-colors rounded-full cursor-pointer opacity-80">
+<span class="font-label-md text-label-md">● LIVE</span>
+</div>
+</header>
+
+<!-- Main Content -->
+<main class="flex-grow flex flex-col items-center justify-center p-gutter relative z-10 pb-[120px]">
+<!-- Faded Logo -->
+<div class="mb-12 opacity-80 transition-opacity duration-1000 ease-in-out">
+<img alt="AUDIVUE Logo" class="h-28 w-auto object-contain drop-shadow-2xl" src="assets/logo.png"/>
+</div>
+<!-- Spinner -->
+<div class="spinner mb-stack-gap shadow-[0_0_30px_rgba(173,198,255,0.2)]"></div>
+<!-- Text -->
+<h1 class="font-headline-md text-headline-md text-on-background mt-gutter">Signing you in...</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2 max-w-sm text-center">
+            Connecting securely with Google.
+        </p>
+</main>
+
+<!-- Bottom Navigation Shell & Progress -->
+<div class="fixed bottom-0 left-0 w-full z-50">
+<!-- Progress Bar (above nav) -->
+<div class="relative w-full h-1 bg-surface-container-highest">
+<div class="progress-bar-fill"></div>
+</div>
+<!-- BottomNavBar -->
+<nav class="flex justify-around items-center px-margin-mobile py-4 bg-surface-container dark:bg-surface-container backdrop-blur-xl shadow-lg border-t-2 border-white/10 rounded-t-xl">
+<!-- Inactive Item: Ready -->
+<button onclick="window.location.href='voice_assistant/index.html'" class="flex flex-col items-center justify-center text-on-surface-variant h-[touch-target-min] px-6 min-w-[80px] hover:bg-surface-bright transition-colors rounded-xl">
+<span class="material-symbols-outlined text-[32px] mb-1">mic</span>
+<span class="font-label-lg text-label-lg text-sm">Ready</span>
+</button>
+<!-- Active Item: Processing -->
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl h-[touch-target-min] px-6 min-w-[80px] border-2 border-primary scale-95 transition-all opacity-100">
+<span class="material-symbols-outlined text-[32px] mb-1" style="font-variation-settings: 'FILL' 1;">settings_suggest</span>
+<span class="font-label-lg text-label-lg text-sm font-bold">Processing</span>
+</button>
+<!-- Inactive Item: Speaking -->
+<button onclick="window.location.href='voice_assistant/index.html'" class="flex flex-col items-center justify-center text-on-surface-variant h-[touch-target-min] px-6 min-w-[80px] hover:bg-surface-bright transition-colors rounded-xl">
+<span class="material-symbols-outlined text-[32px] mb-1">volume_up</span>
+<span class="font-label-lg text-label-lg text-sm">Speaking</span>
+</button>
+</nav>
+</div>
+
+<script>
+    // Automatic transition to voice assistant after authentication simulation
+    setTimeout(() => {
+        window.location.href = 'voice_assistant/index.html';
+    }, 2500);
+</script>
+</body>
+</html>

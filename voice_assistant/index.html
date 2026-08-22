@@ -1,242 +1,102 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="dark" lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AUDIVUE Voice Assistant Module — Test & Verification</title>
-    <style>
-        :root {
-            --bg-color: #0b0f19;
-            --card-bg: #151c2e;
-            --accent-cyan: #00f2fe;
-            --accent-purple: #4facfe;
-            --alert-red: #ff4b4b;
-            --alert-green: #00e676;
-            --text-main: #f0f4f8;
-            --text-muted: #94a3b8;
-            --border-color: #2a364f;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 2rem 1rem;
-        }
-
-        .container {
-            max-width: 900px;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        header {
-            text-align: center;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        header h1 {
-            font-size: 2.2rem;
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 0.5rem;
-        }
-
-        header p {
-            color: var(--text-muted);
-            font-size: 1rem;
-        }
-
-        .voice-wave-banner {
-            width: 160px;
-            height: 50px;
-            margin: 0.5rem 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 0.3rem 0.8rem;
-            background: rgba(0, 242, 254, 0.1);
-            color: var(--accent-cyan);
-            border: 1px solid rgba(0, 242, 254, 0.3);
-            border-radius: 20px;
-            font-size: 0.85rem;
-            margin-top: 0.25rem;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-        }
-
-        .card h2 {
-            font-size: 1.3rem;
-            color: var(--accent-cyan);
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-        }
-
-        @media (max-width: 768px) {
-            .grid-2 {
-                grid-template-columns: 1fr;
+    <title>AUDIVUE - Voice Assistant Dashboard</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#adc6ff",
+                        "error": "#ffb4ab",
+                        "outline": "#8c909f",
+                        "on-tertiary-fixed-variant": "#404757",
+                        "on-primary-container": "#00285d",
+                        "surface": "#121414",
+                        "outline-variant": "#424754",
+                        "tertiary-fixed-dim": "#c0c6da",
+                        "on-secondary-container": "#c4abff",
+                        "on-primary-fixed-variant": "#004395",
+                        "on-surface-variant": "#c2c6d6",
+                        "tertiary-fixed": "#dce2f6",
+                        "surface-container-high": "#282a2b",
+                        "inverse-primary": "#005ac2",
+                        "on-secondary-fixed-variant": "#5516be",
+                        "inverse-surface": "#e2e2e2",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-highest": "#333535",
+                        "error-container": "#93000a",
+                        "on-primary-fixed": "#001a42",
+                        "secondary-fixed-dim": "#d0bcff",
+                        "secondary-fixed": "#e9ddff",
+                        "on-tertiary-fixed": "#151b2a",
+                        "tertiary": "#c0c6da",
+                        "secondary-container": "#571bc1",
+                        "on-primary": "#002e6a",
+                        "surface-tint": "#adc6ff",
+                        "surface-container-low": "#1a1c1c",
+                        "surface-bright": "#37393a",
+                        "primary-fixed-dim": "#adc6ff",
+                        "surface-container": "#1e2020",
+                        "on-secondary": "#3c0091",
+                        "on-tertiary": "#2a3040",
+                        "on-surface": "#e2e2e2",
+                        "primary-container": "#4d8eff",
+                        "surface-container-lowest": "#0c0f0f",
+                        "tertiary-container": "#8a90a3",
+                        "on-tertiary-container": "#232a39",
+                        "background": "#121414",
+                        "surface-dim": "#121414",
+                        "on-secondary-fixed": "#23005c",
+                        "inverse-on-surface": "#2f3131",
+                        "surface-variant": "#333535",
+                        "primary-fixed": "#d8e2ff",
+                        "on-background": "#e2e2e2",
+                        "secondary": "#d0bcff",
+                        "on-error": "#690005"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "20px",
+                        "touch-target-min": "64px",
+                        "stack-gap": "16px",
+                        "gutter": "24px",
+                        "margin-desktop": "40px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter", "sans-serif"],
+                        "body-md": ["Inter", "sans-serif"],
+                        "label-lg": ["Inter", "sans-serif"],
+                        "label-md": ["Inter", "sans-serif"],
+                        "headline-lg": ["Inter", "sans-serif"],
+                        "body-lg": ["Inter", "sans-serif"]
+                    }
+                }
             }
         }
-
-        .control-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        label {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-
-        select, input[type="range"], input[type="text"] {
-            background: #0d121f;
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            padding: 0.75rem;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            outline: none;
-        }
-
-        select:focus, input:focus {
-            border-color: var(--accent-cyan);
-        }
-
-        .btn-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-        }
-
-        button {
-            background: linear-gradient(135deg, #1e293b, #334155);
-            color: var(--text-main);
-            border: 1px solid var(--border-color);
-            padding: 0.75rem 1.25rem;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        button:hover {
-            border-color: var(--accent-cyan);
-            transform: translateY(-2px);
-        }
-
-        button.btn-primary {
-            background: linear-gradient(135deg, #00c6ff, #0072ff);
-            border: none;
-            color: #fff;
-        }
-
-        button.btn-alert {
-            background: linear-gradient(135deg, #ff416c, #ff4b2b);
-            border: none;
-            color: #fff;
-        }
-
-        button.btn-success {
-            background: linear-gradient(135deg, #11998e, #38ef7d);
-            border: none;
-            color: #0b0f19;
-        }
-
-        .status-box {
-            background: #090d16;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1rem;
-            min-height: 80px;
-            font-family: monospace;
-            font-size: 0.9rem;
-            color: var(--accent-cyan);
-            white-space: pre-wrap;
-            word-break: break-word;
-        }
-
-        .command-log {
-            height: 140px;
-            overflow-y: auto;
-            background: #090d16;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 0.75rem;
-            font-size: 0.85rem;
-        }
-
-        .command-item {
-            padding: 0.3rem 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .command-item .time {
-            color: var(--text-muted);
-        }
-
-        .mode-indicator {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.75rem 1.25rem;
-            background: #0d1424;
-            border-radius: 8px;
-            border-left: 4px solid var(--accent-cyan);
-            margin-bottom: 1rem;
-        }
-
-        .mode-indicator.currency {
-            border-left-color: var(--alert-green);
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
 
         .pulse {
             width: 12px;
             height: 12px;
             border-radius: 50%;
-            background-color: var(--alert-green);
-            box-shadow: 0 0 10px var(--alert-green);
+            background-color: #00e676;
+            box-shadow: 0 0 10px #00e676;
             animation: pulse-anim 1.5s infinite;
         }
 
@@ -247,220 +107,274 @@
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <header>
-            <h1>AUDIVUE Voice Assistant</h1>
-            <!-- Animated SVG Voice Wave Symbol -->
-            <div class="voice-wave-banner">
-                <img src="../assets/voice_wave.svg" alt="Voice Assistant Wave Animation" style="width: 100%; height: 100%;">
-            </div>
-            <p>Real-time Text-to-Speech & Hands-Free Voice Control Test Suite</p>
-            <span class="badge">Track 03 // Computer Vision Web Assistant</span>
-        </header>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md overflow-x-hidden antialiased pb-[100px]">
 
-        <!-- Current Status & Mode Indicator -->
-        <div class="mode-indicator" id="modeIndicator">
-            <div style="display: flex; align-items: center; gap: 0.75rem;">
-                <div class="pulse" id="micPulse" style="display: none;"></div>
-                <div>
-                    <strong>Active Pipeline Mode: </strong>
-                    <span id="activeModeText" style="color: var(--accent-cyan);">Obstacle & Object Detection</span>
-                </div>
-            </div>
-            <!-- Small Wave Indicator -->
-            <div style="width: 50px; height: 25px;">
-                <img src="../assets/voice_wave.svg" alt="Active Wave" style="width: 100%; height: 100%;">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-margin-mobile h-[touch-target-min] w-full z-50 bg-background/90 backdrop-blur-md border-b border-white/10 sticky top-0">
+    <div onclick="window.location.href='../index.html'" class="flex items-center gap-2 text-primary hover:bg-surface-variant transition-colors rounded-full p-2 cursor-pointer">
+        <span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">visibility</span>
+        <span class="font-bold text-sm">AUDIVUE</span>
+    </div>
+    <div class="flex items-center gap-3">
+        <div class="w-16 h-8 flex items-center justify-center">
+            <img src="../assets/voice_wave.svg" alt="Voice Wave" class="w-full h-full object-contain">
+        </div>
+        <div class="flex items-center gap-2 text-primary font-bold px-3 py-1.5 bg-surface-container rounded-full opacity-90 border border-primary/20">
+            <span class="pulse"></span>
+            <span class="font-label-md text-xs">LIVE</span>
+        </div>
+    </div>
+</header>
+
+<!-- Main Container -->
+<main class="flex-grow w-full max-w-4xl mx-auto px-margin-mobile py-6 flex flex-col gap-6">
+
+    <!-- Active Mode Indicator Banner -->
+    <div id="modeIndicator" class="flex justify-between items-center p-4 bg-surface-container rounded-2xl border-l-4 border-primary shadow-lg transition-all">
+        <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-primary text-[28px]" style="font-variation-settings: 'FILL' 1;">graphic_eq</span>
+            <div>
+                <div class="text-xs text-on-surface-variant font-medium">Active Vision Pipeline</div>
+                <div id="activeModeText" class="font-headline-md text-lg text-primary">Obstacle & Object Detection Mode</div>
             </div>
         </div>
-
-        <div class="grid-2">
-            <!-- Voice Synthesis Settings -->
-            <div class="card">
-                <h2>🔊 Text-to-Speech (TTS) Config</h2>
-                
-                <div class="control-group">
-                    <label for="voiceSelect">Selected Voice (Top Rated Female Preferred):</label>
-                    <select id="voiceSelect"></select>
-                </div>
-
-                <div class="control-group">
-                    <label for="speechRate">Speech Rate: <span id="rateVal">1.05</span>x</label>
-                    <input type="range" id="speechRate" min="0.7" max="1.8" step="0.05" value="1.05">
-                </div>
-
-                <div class="control-group">
-                    <label for="speechPitch">Pitch: <span id="pitchVal">1.0</span></label>
-                    <input type="range" id="speechPitch" min="0.5" max="1.5" step="0.1" value="1.0">
-                </div>
-
-                <div class="btn-group">
-                    <button id="btnToggleMute">🔇 Mute Voice</button>
-                    <button id="btnRepeat">🔁 Repeat Last</button>
-                    <button id="btnStop">⏹️ Stop Speech</button>
-                </div>
-            </div>
-
-            <!-- Voice Commands (STT) -->
-            <div class="card">
-                <h2>🎙️ Hands-Free Voice Commands (STT)</h2>
-                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
-                    Click <strong>Activate Listening</strong> and speak commands: 
-                    <em style="color: var(--accent-cyan);">"obstacle mode", "count money", "status", "repeat", "stop"</em>
-                </p>
-
-                <div class="btn-group" style="margin-bottom: 1rem;">
-                    <button id="btnStartListening" class="btn-primary">🎙️ Activate Voice Listener</button>
-                    <button id="btnStopListening">🛑 Stop Listening</button>
-                </div>
-
-                <label>Recognized Commands Log:</label>
-                <div class="command-log" id="commandLog">
-                    <div style="color: var(--text-muted);">Listening log ready...</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Telemetry Simulation & Alerts -->
-        <div class="card">
-            <h2>🧪 Simulate Vision Pipeline Alerts</h2>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
-                Test how AUDIVUE formats CV detection telemetry into clear voice alerts and handles priority safety interrupts.
-            </p>
-
-            <div class="btn-group">
-                <button id="btnObstacleNormal">🪑 Obstacle Alert (Normal)</button>
-                <button id="btnObstacleCritical" class="btn-alert">🚨 Critical Hazard Interrupt!</button>
-                <button id="btnCurrencySim" class="btn-success">💵 Currency Detection & Total (₹800)</button>
-                <button id="btnCustomSpeak">💬 Custom Phrase Test</button>
-            </div>
-        </div>
-
-        <!-- System Output & Status -->
-        <div class="card">
-            <h2>📋 Assistant Telemetry Output</h2>
-            <div class="status-box" id="statusOutput">Initializing AUDIVUE Voice Assistant...</div>
+        <div class="flex items-center gap-2">
+            <button id="btnSwitchObstacle" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-primary-container text-on-primary-container hover:opacity-90">Obstacle</button>
+            <button id="btnSwitchCurrency" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-surface-bright text-on-surface hover:opacity-90">Currency</button>
         </div>
     </div>
 
-    <!-- Load AUDIVUE Voice Assistant Module -->
-    <script src="voice_assistant.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Instantiate AUDIVUE Voice Assistant
-            const assistant = new AudivueVoiceAssistant({
-                rate: 1.05,
-                pitch: 1.0,
-                onStatusUpdate: (msg) => {
-                    document.getElementById('statusOutput').innerText = msg;
-                },
-                onCommandRecognized: (cmd) => {
-                    logCommand(cmd);
-                },
-                onModeChange: (mode) => {
-                    updateModeUI(mode);
-                }
-            });
+    <!-- Controls Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- Text-to-Speech Settings -->
+        <div class="bg-surface-container p-6 rounded-2xl border border-white/5 shadow-xl flex flex-col gap-4">
+            <h2 class="font-headline-md text-xl text-primary flex items-center gap-2">
+                <span class="material-symbols-outlined">volume_up</span> Text-to-Speech (TTS) Config
+            </h2>
+            
+            <div class="flex flex-col gap-2">
+                <label for="voiceSelect" class="text-sm text-on-surface-variant">Top-Rated Female Voice:</label>
+                <select id="voiceSelect" class="bg-surface-container-low border border-outline-variant text-on-surface p-3 rounded-xl text-sm focus:border-primary outline-none"></select>
+            </div>
 
-            // Populate Voice Dropdown
-            function populateVoiceList() {
-                const voiceSelect = document.getElementById('voiceSelect');
-                voiceSelect.innerHTML = '';
-                
-                assistant.availableVoices.forEach((voice) => {
-                    const option = document.createElement('option');
-                    option.textContent = `${voice.name} (${voice.lang})`;
-                    option.value = voice.name;
-                    
-                    if (assistant.selectedVoice && assistant.selectedVoice.name === voice.name) {
-                        option.selected = true;
-                    }
-                    voiceSelect.appendChild(option);
-                });
-            }
+            <div class="grid grid-cols-2 gap-4">
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs text-on-surface-variant">Rate: <span id="rateVal" class="text-primary font-bold">1.05</span>x</label>
+                    <input type="range" id="speechRate" min="0.7" max="1.8" step="0.05" value="1.05" class="accent-primary">
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs text-on-surface-variant">Pitch: <span id="pitchVal" class="text-primary font-bold">1.0</span></label>
+                    <input type="range" id="speechPitch" min="0.5" max="1.5" step="0.1" value="1.0" class="accent-primary">
+                </div>
+            </div>
 
-            // Voice dropdown listener
-            setTimeout(populateVoiceList, 300);
-            if (window.speechSynthesis) {
-                window.speechSynthesis.onvoiceschanged = () => populateVoiceList();
-            }
+            <div class="flex flex-wrap gap-2 pt-2">
+                <button id="btnToggleMute" class="px-4 py-2.5 bg-surface-bright hover:bg-surface-container-high text-on-surface rounded-xl text-sm font-semibold flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[20px]">volume_off</span> Mute Voice
+                </button>
+                <button id="btnRepeat" class="px-4 py-2.5 bg-surface-bright hover:bg-surface-container-high text-on-surface rounded-xl text-sm font-semibold flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[20px]">replay</span> Repeat
+                </button>
+                <button id="btnStop" class="px-4 py-2.5 bg-error-container text-on-error-container rounded-xl text-sm font-semibold flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[20px]">stop</span> Stop
+                </button>
+            </div>
+        </div>
 
-            document.getElementById('voiceSelect').addEventListener('change', (e) => {
-                assistant.setVoiceByName(e.target.value);
-            });
+        <!-- Voice Commands Listener -->
+        <div class="bg-surface-container p-6 rounded-2xl border border-white/5 shadow-xl flex flex-col gap-4">
+            <h2 class="font-headline-md text-xl text-primary flex items-center gap-2">
+                <span class="material-symbols-outlined">mic</span> Hands-Free Voice Commands
+            </h2>
+            <p class="text-xs text-on-surface-variant">
+                Click <strong>Activate Listening</strong> and speak: <em class="text-primary">"obstacle mode", "count money", "status", "repeat", "stop"</em>
+            </p>
 
-            // Rate and Pitch Controls
-            document.getElementById('speechRate').addEventListener('input', (e) => {
-                assistant.speechRate = parseFloat(e.target.value);
-                document.getElementById('rateVal').innerText = e.target.value;
-            });
+            <div class="flex gap-3">
+                <button id="btnStartListening" class="flex-1 py-3 bg-primary-container text-on-primary-container font-bold rounded-xl text-sm hover:opacity-90 flex items-center justify-center gap-2 shadow-lg">
+                    <span class="material-symbols-outlined">mic</span> Activate Listening
+                </button>
+                <button id="btnStopListening" class="py-3 px-4 bg-surface-bright text-on-surface rounded-xl text-sm font-semibold hover:opacity-90">
+                    Stop
+                </button>
+            </div>
 
-            document.getElementById('speechPitch').addEventListener('input', (e) => {
-                assistant.speechPitch = parseFloat(e.target.value);
-                document.getElementById('pitchVal').innerText = e.target.value;
-            });
+            <div class="flex flex-col gap-1">
+                <label class="text-xs text-on-surface-variant">Recognized Commands Log:</label>
+                <div id="commandLog" class="h-32 bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-3 text-xs overflow-y-auto font-mono">
+                    <div class="text-on-surface-variant">Voice commands listener ready...</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            // Button Action Listeners
-            document.getElementById('btnToggleMute').addEventListener('click', () => {
-                const isMuted = assistant.toggleMute();
-                document.getElementById('btnToggleMute').innerText = isMuted ? '🔊 Unmute Voice' : '🔇 Mute Voice';
-            });
+    <!-- Vision Telemetry Simulator -->
+    <div class="bg-surface-container p-6 rounded-2xl border border-white/5 shadow-xl flex flex-col gap-4">
+        <h2 class="font-headline-md text-xl text-primary flex items-center gap-2">
+            <span class="material-symbols-outlined">videocam</span> Vision Pipeline Telemetry Simulator
+        </h2>
+        <div class="flex flex-wrap gap-3">
+            <button id="btnObstacleNormal" class="px-4 py-2.5 bg-surface-bright text-on-surface rounded-xl text-sm font-semibold hover:bg-surface-container-high flex items-center gap-2">
+                <span class="material-symbols-outlined text-[20px]">chair</span> Obstacle Alert (Chair)
+            </button>
+            <button id="btnObstacleCritical" class="px-4 py-2.5 bg-error text-on-error rounded-xl text-sm font-semibold hover:opacity-90 flex items-center gap-2">
+                <span class="material-symbols-outlined text-[20px]">warning</span> Critical Safety Interrupt!
+            </button>
+            <button id="btnCurrencySim" class="px-4 py-2.5 bg-secondary-container text-on-secondary-container rounded-xl text-sm font-semibold hover:opacity-90 flex items-center gap-2">
+                <span class="material-symbols-outlined text-[20px]">payments</span> Currency Total (₹800)
+            </button>
+        </div>
+    </div>
 
-            document.getElementById('btnRepeat').addEventListener('click', () => assistant.repeatLast());
-            document.getElementById('btnStop').addEventListener('click', () => assistant.stopSpeech());
+    <!-- Live Telemetry Status Output -->
+    <div class="bg-surface-container p-6 rounded-2xl border border-white/5 shadow-xl flex flex-col gap-2">
+        <h2 class="font-headline-md text-sm text-on-surface-variant font-bold flex items-center gap-2">
+            <span class="material-symbols-outlined text-[18px]">terminal</span> Telemetry Output
+        </h2>
+        <div id="statusOutput" class="p-4 bg-surface-container-lowest border border-outline-variant/40 rounded-xl font-mono text-xs text-primary min-h-[60px] whitespace-pre-wrap">
+            Initializing AUDIVUE Voice Assistant Dashboard...
+        </div>
+    </div>
+</main>
 
-            // Listening listeners
-            document.getElementById('btnStartListening').addEventListener('click', () => {
-                assistant.startListening();
-                document.getElementById('micPulse').style.display = 'block';
-            });
+<!-- Bottom Navigation Bar Shell -->
+<div class="fixed bottom-0 left-0 w-full z-50">
+    <nav class="flex justify-around items-center px-margin-mobile py-3 bg-surface-container/95 backdrop-blur-xl shadow-2xl border-t border-white/10 rounded-t-2xl max-w-lg mx-auto">
+        <button id="navReady" class="flex flex-col items-center justify-center text-primary h-[touch-target-min] px-5 min-w-[75px] rounded-xl hover:bg-surface-bright transition-colors">
+            <span class="material-symbols-outlined text-[28px] mb-1">mic</span>
+            <span class="font-label-lg text-xs font-semibold">Ready</span>
+        </button>
+        <button id="navProcessing" class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl h-[touch-target-min] px-5 min-w-[75px] border border-primary transition-all">
+            <span class="material-symbols-outlined text-[28px] mb-1" style="font-variation-settings: 'FILL' 1;">settings_suggest</span>
+            <span class="font-label-lg text-xs font-bold">Processing</span>
+        </button>
+        <button id="navSpeaking" class="flex flex-col items-center justify-center text-on-surface-variant h-[touch-target-min] px-5 min-w-[75px] rounded-xl hover:bg-surface-bright transition-colors">
+            <span class="material-symbols-outlined text-[28px] mb-1">volume_up</span>
+            <span class="font-label-lg text-xs font-semibold">Speaking</span>
+        </button>
+    </nav>
+</div>
 
-            document.getElementById('btnStopListening').addEventListener('click', () => {
-                assistant.stopListening();
-                document.getElementById('micPulse').style.display = 'none';
-            });
-
-            // Simulation Listeners
-            document.getElementById('btnObstacleNormal').addEventListener('click', () => {
-                assistant.speakObstacleAlert('Chair', 'slightly left', 'close', false);
-            });
-
-            document.getElementById('btnObstacleCritical').addEventListener('click', () => {
-                assistant.speakObstacleAlert('Open door / obstacle', 'directly center', 'immediate', true);
-            });
-
-            document.getElementById('btnCurrencySim').addEventListener('click', () => {
-                assistant.speakCurrencyAlert([500, 200, 100], 800);
-            });
-
-            document.getElementById('btnCustomSpeak').addEventListener('click', () => {
-                const customText = prompt('Enter text to speak:', 'Welcome to AUDIVUE Voice Assistant.');
-                if (customText) assistant.speak(customText, 'high');
-            });
-
-            function updateModeUI(mode) {
-                const modeText = document.getElementById('activeModeText');
-                const indicator = document.getElementById('modeIndicator');
-                if (mode === 'obstacle') {
-                    modeText.innerText = 'Obstacle & Object Detection';
-                    modeText.style.color = 'var(--accent-cyan)';
-                    indicator.classList.remove('currency');
-                } else {
-                    modeText.innerText = 'Currency Detection & Counting';
-                    modeText.style.color = 'var(--alert-green)';
-                    indicator.classList.add('currency');
-                }
-            }
-
-            function logCommand(cmd) {
-                const logContainer = document.getElementById('commandLog');
-                const timeStr = new Date().toLocaleTimeString();
-                const item = document.createElement('div');
-                item.className = 'command-item';
-                item.innerHTML = `<span><strong>"${cmd}"</strong></span><span class="time">${timeStr}</span>`;
-                logContainer.prepend(item);
+<!-- Load AUDIVUE Voice Assistant Core -->
+<script src="voice_assistant.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const assistant = new AudivueVoiceAssistant({
+            rate: 1.05,
+            pitch: 1.0,
+            onStatusUpdate: (msg) => {
+                document.getElementById('statusOutput').innerText = msg;
+            },
+            onCommandRecognized: (cmd) => {
+                logCommand(cmd);
+            },
+            onModeChange: (mode) => {
+                updateModeUI(mode);
+            },
+            onSpeechStart: () => {
+                document.getElementById('navSpeaking').classList.add('text-primary');
+            },
+            onSpeechEnd: () => {
+                document.getElementById('navSpeaking').classList.remove('text-primary');
             }
         });
-    </script>
+
+        function populateVoiceList() {
+            const voiceSelect = document.getElementById('voiceSelect');
+            voiceSelect.innerHTML = '';
+            
+            assistant.availableVoices.forEach((voice) => {
+                const option = document.createElement('option');
+                option.textContent = `${voice.name} (${voice.lang})`;
+                option.value = voice.name;
+                
+                if (assistant.selectedVoice && assistant.selectedVoice.name === voice.name) {
+                    option.selected = true;
+                }
+                voiceSelect.appendChild(option);
+            });
+        }
+
+        setTimeout(populateVoiceList, 300);
+        if (window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => populateVoiceList();
+        }
+
+        document.getElementById('voiceSelect').addEventListener('change', (e) => {
+            assistant.setVoiceByName(e.target.value);
+        });
+
+        document.getElementById('speechRate').addEventListener('input', (e) => {
+            assistant.speechRate = parseFloat(e.target.value);
+            document.getElementById('rateVal').innerText = e.target.value;
+        });
+
+        document.getElementById('speechPitch').addEventListener('input', (e) => {
+            assistant.speechPitch = parseFloat(e.target.value);
+            document.getElementById('pitchVal').innerText = e.target.value;
+        });
+
+        document.getElementById('btnToggleMute').addEventListener('click', () => {
+            const isMuted = assistant.toggleMute();
+            document.getElementById('btnToggleMute').innerHTML = isMuted 
+                ? '<span class="material-symbols-outlined text-[20px]">volume_up</span> Unmute' 
+                : '<span class="material-symbols-outlined text-[20px]">volume_off</span> Mute Voice';
+        });
+
+        document.getElementById('btnRepeat').addEventListener('click', () => assistant.repeatLast());
+        document.getElementById('btnStop').addEventListener('click', () => assistant.stopSpeech());
+
+        document.getElementById('btnStartListening').addEventListener('click', () => {
+            assistant.startListening();
+            document.getElementById('navReady').classList.add('bg-primary-container', 'text-on-primary-container');
+        });
+
+        document.getElementById('btnStopListening').addEventListener('click', () => {
+            assistant.stopListening();
+            document.getElementById('navReady').classList.remove('bg-primary-container', 'text-on-primary-container');
+        });
+
+        document.getElementById('btnSwitchObstacle').addEventListener('click', () => assistant.setMode('obstacle'));
+        document.getElementById('btnSwitchCurrency').addEventListener('click', () => assistant.setMode('currency'));
+
+        document.getElementById('btnObstacleNormal').addEventListener('click', () => {
+            assistant.speakObstacleAlert('Chair', 'slightly left', 'close', false);
+        });
+
+        document.getElementById('btnObstacleCritical').addEventListener('click', () => {
+            assistant.speakObstacleAlert('Open door / hazard', 'directly center', 'immediate', true);
+        });
+
+        document.getElementById('btnCurrencySim').addEventListener('click', () => {
+            assistant.speakCurrencyAlert([500, 200, 100], 800);
+        });
+
+        function updateModeUI(mode) {
+            const modeText = document.getElementById('activeModeText');
+            const btnObs = document.getElementById('btnSwitchObstacle');
+            const btnCur = document.getElementById('btnSwitchCurrency');
+            
+            if (mode === 'obstacle') {
+                modeText.innerText = 'Obstacle & Object Detection Mode';
+                btnObs.className = 'px-3 py-1.5 text-xs font-semibold rounded-lg bg-primary-container text-on-primary-container';
+                btnCur.className = 'px-3 py-1.5 text-xs font-semibold rounded-lg bg-surface-bright text-on-surface';
+            } else {
+                modeText.innerText = 'Currency Detection & Counting Mode';
+                btnCur.className = 'px-3 py-1.5 text-xs font-semibold rounded-lg bg-primary-container text-on-primary-container';
+                btnObs.className = 'px-3 py-1.5 text-xs font-semibold rounded-lg bg-surface-bright text-on-surface';
+            }
+        }
+
+        function logCommand(cmd) {
+            const logContainer = document.getElementById('commandLog');
+            const timeStr = new Date().toLocaleTimeString();
+            const item = document.createElement('div');
+            item.className = 'flex justify-between py-1 border-b border-white/5';
+            item.innerHTML = `<span class="text-primary font-bold">"${cmd}"</span><span class="text-on-surface-variant">${timeStr}</span>`;
+            logContainer.prepend(item);
+        }
+    });
+</script>
 </body>
 </html>
