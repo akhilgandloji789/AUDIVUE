@@ -3,14 +3,14 @@
  * Handles Google OAuth Sign-In, Session Persistence, User Profile Management & Sign-Out
  */
 
-// Firebase Default Client Configuration (AUDIVUE App)
+// Firebase App Client Configuration for: audivue
 const firebaseConfig = {
-    apiKey: "AIzaSyAUDIVUE-Vision-Assistant-Key-2026",
-    authDomain: "audivue-ai-vision.firebaseapp.com",
-    projectId: "audivue-ai-vision",
-    storageBucket: "audivue-ai-vision.appspot.com",
+    apiKey: "AIzaSyAUDIVUE-Vision-Key-2026",
+    authDomain: "audivue.firebaseapp.com",
+    projectId: "audivue",
+    storageBucket: "audivue.appspot.com",
     messagingSenderId: "987654321012",
-    appId: "1:987654321012:web:audivue2026key"
+    appId: "1:987654321012:web:audivue2026"
 };
 
 // Initialize Firebase if loaded
