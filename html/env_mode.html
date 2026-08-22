@@ -179,13 +179,23 @@ document.addEventListener('DOMContentLoaded', async () => {
   const hiddenCanvas = document.createElement('canvas');
   const hiddenCtx = hiddenCanvas.getContext('2d');
   let lastSpokenText = "";
+  let lastSpokenTime = 0;
 
   function handleDetectionData(data) {
     if (data.engine && document.getElementById('engineBadge')) {
       document.getElementById('engineBadge').textContent = data.engine;
     }
+    
     if (data.status === 'success' && Array.isArray(data.detections)) {
       arLayer.innerHTML = '';
+
+      // If no objects detected, clear screen & reset caption silently
+      if (data.detections.length === 0) {
+        captionEl.textContent = '"Scanning environment for real-time obstacles..."';
+        lastSpokenText = "";
+        return;
+      }
+
       data.detections.forEach(det => {
         const box = document.createElement('div');
         box.className = 'ar-box';
@@ -201,12 +211,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         arLayer.appendChild(box);
       });
 
-      if (data.spoken_summary && data.spoken_summary !== lastSpokenText) {
+      const now = Date.now();
+      // Enforce speech deduplication & 8-second cooldown for repeating identical phrases
+      if (data.spoken_summary && (data.spoken_summary !== lastSpokenText || (now - lastSpokenTime) > 8000)) {
         captionEl.textContent = `"${data.spoken_summary}"`;
         if (va && !isMuted) {
           va.speak(data.spoken_summary, 'normal');
         }
         lastSpokenText = data.spoken_summary;
+        lastSpokenTime = now;
       }
     }
   }
@@ -279,47 +292,55 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!cocoModel || !videoEl || videoEl.paused || videoEl.ended || !videoEl.videoWidth) return;
     try {
       const predictions = await cocoModel.detect(videoEl);
-      if (predictions && predictions.length > 0) {
-        const vW = videoEl.videoWidth || 640;
-        const vH = videoEl.videoHeight || 480;
-        
-        const detections = predictions.map(p => {
-          const [x, y, w, h] = p.bbox;
-          const leftPct = (x / vW) * 100;
-          const topPct = (y / vH) * 100;
-          const widthPct = (w / vW) * 100;
-          const heightPct = (h / vH) * 100;
-          
-          const centerX = (x + w / 2) / vW;
-          const areaPct = (w * h) / (vW * vH);
-          
-          let position = 'Center';
-          if (centerX < 0.38) position = 'Left';
-          else if (centerX > 0.62) position = 'Right';
-          
-          let proximity = 'Far';
-          if (areaPct > 0.12) proximity = 'Close';
-          else if (areaPct > 0.03) proximity = 'Medium';
-          
-          return {
-            label: p.class.toUpperCase(),
-            confidence: p.score,
-            position: position,
-            proximity: proximity,
-            bbox_pct: { left: leftPct, top: topPct, width: widthPct, height: heightPct }
-          };
-        });
-        
-        const topDet = detections[0];
-        const spoken = `${topDet.label} detected in ${topDet.position} quadrant — ${topDet.proximity} proximity.`;
-        
+      if (!predictions || predictions.length === 0) {
         handleDetectionData({
           status: 'success',
           engine: 'IN-BROWSER AI ENGINE (REAL-TIME)',
-          detections: detections,
-          spoken_summary: spoken
+          detections: [],
+          spoken_summary: ''
         });
+        return;
       }
+
+      const vW = videoEl.videoWidth || 640;
+      const vH = videoEl.videoHeight || 480;
+      
+      const detections = predictions.map(p => {
+        const [x, y, w, h] = p.bbox;
+        const leftPct = (x / vW) * 100;
+        const topPct = (y / vH) * 100;
+        const widthPct = (w / vW) * 100;
+        const heightPct = (h / vH) * 100;
+        
+        const centerX = (x + w / 2) / vW;
+        const areaPct = (w * h) / (vW * vH);
+        
+        let position = 'Center';
+        if (centerX < 0.38) position = 'Left';
+        else if (centerX > 0.62) position = 'Right';
+        
+        let proximity = 'Far';
+        if (areaPct > 0.12) proximity = 'Close';
+        else if (areaPct > 0.03) proximity = 'Medium';
+        
+        return {
+          label: p.class.toUpperCase(),
+          confidence: p.score,
+          position: position,
+          proximity: proximity,
+          bbox_pct: { left: leftPct, top: topPct, width: widthPct, height: heightPct }
+        };
+      });
+      
+      const topDet = detections[0];
+      const spoken = `${topDet.label} detected in ${topDet.position} quadrant — ${topDet.proximity} proximity.`;
+      
+      handleDetectionData({
+        status: 'success',
+        engine: 'IN-BROWSER AI ENGINE (REAL-TIME)',
+        detections: detections,
+        spoken_summary: spoken
+      });
     } catch(err){}
   }
 
