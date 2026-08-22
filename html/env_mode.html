@@ -166,15 +166,71 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('muteBtn').style.background = isMuted ? 'rgba(255,180,171,0.15)' : 'rgba(255,255,255,0.07)';
   });
 
-  // Subtle AR jitter animation for realism
-  let tick = 0;
-  setInterval(() => {
-    tick += 0.04;
-    const chair = document.getElementById('boxChair');
-    const person = document.getElementById('boxPerson');
-    if (chair) chair.style.left = (10 + Math.sin(tick) * 0.4) + '%';
-    if (person) person.style.top = (17 + Math.sin(tick * 0.7) * 0.3) + '%';
-  }, 60);
+  // Live Real-Time YOLOv8 Detection Loop from Extracted Repo
+  const videoEl = document.getElementById('camFeed');
+  const arLayer = document.getElementById('arLayer');
+  const captionEl = document.getElementById('captionText');
+  const hiddenCanvas = document.createElement('canvas');
+  const hiddenCtx = hiddenCanvas.getContext('2d');
+  let lastSpokenText = "";
+  let isDetecting = false;
+
+  async function captureAndDetect() {
+    if (isDetecting || !videoEl || videoEl.paused || videoEl.ended || !videoEl.videoWidth) return;
+    isDetecting = true;
+
+    try {
+      hiddenCanvas.width = 480;
+      hiddenCanvas.height = Math.round(480 * (videoEl.videoHeight / videoEl.videoWidth));
+      hiddenCtx.drawImage(videoEl, 0, 0, hiddenCanvas.width, hiddenCanvas.height);
+      const base64Image = hiddenCanvas.toDataURL('image/jpeg', 0.6);
+
+      const response = await fetch('/api/detect_obstacle', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ image: base64Image })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.status === 'success' && Array.isArray(data.detections)) {
+          // If real detections found from backend YOLO model
+          if (data.detections.length > 0) {
+            arLayer.innerHTML = '';
+            data.detections.forEach(det => {
+              const box = document.createElement('div');
+              box.className = 'ar-box';
+              box.style.top = det.bbox_pct.top + '%';
+              box.style.left = det.bbox_pct.left + '%';
+              box.style.width = det.bbox_pct.width + '%';
+              box.style.height = det.bbox_pct.height + '%';
+              if (det.proximity === 'Close') {
+                box.style.borderColor = '#ffb4ab';
+                box.style.boxShadow = '0 0 18px rgba(255,180,171,0.6)';
+              }
+              box.innerHTML = `<div class="ar-label"><span class="ar-dot"></span>${det.label} — ${Math.round(det.confidence * 100)}% (${det.position}, ${det.proximity})</div>`;
+              arLayer.appendChild(box);
+            });
+          }
+
+          if (data.spoken_summary && data.spoken_summary !== lastSpokenText) {
+            captionEl.textContent = `"${data.spoken_summary}"`;
+            if (va && !isMuted) {
+              va.speak(data.spoken_summary, 'normal');
+            }
+            lastSpokenText = data.spoken_summary;
+          }
+        }
+      }
+    } catch (err) {
+      // Backend offline or loading - keep default AR view
+    } finally {
+      isDetecting = false;
+    }
+  }
+
+  // Poll backend YOLO model every 400ms
+  setInterval(captureAndDetect, 400);
 });
 </script>
 </body>

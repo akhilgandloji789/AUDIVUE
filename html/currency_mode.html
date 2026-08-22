@@ -165,15 +165,66 @@ document.addEventListener('DOMContentLoaded', async () => {
     setTimeout(() => va.speakCurrencyAlert([500, 200, 100], 800), 700);
   }
 
-  // Subtle AR jitter
-  let tick = 0;
-  setInterval(() => {
-    tick += 0.04;
-    const b500 = document.getElementById('box500');
-    const b200 = document.getElementById('box200');
-    if (b500) b500.style.top = (30 + Math.sin(tick * 0.9) * 0.4) + '%';
-    if (b200) b200.style.left = (38 + Math.sin(tick * 1.1) * 0.3) + '%';
-  }, 60);
+  // Live Real-Time Currency YOLO Detection Loop from Extracted Repo
+  const videoEl = document.getElementById('camFeed');
+  const arLayer = document.querySelector('.ar-layer');
+  const currencyTextEl = document.getElementById('currencyText');
+  const hiddenCanvas = document.createElement('canvas');
+  const hiddenCtx = hiddenCanvas.getContext('2d');
+  let lastSpokenText = "";
+  let isDetecting = false;
+
+  async function captureAndDetectCurrency() {
+    if (isDetecting || !videoEl || videoEl.paused || videoEl.ended || !videoEl.videoWidth) return;
+    isDetecting = true;
+
+    try {
+      hiddenCanvas.width = 480;
+      hiddenCanvas.height = Math.round(480 * (videoEl.videoHeight / videoEl.videoWidth));
+      hiddenCtx.drawImage(videoEl, 0, 0, hiddenCanvas.width, hiddenCanvas.height);
+      const base64Image = hiddenCanvas.toDataURL('image/jpeg', 0.6);
+
+      const response = await fetch('/api/detect_currency', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ image: base64Image })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.status === 'success' && Array.isArray(data.detections)) {
+          if (data.detections.length > 0) {
+            arLayer.innerHTML = '';
+            data.detections.forEach(det => {
+              const box = document.createElement('div');
+              box.className = 'ar-box-violet';
+              box.style.top = det.bbox_pct.top + '%';
+              box.style.left = det.bbox_pct.left + '%';
+              box.style.width = det.bbox_pct.width + '%';
+              box.style.height = det.bbox_pct.height + '%';
+              box.innerHTML = `<div class="ar-label-violet">${det.label} — ${Math.round(det.confidence * 100)}%</div>`;
+              arLayer.appendChild(box);
+            });
+          }
+
+          if (data.spoken_summary && data.spoken_summary !== lastSpokenText) {
+            currencyTextEl.textContent = `"${data.spoken_summary}"`;
+            if (typeof AudivueVoiceAssistant !== 'undefined') {
+              const va = new AudivueVoiceAssistant({ rate: 1.05, pitch: 1.0 });
+              va.speak(data.spoken_summary, 'high');
+            }
+            lastSpokenText = data.spoken_summary;
+          }
+        }
+      }
+    } catch (err) {
+      // Backend offline or initializing
+    } finally {
+      isDetecting = false;
+    }
+  }
+
+  setInterval(captureAndDetectCurrency, 400);
 });
 </script>
 </body>
