@@ -209,35 +209,99 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  // Connect WebSocket
-  const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
-  const wsUrl = `${wsProtocol}//${location.host}/ws/detect`;
+  // Connect WebSocket & REST API to FastAPI YOLO Server
   let ws = null;
+  let isSendingRest = false;
 
+  function getBackendWsUrls() {
+    if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+      return [
+        `${location.protocol === 'https:' ? 'wss:' : 'ws:'}//${location.host}/ws/detect`,
+        `ws://localhost:8000/ws/detect`
+      ];
+    }
+    return [
+      `ws://localhost:8000/ws/detect`,
+      `ws://127.0.0.1:8000/ws/detect`
+    ];
+  }
+
+  let backendIdx = 0;
   function initWebSocket() {
-    ws = new WebSocket(wsUrl);
-    ws.onopen = () => console.log('[AUDIVUE] Connected to FastAPI WebSocket AI Stream');
-    ws.onmessage = (evt) => {
-      try {
-        const data = JSON.parse(evt.data);
-        handleDetectionData(data);
-      } catch(e){}
-    };
-    ws.onclose = () => setTimeout(initWebSocket, 2000);
+    const urls = getBackendWsUrls();
+    const targetUrl = urls[backendIdx % urls.length];
+    console.log('[AUDIVUE] Connecting to YOLO AI Stream:', targetUrl);
+    
+    try {
+      ws = new WebSocket(targetUrl);
+      ws.onopen = () => {
+        console.log('[AUDIVUE] Connected to FastAPI WebSocket AI Stream:', targetUrl);
+        if (document.getElementById('engineBadge')) {
+          document.getElementById('engineBadge').textContent = "FASTAPI + YOLO11 (PYTORCH) STREAM";
+        }
+      };
+      ws.onmessage = (evt) => {
+        try {
+          const data = JSON.parse(evt.data);
+          handleDetectionData(data);
+        } catch(e){}
+      };
+      ws.onerror = () => {
+        backendIdx++;
+      };
+      ws.onclose = () => {
+        backendIdx++;
+        setTimeout(initWebSocket, 2000);
+      };
+    } catch (e) {
+      backendIdx++;
+      setTimeout(initWebSocket, 2000);
+    }
   }
   initWebSocket();
 
-  // Binary Frame Streamer @ 12 FPS
-  setInterval(() => {
-    if (!ws || ws.readyState !== WebSocket.OPEN || !videoEl || !videoEl.videoWidth || videoEl.paused) return;
+  // Dual Frame Streamer: Primary WebSocket (12 FPS) + Fallback HTTP REST POST
+  setInterval(async () => {
+    if (!videoEl || !videoEl.videoWidth || videoEl.paused) return;
+
     hiddenCanvas.width = 480;
     hiddenCanvas.height = Math.round(480 * (videoEl.videoHeight / videoEl.videoWidth));
     hiddenCtx.drawImage(videoEl, 0, 0, hiddenCanvas.width, hiddenCanvas.height);
-    hiddenCanvas.toBlob((blob) => {
-      if (blob && ws && ws.readyState === WebSocket.OPEN) {
-        ws.send(blob);
+
+    // 1. Try WebSocket binary streaming if connected
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      hiddenCanvas.toBlob((blob) => {
+        if (blob && ws && ws.readyState === WebSocket.OPEN) {
+          ws.send(blob);
+        }
+      }, 'image/jpeg', 0.6);
+      return;
+    }
+
+    // 2. HTTP REST POST Fallback if WebSocket connecting
+    if (!isSendingRest) {
+      isSendingRest = true;
+      try {
+        const dataUrl = hiddenCanvas.toDataURL('image/jpeg', 0.5);
+        const restEndpoint = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+          ? '/api/detect_obstacle'
+          : 'http://localhost:8000/api/detect_obstacle';
+
+        const res = await fetch(restEndpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ image: dataUrl })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          handleDetectionData(data);
+        }
+      } catch (e) {
+        console.warn('[AUDIVUE REST Fallback] Notice:', e);
+      } finally {
+        isSendingRest = false;
       }
-    }, 'image/jpeg', 0.6);
+    }
   }, 90);
 });
 </script>
