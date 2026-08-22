@@ -81,6 +81,20 @@ def get_byte_tracker():
     return byte_tracker
 
 
+yolo11_model = None
+yolo_model = None
+
+def get_yolo11_model():
+    global yolo11_model
+    if yolo11_model is None:
+        try:
+            from ultralytics import YOLO
+            print("[AUDIVUE Server] Initializing Latest YOLO11x Model...")
+            yolo11_model = YOLO("yolo11x.pt")
+        except Exception as e:
+            print(f"[AUDIVUE Server] YOLO11 loading exception: {e}")
+    return yolo11_model
+
 def get_yolo_model():
     global yolo_model
     if yolo_model is None:
