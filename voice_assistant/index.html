@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AUDIVUE Voice Assistant Module — Test & Verification</title>
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: #151c2e;
+            --accent-cyan: #00f2fe;
+            --accent-purple: #4facfe;
+            --alert-red: #ff4b4b;
+            --alert-green: #00e676;
+            --text-main: #f0f4f8;
+            --text-muted: #94a3b8;
+            --border-color: #2a364f;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        header {
+            text-align: center;
+            padding-bottom: 1rem;
+            border-bottom: 1fr solid var(--border-color);
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background: rgba(0, 242, 254, 0.1);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        }
+
+        .card h2 {
+            font-size: 1.3rem;
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        select, input[type="range"], input[type="text"] {
+            background: #0d121f;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        select:focus, input:focus {
+            border-color: var(--accent-cyan);
+        }
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        button {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 0.75rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        button:hover {
+            border-color: var(--accent-cyan);
+            transform: translateY(-2px);
+        }
+
+        button.btn-primary {
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            border: none;
+            color: #fff;
+        }
+
+        button.btn-alert {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            border: none;
+            color: #fff;
+        }
+
+        button.btn-success {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            border: none;
+            color: #0b0f19;
+        }
+
+        .status-box {
+            background: #090d16;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            min-height: 80px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: var(--accent-cyan);
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .command-log {
+            height: 140px;
+            overflow-y: auto;
+            background: #090d16;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-size: 0.85rem;
+        }
+
+        .command-item {
+            padding: 0.3rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .command-item .time {
+            color: var(--text-muted);
+        }
+
+        .mode-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: #0d1424;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-cyan);
+            margin-bottom: 1rem;
+        }
+
+        .mode-indicator.currency {
+            border-left-color: var(--alert-green);
+        }
+
+        .pulse {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--alert-green);
+            box-shadow: 0 0 10px var(--alert-green);
+            animation: pulse-anim 1.5s infinite;
+        }
+
+        @keyframes pulse-anim {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.15); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AUDIVUE Voice Assistant</h1>
+            <p>Real-time Text-to-Speech & Hands-Free Voice Control Test Suite</p>
+            <span class="badge">Track 03 // Computer Vision Web Assistant</span>
+        </header>
+
+        <!-- Current Status & Mode Indicator -->
+        <div class="mode-indicator" id="modeIndicator">
+            <div class="pulse" id="micPulse" style="display: none;"></div>
+            <div>
+                <strong>Active Pipeline Mode: </strong>
+                <span id="activeModeText" style="color: var(--accent-cyan);">Obstacle & Object Detection</span>
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <!-- Voice Synthesis Settings -->
+            <div class="card">
+                <h2>🔊 Text-to-Speech (TTS) Config</h2>
+                
+                <div class="control-group">
+                    <label for="voiceSelect">Selected Voice (Top Rated Female Preferred):</label>
+                    <select id="voiceSelect"></select>
+                </div>
+
+                <div class="control-group">
+                    <label for="speechRate">Speech Rate: <span id="rateVal">1.05</span>x</label>
+                    <input type="range" id="speechRate" min="0.7" max="1.8" step="0.05" value="1.05">
+                </div>
+
+                <div class="control-group">
+                    <label for="speechPitch">Pitch: <span id="pitchVal">1.0</span></label>
+                    <input type="range" id="speechPitch" min="0.5" max="1.5" step="0.1" value="1.0">
+                </div>
+
+                <div class="btn-group">
+                    <button id="btnToggleMute">🔇 Mute Voice</button>
+                    <button id="btnRepeat">🔁 Repeat Last</button>
+                    <button id="btnStop">⏹️ Stop Speech</button>
+                </div>
+            </div>
+
+            <!-- Voice Commands (STT) -->
+            <div class="card">
+                <h2>🎙️ Hands-Free Voice Commands (STT)</h2>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+                    Click <strong>Activate Listening</strong> and speak commands: 
+                    <em style="color: var(--accent-cyan);">"obstacle mode", "count money", "status", "repeat", "stop"</em>
+                </p>
+
+                <div class="btn-group" style="margin-bottom: 1rem;">
+                    <button id="btnStartListening" class="btn-primary">🎙️ Activate Voice Listener</button>
+                    <button id="btnStopListening">🛑 Stop Listening</button>
+                </div>
+
+                <label>Recognized Commands Log:</label>
+                <div class="command-log" id="commandLog">
+                    <div style="color: var(--text-muted);">Listening log ready...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Telemetry Simulation & Alerts -->
+        <div class="card">
+            <h2>🧪 Simulate Vision Pipeline Alerts</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+                Test how AUDIVUE formats CV detection telemetry into clear voice alerts and handles priority safety interrupts.
+            </p>
+
+            <div class="btn-group">
+                <button id="btnObstacleNormal">🪑 Obstacle Alert (Normal)</button>
+                <button id="btnObstacleCritical" class="btn-alert">🚨 Critical Hazard Interrupt!</button>
+                <button id="btnCurrencySim" class="btn-success">💵 Currency Detection & Total (₹800)</button>
+                <button id="btnCustomSpeak">💬 Custom Phrase Test</button>
+            </div>
+        </div>
+
+        <!-- System Output & Status -->
+        <div class="card">
+            <h2>📋 Assistant Telemetry Output</h2>
+            <div class="status-box" id="statusOutput">Initializing AUDIVUE Voice Assistant...</div>
+        </div>
+    </div>
+
+    <!-- Load AUDIVUE Voice Assistant Module -->
+    <script src="voice_assistant.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Instantiate AUDIVUE Voice Assistant
+            const assistant = new AudivueVoiceAssistant({
+                rate: 1.05,
+                pitch: 1.0,
+                onStatusUpdate: (msg) => {
+                    document.getElementById('statusOutput').innerText = msg;
+                },
+                onCommandRecognized: (cmd) => {
+                    logCommand(cmd);
+                },
+                onModeChange: (mode) => {
+                    updateModeUI(mode);
+                }
+            });
+
+            // Populate Voice Dropdown
+            function populateVoiceList() {
+                const voiceSelect = document.getElementById('voiceSelect');
+                voiceSelect.innerHTML = '';
+                
+                assistant.availableVoices.forEach((voice) => {
+                    const option = document.createElement('option');
+                    option.textContent = `${voice.name} (${voice.lang})`;
+                    option.value = voice.name;
+                    
+                    if (assistant.selectedVoice && assistant.selectedVoice.name === voice.name) {
+                        option.selected = true;
+                    }
+                    voiceSelect.appendChild(option);
+                });
+            }
+
+            // Voice dropdown listener
+            setTimeout(populateVoiceList, 300);
+            if (window.speechSynthesis) {
+                window.speechSynthesis.onvoiceschanged = () => populateVoiceList();
+            }
+
+            document.getElementById('voiceSelect').addEventListener('change', (e) => {
+                assistant.setVoiceByName(e.target.value);
+            });
+
+            // Rate and Pitch Controls
+            document.getElementById('speechRate').addEventListener('input', (e) => {
+                assistant.speechRate = parseFloat(e.target.value);
+                document.getElementById('rateVal').innerText = e.target.value;
+            });
+
+            document.getElementById('speechPitch').addEventListener('input', (e) => {
+                assistant.speechPitch = parseFloat(e.target.value);
+                document.getElementById('pitchVal').innerText = e.target.value;
+            });
+
+            // Button Action Listeners
+            document.getElementById('btnToggleMute').addEventListener('click', () => {
+                const isMuted = assistant.toggleMute();
+                document.getElementById('btnToggleMute').innerText = isMuted ? '🔊 Unmute Voice' : '🔇 Mute Voice';
+            });
+
+            document.getElementById('btnRepeat').addEventListener('click', () => assistant.repeatLast());
+            document.getElementById('btnStop').addEventListener('click', () => assistant.stopSpeech());
+
+            // Listening listeners
+            document.getElementById('btnStartListening').addEventListener('click', () => {
+                assistant.startListening();
+                document.getElementById('micPulse').style.display = 'block';
+            });
+
+            document.getElementById('btnStopListening').addEventListener('click', () => {
+                assistant.stopListening();
+                document.getElementById('micPulse').style.display = 'none';
+            });
+
+            // Simulation Listeners
+            document.getElementById('btnObstacleNormal').addEventListener('click', () => {
+                assistant.speakObstacleAlert('Chair', 'slightly left', 'close', false);
+            });
+
+            document.getElementById('btnObstacleCritical').addEventListener('click', () => {
+                assistant.speakObstacleAlert('Open door / obstacle', 'directly center', 'immediate', true);
+            });
+
+            document.getElementById('btnCurrencySim').addEventListener('click', () => {
+                assistant.speakCurrencyAlert([500, 200, 100], 800);
+            });
+
+            document.getElementById('btnCustomSpeak').addEventListener('click', () => {
+                const customText = prompt('Enter text to speak:', 'Welcome to AUDIVUE Voice Assistant.');
+                if (customText) assistant.speak(customText, 'high');
+            });
+
+            function updateModeUI(mode) {
+                const modeText = document.getElementById('activeModeText');
+                const indicator = document.getElementById('modeIndicator');
+                if (mode === 'obstacle') {
+                    modeText.innerText = 'Obstacle & Object Detection';
+                    modeText.style.color = 'var(--accent-cyan)';
+                    indicator.classList.remove('currency');
+                } else {
+                    modeText.innerText = 'Currency Detection & Counting';
+                    modeText.style.color = 'var(--alert-green)';
+                    indicator.classList.add('currency');
+                }
+            }
+
+            function logCommand(cmd) {
+                const logContainer = document.getElementById('commandLog');
+                const timeStr = new Date().toLocaleTimeString();
+                const item = document.createElement('div');
+                item.className = 'command-item';
+                item.innerHTML = `<span><strong>"${cmd}"</strong></span><span class="time">${timeStr}</span>`;
+                logContainer.prepend(item);
+            }
+        });
+    </script>
+</body>
+</html>

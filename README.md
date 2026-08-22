@@ -5,13 +5,14 @@
 <h1 align="center">AUDIVUE</h1>
 <p align="center">
   <b>Real-Time AI Vision & Currency Assistant for the Visually Impaired</b><br>
-  <i>Transforming Live Camera Feeds into Real-Time Spatial Intelligence and Automated Currency Calculations</i>
+  <i>Transforming Live Camera Feeds into Real-Time Spatial Intelligence, Automated Currency Calculations, and Hands-Free Voice Guidance</i>
 </p>
 
 <p align="center">
   <a href="#problem-statement">Problem Statement</a> •
   <a href="#our-solution">Our Solution</a> •
   <a href="#dual-pipeline-architecture">Architecture</a> •
+  <a href="#voice-assistant">Voice Assistant</a> •
   <a href="#track-03-compliance">Track 03 Compliance</a> •
   <a href="#repository-docs">Documentation</a>
 </p>
@@ -32,7 +33,7 @@ Over **2.2 billion people worldwide** live with vision impairment or blindness (
 
 ## 💡 Our Solution
 
-**AUDIVUE** is a real-time AI Vision Assistant designed to run on smartphone camera feeds or webcams. It uses local computer vision models to "see" the world on the user's behalf and translates visual observations into immediate spatial detection alerts and telemetry — with **zero manual input or screen interaction required**.
+**AUDIVUE** is a real-time AI Vision Assistant designed to run on smartphone camera feeds or webcams. It uses local computer vision models to "see" the world on the user's behalf and translates visual observations into immediate spoken audio alerts and hands-free voice commands — powered by our dedicated **Web Voice Assistant Module**.
 
 ---
 
@@ -41,7 +42,7 @@ Over **2.2 billion people worldwide** live with vision impairment or blindness (
 AUDIVUE runs two focused, high-performance vision pipelines:
 
 ```
-Camera Feed ──► CV Model (YOLOv8) ──► Telemetry / Spatial Detection Alerts
+Camera Feed ──► CV Model (YOLOv8) ──► Telemetry / Spatial Detection Alerts ──► Web Voice Assistant
 ```
 
 ### 1️⃣ Pipeline 1: Obstacle & Object Awareness
@@ -55,6 +56,16 @@ Camera Feed ──► CV Model (YOLOv8) ──► Telemetry / Spatial Detection 
 - **CV Architecture:** YOLOv8 fine-tuned on Indian Currency dataset (denominated from ₹10 to ₹2000).
 - **Detection & Calculation:** Detects all notes in frame simultaneously, extracts individual values, and automatically computes the total monetary sum ($\sum \text{notes}$).
 - **Output:** Aggregate detection summary (*"500, 200, and 100 rupees detected — total 800 rupees"*).
+
+---
+
+## 🎙️ Web Voice Assistant Module (`voice_assistant/`)
+
+Located in the [`voice_assistant/`](voice_assistant/) directory:
+- **Top-Rated Female Voice Synthesis:** Prefers natural high-quality female voices (Google US English Female, MS Jenny/Zira, Apple Samantha).
+- **Priority Queue & Safety Interrupts:** Critical obstacle alerts instantly cut off lower-priority speech.
+- **Hands-Free Speech-to-Text Commands:** Responds to spoken commands (*"obstacle mode"*, *"count money"*, *"status"*, *"stop"*, *"repeat"*).
+- **Interactive Test Page:** Try the live demonstration at [`voice_assistant/index.html`](voice_assistant/index.html).
 
 ---
 
@@ -75,7 +86,7 @@ AUDIVUE is built in strict adherence to **Track 03 // Computer Vision** hackatho
 
 - [📋 Product Requirement Document (PRD.md)](PRD.md) — What to build, target users, and detailed features.
 - [📏 Technical Rules & Guidelines (RULES.md)](RULES.md) — What to use and what to avoid during development.
-- [🏗️ System Architecture (Architecture.md)](Architecture.md) — System architecture, dual pipelines, tech stack, and file structure.
+- [🏗️ System Architecture (Architecture.md)](Architecture.md) — System architecture, dual pipelines, voice assistant, tech stack, and file structure.
 
 ---
 
