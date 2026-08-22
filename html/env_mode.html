@@ -82,7 +82,7 @@
     <h1>AUDIVUE</h1>
   </a>
   <div class="hdr-right">
-    <span class="badge-mode">Obstacle Mode</span>
+    <span class="badge-mode" id="engineBadge">RF-DETR Transformer + ByteTrack</span>
     <div class="badge-live"><span class="live-dot"></span>LIVE</div>
     <button class="icon-btn" id="muteBtn" title="Mute / Unmute voice">
       <span class="ms material-symbols-outlined" id="muteIcon">volume_up</span>
@@ -193,6 +193,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       if (response.ok) {
         const data = await response.json();
+        if (data.engine && document.getElementById('engineBadge')) {
+          document.getElementById('engineBadge').textContent = data.engine;
+        }
         if (data.status === 'success' && Array.isArray(data.detections)) {
           // If real detections found from backend YOLO model
           if (data.detections.length > 0) {
