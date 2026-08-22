@@ -1,119 +1,66 @@
 <!DOCTYPE html>
-<html class="dark" lang="en">
+<html lang="en">
 <head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>AUDIVUE - Camera & Microphone Access</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AUDIVUE — Enable Camera & Mic</title>
+<link rel="stylesheet" href="../assets/audivue.css"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "primary": "#adc6ff",
-                        "primary-container": "#4d8eff",
-                        "background": "#0B1220",
-                        "surface": "#121414",
-                        "surface-container": "#1e2020",
-                        "on-surface": "#e2e2e2",
-                        "on-surface-variant": "#c2c6d6"
-                    }
-                }
-            }
-        }
-    </script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <style>
-        body { font-family: 'Inter', sans-serif; background-color: #0B1220; min-height: max(884px, 100dvh); }
-        .glass-card {
-            background: rgba(18, 20, 20, 0.75);
-            backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-    </style>
+  .top-bar-fix{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:60px;background:rgba(11,18,32,0.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.07);}
+  .logo-link{display:flex;align-items:center;gap:10px;text-decoration:none;}
+  .logo-link .material-symbols-outlined{font-size:28px;color:#adc6ff;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;}
+  .logo-link h1{font-size:22px;font-weight:900;color:#adc6ff;margin:0;}
+  .btn-p{width:100%;height:56px;background:#4d8eff;color:#001a42;font-weight:700;font-size:16px;font-family:Inter,sans-serif;border:none;border-radius:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all 0.15s;box-shadow:0 4px 20px rgba(77,142,255,0.3);margin-bottom:12px;}
+  .btn-p:hover{background:#5a97ff;}.btn-p:active{transform:scale(0.97);}
+  .btn-s{width:100%;height:48px;background:transparent;color:#c2c6d6;font-weight:600;font-size:14px;font-family:Inter,sans-serif;border:1px solid rgba(255,255,255,0.15);border-radius:12px;cursor:pointer;transition:all 0.15s;}
+  .btn-s:hover{background:rgba(255,255,255,0.05);}.btn-s:active{transform:scale(0.97);}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.45}}
+  @keyframes slideUpAnim{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+  .slide-up{animation:slideUpAnim 0.45s cubic-bezier(0.16,1,0.3,1) both;}
+</style>
 </head>
-<body class="text-on-background min-h-screen flex flex-col justify-between relative overflow-hidden">
-
-<!-- TopAppBar -->
-<header class="w-full z-50 flex justify-between items-center px-6 h-16 border-b border-white/10 bg-background/80 backdrop-blur-md sticky top-0">
-<div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
-<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">visibility</span>
-<h1 class="font-bold text-2xl text-primary tracking-tight">AUDIVUE</h1>
-</div>
-<div class="flex items-center gap-2 bg-surface-container px-3 py-1.5 rounded-full border border-primary/20">
-<span class="w-2.5 h-2.5 bg-blue-400 rounded-full animate-pulse"></span>
-<span class="text-xs font-bold text-primary tracking-wider uppercase">PERMISSIONS</span>
-</div>
+<body style="background:#0B1220;min-height:100vh;display:flex;flex-direction:column;font-family:Inter,sans-serif;">
+<header class="top-bar-fix">
+  <a class="logo-link" href="index.html"><span class="material-symbols-outlined">visibility</span><h1>AUDIVUE</h1></a>
+  <div style="display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;background:rgba(77,142,255,0.1);border:1px solid rgba(77,142,255,0.3);color:#adc6ff;"><span style="width:8px;height:8px;border-radius:50%;background:#4d8eff;display:inline-block;animation:pulse 2s infinite;"></span>PERMISSIONS</div>
 </header>
-
-<!-- Main Permissions Card -->
-<main class="flex-grow z-10 flex flex-col justify-center items-center px-6 py-12 relative">
-<div class="glass-card rounded-3xl p-8 md:p-10 max-w-lg w-full flex flex-col items-center text-center shadow-2xl relative overflow-hidden">
-<!-- Top Glow Accent -->
-<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-primary-container to-primary"></div>
-
-<!-- Icon Pair -->
-<div class="flex items-center justify-center gap-4 mb-6">
-    <div class="w-16 h-16 rounded-full bg-primary-container/20 flex items-center justify-center border border-primary/30 shadow-lg">
-        <span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">videocam</span>
+<main style="flex:1;display:flex;align-items:center;justify-content:center;padding:24px;">
+  <div class="glass slide-up" style="border-radius:24px;padding:36px 24px;max-width:420px;width:100%;position:relative;overflow:hidden;">
+    <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#4d8eff,#a855f7);"></div>
+    <div style="display:flex;justify-content:center;gap:16px;margin-bottom:24px;">
+      <div style="width:60px;height:60px;border-radius:50%;background:rgba(77,142,255,0.12);border:2px solid rgba(77,142,255,0.3);display:flex;align-items:center;justify-content:center;"><span class="material-symbols-outlined" style="font-size:28px;color:#4d8eff;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;">videocam</span></div>
+      <div style="width:60px;height:60px;border-radius:50%;background:rgba(77,142,255,0.12);border:2px solid rgba(77,142,255,0.3);display:flex;align-items:center;justify-content:center;"><span class="material-symbols-outlined" style="font-size:28px;color:#4d8eff;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;">mic</span></div>
     </div>
-    <div class="w-16 h-16 rounded-full bg-primary-container/20 flex items-center justify-center border border-primary/30 shadow-lg">
-        <span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">mic</span>
+    <h2 style="font-size:22px;font-weight:800;color:#e2e2e2;margin:0 0 10px;text-align:center;">Enable Camera & Microphone</h2>
+    <p style="font-size:14px;color:#8c909f;margin:0 0 24px;text-align:center;line-height:1.6;">AUDIVUE needs camera access to detect obstacles and count currency notes, and microphone for hands-free voice commands.</p>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:28px;">
+      <div style="display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);"><span class="material-symbols-outlined" style="font-size:20px;color:#4d8eff;">sensors</span><span style="font-size:13px;color:#c2c6d6;">Real-time spatial obstacle tracking</span></div>
+      <div style="display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);"><span class="material-symbols-outlined" style="font-size:20px;color:#a855f7;">payments</span><span style="font-size:13px;color:#c2c6d6;">Indian currency note detection & sum</span></div>
+      <div style="display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);"><span class="material-symbols-outlined" style="font-size:20px;color:#34d399;">record_voice_over</span><span style="font-size:13px;color:#c2c6d6;">Voice commands & spoken spatial alerts</span></div>
     </div>
-</div>
-
-<h2 class="text-3xl font-extrabold text-on-surface mb-3">Enable Camera & Microphone</h2>
-<p class="text-on-surface-variant text-base mb-8 leading-relaxed">
-    AUDIVUE requires real-time camera access to detect obstacles and count cash, and microphone access for hands-free voice commands.
-</p>
-
-<!-- Feature Explanations -->
-<div class="w-full flex flex-col gap-3 mb-8 text-left">
-    <div class="p-3 bg-surface-container-low/80 rounded-xl border border-white/5 flex items-center gap-3">
-        <span class="material-symbols-outlined text-primary text-2xl">sensors</span>
-        <span class="text-sm text-on-surface">Spatial quadrant tracking & distance detection</span>
-    </div>
-    <div class="p-3 bg-surface-container-low/80 rounded-xl border border-white/5 flex items-center gap-3">
-        <span class="material-symbols-outlined text-secondary text-2xl">record_voice_over</span>
-        <span class="text-sm text-on-surface">Natural voice command & telemetry announcements</span>
-    </div>
-</div>
-
-<!-- Actions -->
-<button id="btnAllowPermissions" class="w-full py-4 bg-primary-container hover:bg-primary-fixed text-on-primary-container font-bold rounded-2xl transition-all shadow-xl flex items-center justify-center gap-3 active:scale-95 border border-primary/40 text-lg mb-4">
-    <span class="material-symbols-outlined text-2xl">check_circle</span>
-    <span>Allow Camera & Microphone</span>
-</button>
-
-<button onclick="window.location.href='permissions_denied.html'" class="w-full py-3 border border-white/10 text-on-surface-variant hover:text-on-surface font-semibold rounded-xl transition-all text-sm">
-    Not right now
-</button>
-</div>
+    <button id="btnAllow" class="btn-p"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;">check_circle</span>Allow Camera & Microphone</button>
+    <button onclick="window.location.href='permissions_denied.html'" class="btn-s">Not right now</button>
+  </div>
 </main>
-
 <script src="../voice_assistant/voice_assistant.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const assistant = new AudivueVoiceAssistant({ rate: 1.05, pitch: 1.0 });
-        setTimeout(() => {
-            assistant.speak("AUDIVUE needs camera and microphone access to assist you. Tap allow camera and microphone.", "high");
-        }, 500);
-
-        document.getElementById('btnAllowPermissions').addEventListener('click', async () => {
-            try {
-                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                    await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-                    window.location.href = 'env_mode.html';
-                    return;
-                }
-            } catch (e) {
-                console.log('Permission denied:', e);
-            }
-            window.location.href = 'permissions_denied.html';
-        });
-    });
+document.addEventListener('DOMContentLoaded',()=>{
+  if(typeof AudivueVoiceAssistant!=='undefined'){
+    const va=new AudivueVoiceAssistant({rate:1.05,pitch:1.0});
+    setTimeout(()=>va.speak('AUDIVUE needs camera and microphone access. Tap Allow Camera and Microphone to continue.','high'),500);
+  }
+  document.getElementById('btnAllow').addEventListener('click',async()=>{
+    try{
+      if(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia){
+        await navigator.mediaDevices.getUserMedia({video:true,audio:true});
+        window.location.href='env_mode.html';return;
+      }
+    }catch(e){console.log('Permission denied');}
+    window.location.href='permissions_denied.html';
+  });
+});
 </script>
 </body>
 </html>

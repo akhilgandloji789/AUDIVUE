@@ -1,108 +1,102 @@
 <!DOCTYPE html>
-<html class="dark" lang="en">
+<html lang="en">
 <head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>AUDIVUE - Critical Safety Interrupt</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AUDIVUE — Critical Safety Alert</title>
+<link rel="stylesheet" href="../assets/audivue.css"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "primary-container": "#4d8eff",
-                        "background": "#0B1220",
-                        "surface-container": "#1e2020",
-                        "error": "#ffb4ab",
-                        "error-container": "#93000a",
-                        "on-error-container": "#ffdad6",
-                        "on-error": "#690005",
-                        "on-surface": "#e2e2e2",
-                        "on-surface-variant": "#c2c6d6"
-                    }
-                }
-            }
-        }
-    </script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <style>
-        body { font-family: 'Inter', sans-serif; background-color: #0B1220; min-height: max(884px, 100dvh); }
-        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-        .alert-view {
-            background-color: #0B1220;
-            background-image: radial-gradient(circle at 50% 50%, rgba(244, 63, 94, 0.3), transparent 80%), linear-gradient(to bottom, rgba(11, 18, 32, 0.85), rgba(11, 18, 32, 0.98));
-        }
-    </style>
+  body{margin:0;height:100dvh;overflow:hidden;background:#0B1220;font-family:Inter,sans-serif;}
+  @keyframes hazardPulse{0%,100%{box-shadow:0 0 20px rgba(255,180,171,0.3)}50%{box-shadow:0 0 60px rgba(255,180,171,0.7)}}
+  .hazard-box{animation:hazardPulse 1.2s ease-in-out infinite;}
+  @keyframes iconPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+  .warn-icon-anim{animation:iconPulse 0.8s ease-in-out infinite;}
+  @keyframes pingDot{75%,100%{transform:scale(2);opacity:0;}}
+  .top-bar{position:fixed;top:0;left:0;right:0;z-index:50;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:rgba(100,0,8,0.6);backdrop-filter:blur(20px);border-bottom:2px solid rgba(255,180,171,0.25);}
+  .logo-link{display:flex;align-items:center;gap:8px;text-decoration:none;}
+  .logo-link .ms{font-size:26px;color:#ffb4ab;font-family:'Material Symbols Outlined';font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;}
+  .logo-link h1{font-size:20px;font-weight:900;color:#ffb4ab;margin:0;}
+  .bottom-nav{position:fixed;bottom:0;left:0;right:0;height:72px;z-index:50;display:flex;align-items:center;justify-content:space-around;background:rgba(10,13,13,0.97);backdrop-filter:blur(24px);border-top:1px solid rgba(255,255,255,0.06);padding:0 6px;}
+  .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;background:transparent;color:#6b7280;font-size:10px;font-weight:600;font-family:Inter,sans-serif;padding:6px 2px;border-radius:10px;cursor:pointer;transition:all 0.15s;}
+  .nav-btn:hover{background:rgba(255,255,255,0.04);color:#c2c6d6;}
+  .nav-btn.alert-active{background:rgba(255,180,171,0.14);color:#ffb4ab;border:1px solid rgba(255,180,171,0.28);font-weight:700;}
+  .nav-btn .ms{font-size:22px;font-family:'Material Symbols Outlined';}
+</style>
 </head>
-<body class="bg-background text-on-background h-screen w-screen overflow-hidden relative">
+<body>
+<!-- Red tinted background -->
+<div style="position:fixed;inset:0;background:radial-gradient(circle at 50% 40%,rgba(147,0,10,0.45),rgba(11,18,32,0.98) 70%);z-index:0;"></div>
 
-<!-- Background Alert Overlay -->
-<div class="absolute inset-0 alert-view z-0"></div>
-
-<!-- Critical Safety Bounding Box Overlay -->
-<div class="absolute inset-0 z-10 pointer-events-none flex items-center justify-center">
-    <div class="border-4 border-error rounded-3xl w-4/5 h-1/2 animate-pulse shadow-[0_0_40px_rgba(255,180,171,0.6)] flex items-start p-6">
-        <div class="bg-error-container text-on-error-container font-extrabold text-xl px-5 py-2.5 rounded-2xl shadow-xl border border-error/50 flex items-center gap-2">
-            <span class="material-symbols-outlined text-2xl animate-bounce" style="font-variation-settings: 'FILL' 1;">warning</span>
-            <span>🚨 CRITICAL HAZARD — IMMINENT OBSTACLE</span>
-        </div>
+<!-- Hazard AR Box Overlay -->
+<div style="position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;pointer-events:none;">
+  <div class="hazard-box" style="width:74%;height:52%;border:3px solid #ffb4ab;border-radius:16px;display:flex;align-items:flex-start;padding:14px;">
+    <div style="background:rgba(147,0,10,0.92);border:1px solid rgba(255,180,171,0.6);border-radius:10px;padding:8px 16px;display:flex;align-items:center;gap:8px;backdrop-filter:blur(12px);">
+      <span class="ms material-symbols-outlined warn-icon-anim" style="font-size:22px;color:#ffb4ab;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;">warning</span>
+      <span style="font-size:13px;font-weight:800;color:#ffdad6;">CRITICAL HAZARD — IMMINENT OBSTACLE</span>
     </div>
+  </div>
 </div>
 
-<!-- TopAppBar -->
-<header class="flex justify-between items-center px-6 h-16 w-full z-50 absolute top-0 bg-background/90 backdrop-blur-md border-b-2 border-error/40">
-<div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
-<span class="material-symbols-outlined text-error text-3xl" style="font-variation-settings: 'FILL' 1;">warning</span>
-<span class="font-black text-2xl tracking-tight text-error">AUDIVUE ALERTS</span>
-</div>
-<div class="flex items-center gap-2 bg-error-container/50 px-4 py-1.5 rounded-full border border-error/50">
-<span class="w-2.5 h-2.5 bg-error rounded-full animate-ping"></span>
-<span class="text-xs font-extrabold text-on-error-container">SAFETY INTERRUPT</span>
-</div>
+<!-- Top Bar -->
+<header class="top-bar">
+  <a class="logo-link" href="index.html">
+    <span class="ms material-symbols-outlined">warning</span>
+    <h1>AUDIVUE ALERTS</h1>
+  </a>
+  <div style="display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;background:rgba(147,0,10,0.5);border:1px solid rgba(255,180,171,0.35);color:#ffdad6;">
+    <span style="width:8px;height:8px;border-radius:50%;background:#ffb4ab;display:inline-block;animation:pingDot 1s cubic-bezier(0,0,0.2,1) infinite;"></span>SAFETY INTERRUPT
+  </div>
 </header>
 
-<!-- Main Safety Alert Card -->
-<main class="absolute inset-0 z-10 pointer-events-none flex flex-col justify-end pb-32 px-6">
-<div class="bg-error-container/95 backdrop-blur-2xl border-2 border-error rounded-3xl p-6 shadow-2xl pointer-events-auto w-full max-w-2xl mx-auto mb-4 flex items-center gap-6">
-<div class="bg-error w-16 h-16 rounded-full flex items-center justify-center shrink-0 shadow-lg animate-bounce border border-white/20">
-<span class="material-symbols-outlined text-on-error text-4xl" style="font-variation-settings: 'FILL' 1;">warning</span>
+<!-- Alert Caption Card -->
+<div style="position:fixed;bottom:84px;left:0;right:0;z-index:40;padding:0 14px 12px;">
+  <div style="background:rgba(100,0,8,0.93);backdrop-filter:blur(24px);border:2px solid #ffb4ab;border-radius:18px;padding:16px;display:flex;align-items:flex-start;gap:14px;">
+    <div style="width:48px;height:48px;border-radius:50%;background:#ffb4ab;display:flex;align-items:center;justify-content:center;flex-shrink:0;animation:iconPulse 0.8s ease-in-out infinite;">
+      <span class="ms material-symbols-outlined" style="font-size:26px;color:#690005;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;">warning</span>
+    </div>
+    <div>
+      <div style="font-size:10px;color:#ffdad6;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:4px;">Preemptive Safety Override</div>
+      <p style="font-size:16px;font-weight:800;color:#ffdad6;margin:0;line-height:1.3;">"Warning! Open door and obstacle directly ahead — 2 feet! Stop immediately."</p>
+    </div>
+  </div>
 </div>
-<div class="flex-1">
-    <div class="text-xs text-on-error-container font-black uppercase tracking-wider mb-1">Preemptive Safety Override</div>
-    <p class="text-xl text-on-error-container m-0 leading-relaxed font-black">
-        "Warning! Open door and obstacle directly ahead, 2 feet!"
-    </p>
-</div>
-</div>
-</main>
 
-<!-- Bottom Navigation Bar -->
-<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-24 bg-surface/95 backdrop-blur-xl border-t-2 border-error/30 shadow-2xl rounded-t-2xl">
-<button onclick="window.location.href='env_mode.html'" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container rounded-xl flex-1">
-<span class="material-symbols-outlined text-2xl mb-1">visibility</span>
-<span class="text-xs font-semibold">Vision</span>
-</button>
-<!-- Active Alerting -->
-<button class="flex flex-col items-center justify-center bg-error-container text-on-error-container rounded-xl p-2 px-5 border border-error flex-1 shadow-lg">
-<span class="material-symbols-outlined text-2xl mb-1" style="font-variation-settings: 'FILL' 1;">warning</span>
-<span class="text-xs font-bold">Alerting</span>
-</button>
-<button onclick="window.location.href='currency_mode.html'" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container rounded-xl flex-1">
-<span class="material-symbols-outlined text-2xl mb-1">payments</span>
-<span class="text-xs font-semibold">Currency</span>
-</button>
+<!-- Dismiss button -->
+<div style="position:fixed;bottom:164px;left:0;right:0;z-index:41;padding:0 14px;display:flex;justify-content:center;">
+  <button onclick="window.location.href='env_mode.html'" style="padding:10px 28px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);border-radius:12px;color:#e2e2e2;font-size:13px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;backdrop-filter:blur(12px);transition:all 0.15s;" onmouseover="this.style.background='rgba(255,255,255,0.13)'" onmouseout="this.style.background='rgba(255,255,255,0.08)'">Dismiss — Return to Vision</button>
+</div>
+
+<!-- Bottom Nav -->
+<nav class="bottom-nav">
+  <button class="nav-btn" onclick="window.location.href='env_mode.html'">
+    <span class="ms material-symbols-outlined">visibility</span>Vision
+  </button>
+  <button class="nav-btn alert-active">
+    <span class="ms material-symbols-outlined" style="font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;">crisis_alert</span>Alerting
+  </button>
+  <button class="nav-btn" onclick="window.location.href='mode_transition.html'">
+    <span class="ms material-symbols-outlined">payments</span>Currency
+  </button>
+  <button class="nav-btn" onclick="window.location.href='audio_detected.html'">
+    <span class="ms material-symbols-outlined">graphic_eq</span>Audio
+  </button>
+  <button class="nav-btn" onclick="window.location.href='../voice_assistant/index.html'">
+    <span class="ms material-symbols-outlined">settings</span>Settings
+  </button>
 </nav>
 
 <script src="../voice_assistant/voice_assistant.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const assistant = new AudivueVoiceAssistant({ rate: 1.1, pitch: 1.0 });
-        setTimeout(() => {
-            assistant.speakObstacleAlert('Open door and obstacle', 'directly center', 'immediate', true);
-        }, 400);
-    });
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof AudivueVoiceAssistant !== 'undefined') {
+    const va = new AudivueVoiceAssistant({ rate: 1.1, pitch: 1.0 });
+    setTimeout(() => va.speakObstacleAlert('Open door and obstacle', 'directly center', '2 feet', true), 300);
+    // Auto return after 7s
+    setTimeout(() => window.location.href = 'env_mode.html', 7000);
+  }
+});
 </script>
 </body>
 </html>

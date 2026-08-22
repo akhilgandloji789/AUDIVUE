@@ -1,123 +1,60 @@
 <!DOCTYPE html>
-<html class="dark" lang="en">
+<html lang="en">
 <head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>AUDIVUE - Sign Out Confirmation</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AUDIVUE — Sign Out</title>
+<link rel="stylesheet" href="../assets/audivue.css"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "primary": "#adc6ff",
-                        "primary-container": "#4d8eff",
-                        "background": "#0B1220",
-                        "surface": "#121414",
-                        "surface-container": "#1e2020",
-                        "on-surface": "#e2e2e2",
-                        "on-surface-variant": "#c2c6d6"
-                    }
-                }
-            }
-        }
-    </script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <style>
-        body { font-family: 'Inter', sans-serif; background-color: #0B1220; min-height: max(884px, 100dvh); }
-        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-        .glass-card {
-            background: rgba(18, 20, 20, 0.85);
-            backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-    </style>
+  .top-bar-fix{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:60px;background:rgba(11,18,32,0.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.07);}
+  .logo-link{display:flex;align-items:center;gap:10px;text-decoration:none;}
+  .logo-link .material-symbols-outlined{font-size:28px;color:#adc6ff;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;}
+  .logo-link h1{font-size:22px;font-weight:900;color:#adc6ff;margin:0;}
+  .btn-p{width:100%;height:56px;background:#4d8eff;color:#001a42;font-weight:700;font-size:16px;font-family:Inter,sans-serif;border:none;border-radius:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all 0.15s;box-shadow:0 4px 20px rgba(77,142,255,0.3);margin-bottom:12px;}
+  .btn-p:hover{background:#5a97ff;}.btn-p:active{transform:scale(0.97);}
+  .btn-s{width:100%;height:48px;background:transparent;color:#c2c6d6;font-weight:600;font-size:14px;font-family:Inter,sans-serif;border:1px solid rgba(255,255,255,0.15);border-radius:12px;cursor:pointer;transition:all 0.15s;}
+  @keyframes slideUpAnim{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+  .slide-up{animation:slideUpAnim 0.45s cubic-bezier(0.16,1,0.3,1) both;}
+  .bottom-nav{position:fixed;bottom:0;left:0;right:0;height:72px;z-index:50;display:flex;align-items:center;justify-content:space-around;background:rgba(12,15,15,0.97);backdrop-filter:blur(24px);border-top:1px solid rgba(255,255,255,0.07);padding:0 8px;}
+  .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;background:transparent;color:#6b7280;font-size:10px;font-weight:600;font-family:Inter,sans-serif;padding:6px 2px;border-radius:10px;cursor:pointer;}
+  .nav-btn .material-symbols-outlined{font-size:22px;}
+</style>
 </head>
-<body class="antialiased min-h-screen flex flex-col relative overflow-hidden text-on-background">
-<!-- Dimmed Camera Feed Background -->
-<div class="absolute inset-0 z-0 bg-[#0B1220] flex items-center justify-center">
-    <video id="logoutWebcamFeed" autoplay playsinline muted class="w-full h-full object-cover opacity-30"></video>
-    <div class="absolute inset-0 bg-background/60 backdrop-blur-[20px]"></div>
-</div>
-
-<!-- Main Content Area -->
-<main class="flex-grow flex flex-col justify-center items-center px-6 z-10 relative pb-28">
-<!-- Sign Out Card -->
-<div class="w-full max-w-sm glass-card rounded-3xl p-8 shadow-2xl flex flex-col items-center text-center border border-white/10">
-<!-- Logo -->
-<div class="mb-4 cursor-pointer" onclick="window.location.href='index.html'">
-<span class="font-black text-2xl tracking-tight text-primary uppercase">AUDIVUE</span>
-</div>
-
-<!-- Icon -->
-<div class="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center mb-6 shadow-inner border border-white/10">
-<span class="material-symbols-outlined text-4xl text-on-surface" style="font-variation-settings: 'FILL' 1;">logout</span>
-</div>
-
-<!-- Heading -->
-<h1 class="text-2xl font-extrabold text-on-background mb-3">Log out of AUDIVUE?</h1>
-
-<!-- Body Text -->
-<p class="text-base text-on-surface-variant mb-8 leading-relaxed">
-    You can sign back in anytime with Google.
-</p>
-
-<!-- Actions -->
-<div class="w-full flex flex-col gap-3">
-<!-- Primary Button (Log Out) -->
-<button onclick="logoutUser()" class="w-full py-4 bg-primary-container text-on-primary-container font-extrabold text-lg rounded-2xl hover:bg-primary-fixed transition-all shadow-xl active:scale-95 border border-primary/40">
-    Log Out
-</button>
-
-<!-- Secondary Button (Cancel) -->
-<button onclick="window.location.href='env_mode.html'" class="w-full py-3.5 border border-white/20 text-on-background font-bold text-sm rounded-xl hover:bg-white/5 transition-all active:scale-95">
-    Cancel
-</button>
-</div>
-</div>
+<body style="background:#0B1220;min-height:100vh;display:flex;flex-direction:column;font-family:Inter,sans-serif;">
+<header class="top-bar-fix">
+  <a class="logo-link" href="index.html"><span class="material-symbols-outlined">visibility</span><h1>AUDIVUE</h1></a>
+  <div style="padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#c2c6d6;">SIGN OUT</div>
+</header>
+<main style="flex:1;display:flex;align-items:center;justify-content:center;padding:24px 24px 96px;">
+  <div class="glass slide-up" style="border-radius:24px;padding:36px 24px;max-width:400px;width:100%;text-align:center;position:relative;overflow:hidden;">
+    <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#4d8eff,#a855f7);"></div>
+    <div style="width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;"><span class="material-symbols-outlined" style="font-size:32px;color:#c2c6d6;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;">logout</span></div>
+    <h2 style="font-size:22px;font-weight:800;color:#e2e2e2;margin:0 0 8px;">Log out of AUDIVUE?</h2>
+    <p style="font-size:14px;color:#8c909f;margin:0 0 28px;line-height:1.6;">You can sign back in anytime with Google. Your preferences will be saved.</p>
+    <button onclick="doLogout()" class="btn-p"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;">logout</span>Log Out</button>
+    <button onclick="window.location.href='env_mode.html'" class="btn-s">Cancel &mdash; Stay in AUDIVUE</button>
+  </div>
 </main>
-
-<!-- Bottom Navigation Bar -->
-<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-24 bg-surface/95 backdrop-blur-xl border-t border-white/10 shadow-2xl rounded-t-2xl">
-<button onclick="window.location.href='../voice_assistant/index.html'" class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl p-2 px-5 border border-primary flex-1 shadow-lg">
-<span class="material-symbols-outlined text-2xl mb-1" style="font-variation-settings: 'FILL' 1;">mic</span>
-<span class="text-xs font-bold">Ready</span>
-</button>
-<button onclick="window.location.href='env_mode.html'" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container rounded-xl flex-1">
-<span class="material-symbols-outlined text-2xl mb-1">settings_suggest</span>
-<span class="text-xs font-semibold">Processing</span>
-</button>
-<button onclick="window.location.href='currency_mode.html'" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container rounded-xl flex-1">
-<span class="material-symbols-outlined text-2xl mb-1">volume_up</span>
-<span class="text-xs font-semibold">Speaking</span>
-</button>
+<nav class="bottom-nav">
+  <button class="nav-btn" onclick="window.location.href='env_mode.html'"><span class="material-symbols-outlined">visibility</span>Vision</button>
+  <button class="nav-btn" onclick="window.location.href='currency_mode.html'"><span class="material-symbols-outlined">payments</span>Currency</button>
+  <button class="nav-btn" onclick="window.location.href='audio_detected.html'"><span class="material-symbols-outlined">graphic_eq</span>Audio</button>
+  <button class="nav-btn" onclick="window.location.href='../voice_assistant/index.html'"><span class="material-symbols-outlined">settings</span>Settings</button>
 </nav>
-
 <script src="../voice_assistant/voice_assistant.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', async () => {
-        try {
-            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-                document.getElementById('logoutWebcamFeed').srcObject = stream;
-            }
-        } catch (e) {
-            console.log('Webcam fallback');
-        }
-
-        const assistant = new AudivueVoiceAssistant({ rate: 1.05, pitch: 1.0 });
-        setTimeout(() => {
-            assistant.speak("Log out of AUDIVUE? Tap Log Out to confirm.", "high");
-        }, 500);
-    });
-
-    function logoutUser() {
-        localStorage.clear();
-        sessionStorage.clear();
-        window.location.href = 'index.html';
-    }
+document.addEventListener('DOMContentLoaded',()=>{
+  if(typeof AudivueVoiceAssistant!=='undefined'){
+    const va=new AudivueVoiceAssistant({rate:1.05,pitch:1.0});
+    setTimeout(()=>va.speak('Log out of AUDIVUE? Tap Log Out to confirm, or Cancel to stay.','high'),500);
+  }
+});
+function doLogout(){
+  localStorage.clear();sessionStorage.clear();
+  window.location.href='index.html';
+}
 </script>
 </body>
 </html>

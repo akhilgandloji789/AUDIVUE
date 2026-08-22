@@ -1,132 +1,100 @@
 <!DOCTYPE html>
-<html class="dark" lang="en">
+<html lang="en">
 <head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>AUDIVUE - Currency Final Calculation</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AUDIVUE — Final Amount</title>
+<link rel="stylesheet" href="../assets/audivue.css"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "primary": "#adc6ff",
-                        "primary-container": "#4d8eff",
-                        "secondary": "#d0bcff",
-                        "secondary-container": "#571bc1",
-                        "background": "#0B1220",
-                        "surface": "#121414",
-                        "surface-container": "#1e2020",
-                        "on-surface": "#e2e2e2",
-                        "on-surface-variant": "#c2c6d6"
-                    }
-                }
-            }
-        }
-    </script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <style>
-        body { font-family: 'Inter', sans-serif; background-color: #0B1220; min-height: max(884px, 100dvh); }
-        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-        .glass-card {
-            background: rgba(18, 20, 20, 0.85);
-            backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-    </style>
+  body{margin:0;background:#0B1220;min-height:100dvh;display:flex;flex-direction:column;font-family:Inter,sans-serif;}
+  @keyframes slideUpAnim{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+  @keyframes numCount{from{opacity:0;transform:scale(0.8)}to{opacity:1;transform:scale(1)}}
+  .slide-up{animation:slideUpAnim 0.5s cubic-bezier(0.16,1,0.3,1) both;}
+  .num-anim{animation:numCount 0.6s 0.2s cubic-bezier(0.16,1,0.3,1) both;}
+  .top-bar{position:sticky;top:0;z-index:50;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:rgba(11,18,32,0.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.07);}
+  .logo-link{display:flex;align-items:center;gap:8px;text-decoration:none;}
+  .logo-link .ms{font-size:26px;color:#adc6ff;font-family:'Material Symbols Outlined';font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;}
+  .logo-link h1{font-size:20px;font-weight:900;color:#adc6ff;margin:0;}
+  .btn-primary{width:100%;height:56px;background:#4d8eff;color:#001a42;font-weight:700;font-size:16px;font-family:Inter,sans-serif;border:none;border-radius:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all 0.15s;box-shadow:0 4px 20px rgba(77,142,255,0.3);}
+  .btn-primary:hover{background:#5a97ff;}.btn-primary:active{transform:scale(0.97);}
+  .btn-secondary{width:100%;height:48px;background:transparent;color:#c2c6d6;font-weight:600;font-size:14px;font-family:Inter,sans-serif;border:1px solid rgba(255,255,255,0.15);border-radius:12px;cursor:pointer;transition:all 0.15s;margin-top:10px;}
+  .btn-secondary:hover{background:rgba(255,255,255,0.05);}
+  .note-chip{padding:10px 18px;border-radius:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);font-size:17px;font-weight:800;color:#e2e2e2;display:inline-flex;align-items:center;font-family:Inter,sans-serif;}
+  .bottom-nav{position:fixed;bottom:0;left:0;right:0;height:72px;z-index:50;display:flex;align-items:center;justify-content:space-around;background:rgba(10,13,13,0.97);backdrop-filter:blur(24px);border-top:1px solid rgba(255,255,255,0.06);padding:0 6px;}
+  .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;background:transparent;color:#6b7280;font-size:10px;font-weight:600;font-family:Inter,sans-serif;padding:6px 2px;border-radius:10px;cursor:pointer;transition:all 0.15s;}
+  .nav-btn:hover{background:rgba(255,255,255,0.04);color:#c2c6d6;}
+  .nav-btn.active{background:#adc6ff;color:#001a42;font-weight:700;}
+  .nav-btn .ms{font-size:22px;font-family:'Material Symbols Outlined';}
+</style>
 </head>
-<body class="bg-background text-on-background min-h-screen flex flex-col relative overflow-hidden">
-
-<!-- Dimmed Camera Feed Background -->
-<div class="absolute inset-0 z-0 flex items-center justify-center bg-[#0B1220]">
-<div class="absolute inset-0 bg-surface/70 z-10 backdrop-blur-[2px]"></div>
-<video id="finalWebcamFeed" autoplay playsinline muted class="object-cover w-full h-full opacity-40 mix-blend-luminosity"></video>
-</div>
-
-<!-- TopAppBar -->
-<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-surface-container/90 backdrop-blur-xl border-b border-white/10">
-<div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
-<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">visibility</span>
-<h1 class="font-extrabold text-2xl text-primary tracking-tight">AUDIVUE</h1>
-</div>
-<div class="flex items-center gap-2 text-on-surface-variant text-sm font-bold">
-<span class="w-2.5 h-2.5 bg-emerald-400 rounded-full animate-pulse"></span>
-<span>FINAL SUM</span>
-</div>
+<body>
+<header class="top-bar">
+  <a class="logo-link" href="index.html">
+    <span class="ms material-symbols-outlined">visibility</span>
+    <h1>AUDIVUE</h1>
+  </a>
+  <div style="display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;background:rgba(52,211,153,0.12);border:1px solid rgba(52,211,153,0.35);color:#34d399;font-family:Inter,sans-serif;">FINAL SUM</div>
 </header>
 
-<!-- Main Results Canvas -->
-<main class="flex-grow z-10 pt-20 pb-32 flex flex-col items-center justify-center px-6 relative">
-<!-- Results Card -->
-<section class="glass-card rounded-3xl p-8 w-full max-w-md border border-white/10 shadow-2xl flex flex-col items-center justify-center space-y-6">
-<div class="flex items-center space-x-2 text-on-surface-variant">
-<span class="material-symbols-outlined text-[#3b82f6] text-3xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-<h2 class="text-sm text-on-surface tracking-wider uppercase font-extrabold">TOTAL AMOUNT</h2>
-</div>
+<main style="flex:1;padding:24px 16px 96px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;">
+  <!-- Main Summary Card -->
+  <div class="glass slide-up" style="border-radius:24px;padding:32px 24px;max-width:420px;width:100%;text-align:center;position:relative;overflow:hidden;">
+    <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#a855f7,#4d8eff,#a855f7);"></div>
 
-<!-- Prominent Total Value -->
-<div class="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-primary to-secondary tracking-tighter">
-    ₹800
-</div>
+    <!-- Check Icon -->
+    <div style="width:60px;height:60px;border-radius:50%;background:rgba(52,211,153,0.1);border:2px solid rgba(52,211,153,0.35);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+      <span class="ms material-symbols-outlined" style="font-size:30px;color:#34d399;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;">check_circle</span>
+    </div>
 
-<!-- Breakdown Note Chips -->
-<div class="flex flex-wrap justify-center gap-3 pt-4 border-t border-white/10 w-full">
-<div class="bg-surface-container px-5 py-2.5 rounded-2xl border border-white/10 flex items-center shadow">
-<span class="text-lg font-extrabold text-on-surface">₹500</span>
-</div>
-<div class="bg-surface-container px-5 py-2.5 rounded-2xl border border-white/10 flex items-center shadow">
-<span class="text-lg font-extrabold text-on-surface">₹200</span>
-</div>
-<div class="bg-surface-container px-5 py-2.5 rounded-2xl border border-white/10 flex items-center shadow">
-<span class="text-lg font-extrabold text-on-surface">₹100</span>
-</div>
-</div>
-</section>
+    <div style="font-size:12px;color:#8c909f;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">TOTAL AMOUNT COUNTED</div>
 
-<!-- Count Again CTA Button -->
-<div class="mt-8 w-full max-w-md">
-<button onclick="window.location.href='currency_mode.html'" class="w-full h-touch-target-min bg-primary-container hover:bg-primary-fixed text-on-primary-container rounded-2xl font-bold text-lg flex items-center justify-center space-x-3 transition-all border border-primary/40 shadow-xl active:scale-95">
-<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">refresh</span>
-<span>Count Again</span>
-</button>
-</div>
+    <!-- Big Total -->
+    <div class="num-anim" style="font-size:56px;font-weight:900;background:linear-gradient(135deg,#ffffff,#adc6ff,#d0bcff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-0.03em;line-height:1;margin-bottom:20px;">₹800</div>
+
+    <!-- Note Chips Breakdown -->
+    <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-bottom:28px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.08);">
+      <span class="note-chip">₹500</span>
+      <span class="note-chip">₹200</span>
+      <span class="note-chip">₹100</span>
+    </div>
+
+    <!-- Actions -->
+    <button onclick="window.location.href='currency_mode.html'" class="btn-primary">
+      <span class="ms material-symbols-outlined" style="font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;">refresh</span>
+      Count Again
+    </button>
+    <button onclick="window.location.href='env_mode.html'" class="btn-secondary">Back to Vision Mode</button>
+  </div>
 </main>
 
-<!-- Bottom Navigation Bar -->
-<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-24 bg-surface/95 backdrop-blur-xl border-t border-white/10 shadow-2xl rounded-t-2xl">
-<button onclick="window.location.href='env_mode.html'" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container rounded-xl flex-1">
-<span class="material-symbols-outlined text-2xl mb-1">visibility</span>
-<span class="text-xs font-semibold">Vision</span>
-</button>
-<button onclick="window.location.href='currency_mode.html'" class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl p-2 px-5 border border-primary flex-1 shadow-lg">
-<span class="material-symbols-outlined text-2xl mb-1" style="font-variation-settings: 'FILL' 1;">payments</span>
-<span class="text-xs font-bold">Currency</span>
-</button>
-<button onclick="window.location.href='../voice_assistant/index.html'" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container rounded-xl flex-1">
-<span class="material-symbols-outlined text-2xl mb-1">settings</span>
-<span class="text-xs font-semibold">Settings</span>
-</button>
+<nav class="bottom-nav">
+  <button class="nav-btn" onclick="window.location.href='env_mode.html'">
+    <span class="ms material-symbols-outlined">visibility</span>Vision
+  </button>
+  <button class="nav-btn" onclick="window.location.href='currency_mode.html'">
+    <span class="ms material-symbols-outlined">payments</span>Currency
+  </button>
+  <button class="nav-btn active">
+    <span class="ms material-symbols-outlined">summarize</span>Final Sum
+  </button>
+  <button class="nav-btn" onclick="window.location.href='audio_detected.html'">
+    <span class="ms material-symbols-outlined">graphic_eq</span>Audio
+  </button>
+  <button class="nav-btn" onclick="window.location.href='../voice_assistant/index.html'">
+    <span class="ms material-symbols-outlined">settings</span>Settings
+  </button>
 </nav>
 
 <script src="../voice_assistant/voice_assistant.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', async () => {
-        try {
-            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-                document.getElementById('finalWebcamFeed').srcObject = stream;
-            }
-        } catch (e) {
-            console.log('Webcam fallback');
-        }
-
-        const assistant = new AudivueVoiceAssistant({ rate: 1.05, pitch: 1.0 });
-        setTimeout(() => {
-            assistant.speak('Total count finalized: 800 rupees.', 'high');
-        }, 500);
-    });
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof AudivueVoiceAssistant !== 'undefined') {
+    const va = new AudivueVoiceAssistant({ rate: 1.05, pitch: 1.0 });
+    setTimeout(() => va.speak('Total count finalized: 800 rupees. Tap Count Again to restart.', 'high'), 500);
+  }
+});
 </script>
 </body>
 </html>

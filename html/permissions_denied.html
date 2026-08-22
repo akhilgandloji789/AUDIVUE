@@ -1,104 +1,64 @@
 <!DOCTYPE html>
-<html class="dark" lang="en">
+<html lang="en">
 <head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>AUDIVUE - Permission Denied</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AUDIVUE — Permission Denied</title>
+<link rel="stylesheet" href="../assets/audivue.css"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "primary": "#adc6ff",
-                        "error": "#ffb4ab",
-                        "error-container": "#93000a",
-                        "on-error-container": "#ffdad6",
-                        "background": "#0B1220",
-                        "surface": "#121414",
-                        "surface-container": "#1e2020",
-                        "on-surface": "#e2e2e2",
-                        "on-surface-variant": "#c2c6d6"
-                    }
-                }
-            }
-        }
-    </script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <style>
-        body { font-family: 'Inter', sans-serif; background-color: #0B1220; min-height: max(884px, 100dvh); }
-        .glass-card {
-            background: rgba(18, 20, 20, 0.75);
-            backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-    </style>
+  .top-bar-fix{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:60px;background:rgba(11,18,32,0.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.07);}
+  .logo-link{display:flex;align-items:center;gap:10px;text-decoration:none;}
+  .logo-link .material-symbols-outlined{font-size:28px;color:#adc6ff;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;}
+  .logo-link h1{font-size:22px;font-weight:900;color:#adc6ff;margin:0;}
+  .btn-p{width:100%;height:56px;background:#4d8eff;color:#001a42;font-weight:700;font-size:16px;font-family:Inter,sans-serif;border:none;border-radius:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all 0.15s;box-shadow:0 4px 20px rgba(77,142,255,0.3);margin-bottom:12px;}
+  .btn-p:hover{background:#5a97ff;}.btn-p:active{transform:scale(0.97);}
+  .btn-s{width:100%;height:48px;background:transparent;color:#c2c6d6;font-weight:600;font-size:14px;font-family:Inter,sans-serif;border:1px solid rgba(255,255,255,0.15);border-radius:12px;cursor:pointer;transition:all 0.15s;}
+  @keyframes slideUpAnim{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+  .slide-up{animation:slideUpAnim 0.45s cubic-bezier(0.16,1,0.3,1) both;}
+</style>
 </head>
-<body class="text-on-background min-h-screen flex flex-col justify-between relative overflow-hidden">
-
-<!-- TopAppBar -->
-<header class="w-full z-50 flex justify-between items-center px-6 h-16 border-b border-white/10 bg-background/80 backdrop-blur-md sticky top-0">
-<div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
-<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">visibility</span>
-<h1 class="font-bold text-2xl text-primary tracking-tight">AUDIVUE</h1>
-</div>
-<div class="flex items-center gap-2 bg-error-container/40 px-3 py-1.5 rounded-full border border-error/40">
-<span class="w-2.5 h-2.5 bg-error rounded-full animate-ping"></span>
-<span class="text-xs font-bold text-error tracking-wider uppercase">DENIED</span>
-</div>
+<body style="background:#0B1220;min-height:100vh;display:flex;flex-direction:column;font-family:Inter,sans-serif;">
+<header class="top-bar-fix">
+  <a class="logo-link" href="index.html"><span class="material-symbols-outlined">visibility</span><h1>AUDIVUE</h1></a>
+  <div style="display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;background:rgba(255,180,171,0.12);border:1px solid rgba(255,180,171,0.35);color:#ffb4ab;"><span style="width:8px;height:8px;border-radius:50%;background:#ffb4ab;display:inline-block;"></span>DENIED</div>
 </header>
-
-<!-- Main Permission Denied Card -->
-<main class="flex-grow z-10 flex flex-col justify-center items-center px-6 py-12 relative">
-<div class="glass-card rounded-3xl p-8 md:p-10 max-w-lg w-full flex flex-col items-center text-center shadow-2xl relative overflow-hidden">
-<!-- Top Red Accent -->
-<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-error to-transparent"></div>
-
-<!-- Icon Group -->
-<div class="w-20 h-20 rounded-full bg-error-container/30 flex items-center justify-center border border-error/40 mb-6 shadow-[0_0_30px_rgba(255,180,171,0.2)]">
-<span class="material-symbols-outlined text-error text-4xl" style="font-variation-settings: 'FILL' 1;">videocam_off</span>
-</div>
-
-<h2 class="text-3xl font-extrabold text-on-surface mb-3">Camera Access Needed</h2>
-<p class="text-on-surface-variant text-base mb-8 leading-relaxed">
-    AUDIVUE cannot analyze obstacles or count currency without camera and microphone permissions. Please grant access to continue.
-</p>
-
-<!-- Action Buttons -->
-<button id="btnTryAgain" class="w-full py-4 bg-primary-container hover:bg-primary-fixed text-on-primary-container font-bold rounded-2xl transition-all shadow-xl flex items-center justify-center gap-3 active:scale-95 border border-primary/40 text-lg mb-4">
-    <span class="material-symbols-outlined text-2xl">refresh</span>
-    <span>Try Again</span>
-</button>
-
-<button onclick="alert('To enable permissions:\n1. Click the lock/settings icon next to the URL bar.\n2. Allow Camera & Microphone.\n3. Refresh the page.')" class="w-full py-3 border border-white/10 text-primary hover:text-primary-fixed font-semibold rounded-xl transition-all text-sm">
-    How to enable permissions
-</button>
-</div>
+<main style="flex:1;display:flex;align-items:center;justify-content:center;padding:24px;">
+  <div class="glass slide-up" style="border-radius:24px;padding:36px 24px;max-width:420px;width:100%;text-align:center;position:relative;overflow:hidden;">
+    <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,#ffb4ab,transparent);"></div>
+    <div style="width:72px;height:72px;border-radius:50%;background:rgba(255,180,171,0.1);border:2px solid rgba(255,180,171,0.3);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;box-shadow:0 0 24px rgba(255,180,171,0.15);"><span class="material-symbols-outlined" style="font-size:36px;color:#ffb4ab;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;">videocam_off</span></div>
+    <h2 style="font-size:22px;font-weight:800;color:#e2e2e2;margin:0 0 10px;">Camera Access Needed</h2>
+    <p style="font-size:14px;color:#8c909f;margin:0 0 24px;line-height:1.6;">AUDIVUE cannot work without camera and microphone access. Please grant permission to continue your experience.</p>
+    <div style="background:rgba(255,180,171,0.06);border:1px solid rgba(255,180,171,0.15);border-radius:12px;padding:14px;margin-bottom:24px;text-align:left;">
+      <p style="font-size:11px;font-weight:700;color:#ffb4ab;text-transform:uppercase;letter-spacing:0.06em;margin:0 0 8px;">How to enable</p>
+      <ol style="font-size:13px;color:#c2c6d6;line-height:2;padding-left:18px;margin:0;">
+        <li>Click the lock icon in your browser URL bar</li>
+        <li>Set Camera &amp; Microphone to Allow</li>
+        <li>Refresh and tap Try Again</li>
+      </ol>
+    </div>
+    <button id="btnTryAgain" class="btn-p"><span class="material-symbols-outlined">refresh</span>Try Again</button>
+    <button onclick="window.location.href='index.html'" class="btn-s">Back to Home</button>
+  </div>
 </main>
-
 <script src="../voice_assistant/voice_assistant.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const assistant = new AudivueVoiceAssistant({ rate: 1.05, pitch: 1.0 });
-        setTimeout(() => {
-            assistant.speak("Camera access is needed for AUDIVUE. Tap try again to grant permission.", "high");
-        }, 500);
-
-        document.getElementById('btnTryAgain').addEventListener('click', async () => {
-            try {
-                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                    await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-                    window.location.href = 'env_mode.html';
-                    return;
-                }
-            } catch (e) {
-                console.log('Permission denied again:', e);
-            }
-            window.location.href = 'permissions.html';
-        });
-    });
+document.addEventListener('DOMContentLoaded',()=>{
+  if(typeof AudivueVoiceAssistant!=='undefined'){
+    const va=new AudivueVoiceAssistant({rate:1.05,pitch:1.0});
+    setTimeout(()=>va.speak('Camera access is required. Please grant permission and tap try again.','high'),500);
+  }
+  document.getElementById('btnTryAgain').addEventListener('click',async()=>{
+    try{
+      if(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia){
+        await navigator.mediaDevices.getUserMedia({video:true,audio:true});
+        window.location.href='env_mode.html';return;
+      }
+    }catch(e){console.log('Still denied');}
+    window.location.href='permissions.html';
+  });
+});
 </script>
 </body>
 </html>

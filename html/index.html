@@ -1,246 +1,97 @@
-<!DOCTYPE html>
-<html class="dark" lang="en">
+﻿<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>AUDIVUE - Welcome to AI Vision Assistant</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AUDIVUE — AI Vision Assistant</title>
+<link rel="stylesheet" href="../assets/audivue.css"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-        tailwind.config = {
-          darkMode: "class",
-          theme: {
-            extend: {
-              "colors": {
-                    "primary": "#adc6ff",
-                    "error": "#ffb4ab",
-                    "outline": "#8c909f",
-                    "on-tertiary-fixed-variant": "#404757",
-                    "on-primary-container": "#00285d",
-                    "surface": "#121414",
-                    "outline-variant": "#424754",
-                    "tertiary-fixed-dim": "#c0c6da",
-                    "on-secondary-container": "#c4abff",
-                    "on-primary-fixed-variant": "#004395",
-                    "on-surface-variant": "#c2c6d6",
-                    "tertiary-fixed": "#dce2f6",
-                    "surface-container-high": "#282a2b",
-                    "inverse-primary": "#005ac2",
-                    "on-secondary-fixed-variant": "#5516be",
-                    "inverse-surface": "#e2e2e2",
-                    "on-error-container": "#ffdad6",
-                    "surface-container-highest": "#333535",
-                    "error-container": "#93000a",
-                    "on-primary-fixed": "#001a42",
-                    "secondary-fixed-dim": "#d0bcff",
-                    "secondary-fixed": "#e9ddff",
-                    "on-tertiary-fixed": "#151b2a",
-                    "tertiary": "#c0c6da",
-                    "secondary-container": "#571bc1",
-                    "on-primary": "#002e6a",
-                    "surface-tint": "#adc6ff",
-                    "surface-container-low": "#1a1c1c",
-                    "surface-bright": "#37393a",
-                    "primary-fixed-dim": "#adc6ff",
-                    "surface-container": "#1e2020",
-                    "on-secondary": "#3c0091",
-                    "on-tertiary": "#2a3040",
-                    "on-surface": "#e2e2e2",
-                    "primary-container": "#4d8eff",
-                    "surface-container-lowest": "#0c0f0f",
-                    "tertiary-container": "#8a90a3",
-                    "on-tertiary-container": "#232a39",
-                    "background": "#0B1220",
-                    "surface-dim": "#121414",
-                    "on-secondary-fixed": "#23005c",
-                    "inverse-on-surface": "#2f3131",
-                    "surface-variant": "#333535",
-                    "primary-fixed": "#d8e2ff",
-                    "on-background": "#e2e2e2",
-                    "secondary": "#d0bcff",
-                    "on-error": "#690005"
-              },
-              "borderRadius": {
-                    "DEFAULT": "0.25rem",
-                    "lg": "0.5rem",
-                    "xl": "0.75rem",
-                    "full": "9999px"
-              },
-              "spacing": {
-                    "gutter": "24px",
-                    "margin-mobile": "20px",
-                    "touch-target-min": "64px",
-                    "stack-gap": "16px",
-                    "margin-desktop": "40px"
-              },
-              "fontFamily": {
-                    "label-lg": ["Inter", "sans-serif"],
-                    "body-lg": ["Inter", "sans-serif"],
-                    "headline-md": ["Inter", "sans-serif"],
-                    "body-md": ["Inter", "sans-serif"],
-                    "headline-lg": ["Inter", "sans-serif"],
-                    "label-md": ["Inter", "sans-serif"]
-              },
-              "fontSize": {
-                    "label-lg": ["20px", {"lineHeight": "24px", "letterSpacing": "0.01em", "fontWeight": "600"}],
-                    "body-lg": ["20px", {"lineHeight": "30px", "fontWeight": "400"}],
-                    "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
-                    "body-md": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
-                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
-                    "label-md": ["18px", {"lineHeight": "22px", "fontWeight": "600"}]
-              }
-            }
-          }
-        }
-    </script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <style>
-        body { font-family: 'Inter', sans-serif; background-color: #0B1220; min-height: max(884px, 100dvh); }
-        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-        .glass-card {
-            background: rgba(18, 20, 20, 0.75);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-    </style>
+  canvas#bgCanvas{position:fixed;inset:0;z-index:0;width:100%;height:100%;pointer-events:none;}
+  .hero-card{position:relative;z-index:10;}
+  .feature-chip{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);}
+  .top-bar-fix{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:60px;background:rgba(11,18,32,0.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.07);}
+  .logo-link{display:flex;align-items:center;gap:10px;text-decoration:none;}
+  .logo-link .material-symbols-outlined{font-size:28px;color:#adc6ff;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;}
+  .logo-link h1{font-size:22px;font-weight:900;color:#adc6ff;letter-spacing:-0.02em;margin:0;}
+  @keyframes waveAnim{0%,100%{transform:scaleY(0.3)}50%{transform:scaleY(1)}}
+  .wave-bar{animation:waveAnim 1.2s ease-in-out infinite;transform-origin:bottom;}
+  .btn-google{width:100%;height:56px;background:#4d8eff;color:#001a42;font-weight:700;font-size:16px;font-family:Inter,sans-serif;border:none;border-radius:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;transition:all 0.15s;box-shadow:0 4px 20px rgba(77,142,255,0.3);}
+  .btn-google:hover{background:#5a97ff;}
+  .btn-google:active{transform:scale(0.97);}
+  .orb1{position:fixed;top:-60px;left:-60px;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(77,142,255,0.1),transparent 70%);pointer-events:none;z-index:1;}
+  .orb2{position:fixed;bottom:-60px;right:-60px;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(168,85,247,0.09),transparent 70%);pointer-events:none;z-index:1;}
+  .status-badge{display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;background:rgba(52,211,153,0.12);border:1px solid rgba(52,211,153,0.35);color:#34d399;}
+  .status-badge .dot{width:8px;height:8px;border-radius:50%;background:#34d399;animation:pingDot 1.5s cubic-bezier(0,0,0.2,1) infinite;}
+  @keyframes pingDot{75%,100%{transform:scale(2);opacity:0;}}
+</style>
 </head>
-<body class="bg-background text-on-background min-h-screen flex flex-col justify-between relative overflow-x-hidden">
-
-<!-- WebGL Background Wave Canvas -->
-<div class="fixed inset-0 w-full h-full z-0 opacity-40">
-<canvas id="welcomeWaveCanvas" class="w-full h-full block"></canvas>
-</div>
-
-<!-- Ambient Lighting Orbs -->
-<div class="absolute top-10 left-1/4 w-96 h-96 bg-primary-container/20 rounded-full blur-[120px] pointer-events-none z-0"></div>
-<div class="absolute bottom-10 right-1/4 w-96 h-96 bg-secondary-container/20 rounded-full blur-[120px] pointer-events-none z-0"></div>
-
-<!-- TopAppBar -->
-<header class="w-full z-50 flex justify-between items-center px-margin-mobile h-touch-target-min border-b border-white/10 bg-background/80 backdrop-blur-md sticky top-0">
-<div class="flex items-center gap-3">
-<img src="../assets/logo.png" alt="AUDIVUE Logo" class="w-10 h-10 object-contain drop-shadow" onerror="this.style.display='none'"/>
-<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">visibility</span>
-<h1 class="font-headline-lg text-headline-lg font-black tracking-tight text-primary m-0">AUDIVUE</h1>
-</div>
-<div class="flex items-center gap-2 bg-surface-container px-3 py-1.5 rounded-full border border-primary/20">
-<span class="w-2.5 h-2.5 bg-emerald-400 rounded-full animate-ping"></span>
-<span class="text-xs font-bold text-primary tracking-wider uppercase">READY</span>
-</div>
+<body style="background:#0B1220;min-height:100vh;overflow-x:hidden;">
+<canvas id="bgCanvas"></canvas>
+<div class="orb1"></div>
+<div class="orb2"></div>
+<header class="top-bar-fix">
+  <a class="logo-link" href="index.html"><span class="material-symbols-outlined">visibility</span><h1>AUDIVUE</h1></a>
+  <div class="status-badge"><span class="dot"></span>AI READY</div>
 </header>
-
-<!-- Main Onboarding Hero Area -->
-<main class="flex-grow z-10 flex flex-col justify-center items-center px-margin-mobile py-8 relative">
-<div class="glass-card rounded-3xl p-8 md:p-12 max-w-lg w-full flex flex-col items-center text-center shadow-2xl relative overflow-hidden border border-white/10">
-<!-- Top Glow Accent -->
-<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-secondary-container to-primary"></div>
-
-<!-- Animated Voice Wave Motif -->
-<div class="mb-6 w-24 h-24 flex items-center justify-center bg-primary-container/20 rounded-full border border-primary/30 shadow-[0_0_30px_rgba(77,142,255,0.3)]">
-<img src="../assets/voice_wave.svg" alt="Animated Voice Wave" class="w-16 h-16 object-contain" onerror="this.onerror=null; this.src='../assets/logo.png'"/>
-</div>
-
-<!-- AUDIVUE Heading & Subtitle -->
-<h2 class="font-headline-lg text-4xl font-extrabold text-on-surface mb-3 tracking-tight">AUDIVUE</h2>
-<p class="font-body-lg text-lg text-on-surface-variant mb-6 leading-relaxed">
-    Real-Time AI Vision & Currency Assistant for the Visually Impaired
-</p>
-
-<!-- Core Features Badge Strip -->
-<div class="grid grid-cols-2 gap-3 w-full mb-8 text-left">
-    <div class="p-3 bg-surface-container-low/80 rounded-xl border border-white/5 flex items-center gap-3">
-        <span class="material-symbols-outlined text-primary text-2xl" style="font-variation-settings: 'FILL' 1;">view_in_ar</span>
-        <div>
-            <div class="text-xs text-primary font-bold">Pipeline 1</div>
-            <div class="text-xs text-on-surface">Obstacle Vision</div>
-        </div>
+<main style="position:relative;z-index:10;padding:28px 20px 60px;max-width:480px;margin:0 auto;">
+  <div class="glass hero-card" style="border-radius:24px;padding:32px 24px 28px;text-align:center;overflow:hidden;position:relative;box-shadow:0 0 40px rgba(77,142,255,0.18);">
+    <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#4d8eff,#a855f7,#4d8eff);"></div>
+    <div style="width:80px;height:80px;border-radius:50%;background:rgba(77,142,255,0.12);border:2px solid rgba(77,142,255,0.3);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
+      <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+        <g transform="translate(4,8)">
+          <rect class="wave-bar" x="0" y="0" width="4" height="24" rx="2" fill="#4d8eff"/>
+          <rect class="wave-bar" x="7" y="0" width="4" height="24" rx="2" fill="#6fa3ff" style="animation-delay:0.15s;"/>
+          <rect class="wave-bar" x="14" y="0" width="4" height="24" rx="2" fill="#4d8eff" style="animation-delay:0.3s;"/>
+          <rect class="wave-bar" x="21" y="0" width="4" height="24" rx="2" fill="#a855f7" style="animation-delay:0.1s;"/>
+          <rect class="wave-bar" x="28" y="0" width="4" height="24" rx="2" fill="#4d8eff" style="animation-delay:0.25s;"/>
+        </g>
+      </svg>
     </div>
-    <div class="p-3 bg-surface-container-low/80 rounded-xl border border-white/5 flex items-center gap-3">
-        <span class="material-symbols-outlined text-secondary text-2xl" style="font-variation-settings: 'FILL' 1;">payments</span>
-        <div>
-            <div class="text-xs text-secondary font-bold">Pipeline 2</div>
-            <div class="text-xs text-on-surface">Currency Count</div>
-        </div>
+    <h2 style="font-size:28px;font-weight:900;color:#e2e2e2;letter-spacing:-0.02em;margin:0 0 8px;">AUDIVUE</h2>
+    <p style="font-size:15px;color:#8c909f;line-height:1.6;margin:0 0 24px;">Real-time AI Vision &amp; Currency Detection for the visually impaired</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:28px;text-align:left;">
+      <div class="feature-chip"><span class="material-symbols-outlined" style="font-size:22px;color:#4d8eff;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;">view_in_ar</span><div><div style="font-size:10px;color:#adc6ff;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;">Pipeline 1</div><div style="font-size:13px;color:#e2e2e2;font-weight:600;">Obstacle Vision</div></div></div>
+      <div class="feature-chip"><span class="material-symbols-outlined" style="font-size:22px;color:#a855f7;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;">payments</span><div><div style="font-size:10px;color:#d0bcff;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;">Pipeline 2</div><div style="font-size:13px;color:#e2e2e2;font-weight:600;">Currency Count</div></div></div>
+      <div class="feature-chip"><span class="material-symbols-outlined" style="font-size:22px;color:#34d399;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;">graphic_eq</span><div><div style="font-size:10px;color:#6ee7b7;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;">Audio</div><div style="font-size:13px;color:#e2e2e2;font-weight:600;">Voice Engine</div></div></div>
+      <div class="feature-chip"><span class="material-symbols-outlined" style="font-size:22px;color:#f59e0b;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;">crisis_alert</span><div><div style="font-size:10px;color:#fcd34d;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;">Safety</div><div style="font-size:13px;color:#e2e2e2;font-weight:600;">Hazard Alerts</div></div></div>
     </div>
-</div>
-
-<!-- Google Sign-in CTA Button -->
-<button onclick="window.location.href='auth.html'" class="w-full h-touch-target-min bg-primary-container hover:bg-primary-fixed text-on-primary-container font-label-lg text-label-lg font-bold rounded-2xl transition-all duration-200 shadow-xl flex items-center justify-center gap-3 active:scale-95 border border-primary/40">
-<svg class="w-6 h-6" viewbox="0 0 24 24">
-<path fill="#ffffff" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-<path fill="#ffffff" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-<path fill="#ffffff" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-<path fill="#ffffff" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-</svg>
-<span>Sign in with Google</span>
-</button>
-
-<p class="text-xs text-on-surface-variant mt-4">Hands-free voice assistant will vocalize screen guidance automatically.</p>
-</div>
+    <button onclick="window.location.href='auth.html'" class="btn-google">
+      <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#fff" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#fff" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#fff" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#fff" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
+      Sign in with Google
+    </button>
+    <p style="margin-top:14px;font-size:12px;color:#6b7280;">Voice guidance activates automatically</p>
+  </div>
 </main>
-
-<!-- Footer Bar -->
-<footer class="w-full py-4 text-center text-xs text-on-surface-variant z-10 border-t border-white/5">
-    AUDIVUE Computer Vision Track 03 // Real-Time Vision & Currency Platform
-</footer>
-
-<!-- Load Voice Assistant & WebGL Shader Script -->
 <script src="../voice_assistant/voice_assistant.js"></script>
 <script>
-    // WebGL Canvas Wave Animation
-    (function() {
-        const canvas = document.getElementById('welcomeWaveCanvas');
-        const gl = canvas.getContext('webgl');
-        if (!gl) return;
-        function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            gl.viewport(0, 0, canvas.width, canvas.height);
-        }
-        window.addEventListener('resize', resize);
-        resize();
-
-        const vs = `attribute vec2 pos; void main() { gl_Position = vec4(pos, 0.0, 1.0); }`;
-        const fs = `precision highp float; uniform float t; uniform vec2 r;
-        void main() {
-            vec2 u = gl_FragCoord.xy / r;
-            float w = sin(u.x * 6.0 + t * 2.0) * 0.1 + 0.5;
-            float d = abs(u.y - w);
-            vec3 col = mix(vec3(0.23, 0.51, 0.96), vec3(0.66, 0.33, 0.97), u.x);
-            gl_FragColor = vec4(col * (0.02 / (d + 0.01)), 0.6);
-        }`;
-        function createShader(gl, type, src) {
-            const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return s;
-        }
-        const prog = gl.createProgram();
-        gl.attachShader(prog, createShader(gl, gl.VERTEX_SHADER, vs));
-        gl.attachShader(prog, createShader(gl, gl.FRAGMENT_SHADER, fs));
-        gl.linkProgram(prog); gl.useProgram(prog);
-
-        const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
-        const p = gl.getAttribLocation(prog, 'pos');
-        gl.enableVertexAttribArray(p); gl.vertexAttribPointer(p, 2, gl.FLOAT, false, 0, 0);
-
-        const ut = gl.getUniformLocation(prog, 't');
-        const ur = gl.getUniformLocation(prog, 'r');
-
-        function draw(time) {
-            gl.uniform1f(ut, time * 0.001);
-            gl.uniform2f(ur, canvas.width, canvas.height);
-            gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-            requestAnimationFrame(draw);
-        }
-        draw(0);
-    })();
-
-    // Spoken Welcome Prompt
-    document.addEventListener('DOMContentLoaded', () => {
-        const assistant = new AudivueVoiceAssistant({ rate: 1.05, pitch: 1.0 });
-        setTimeout(() => {
-            assistant.speak("Welcome to AUDIVUE. Tap sign in with Google to start visual assistance.", "high");
-        }, 600);
-    });
+(function(){
+  const c=document.getElementById('bgCanvas');
+  const gl=c.getContext('webgl');if(!gl)return;
+  function resize(){c.width=innerWidth;c.height=innerHeight;gl.viewport(0,0,c.width,c.height);}
+  window.addEventListener('resize',resize);resize();
+  const vs='attribute vec2 p;void main(){gl_Position=vec4(p,0,1);}';
+  const fs='precision highp float;uniform float t;uniform vec2 r;void main(){vec2 u=gl_FragCoord.xy/r;float w=sin(u.x*8.0+t*1.8)*0.08+0.5;float d=abs(u.y-w);vec3 c1=vec3(0.19,0.55,1.0);vec3 c2=vec3(0.66,0.33,0.97);vec3 col=mix(c1,c2,u.x);gl_FragColor=vec4(col*(0.015/(d+0.008)),0.7);}';
+  function cs(t,s){const sh=gl.createShader(t);gl.shaderSource(sh,s);gl.compileShader(sh);return sh;}
+  const pg=gl.createProgram();
+  gl.attachShader(pg,cs(gl.VERTEX_SHADER,vs));
+  gl.attachShader(pg,cs(gl.FRAGMENT_SHADER,fs));
+  gl.linkProgram(pg);gl.useProgram(pg);
+  const b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);
+  gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+  const pa=gl.getAttribLocation(pg,'p');
+  gl.enableVertexAttribArray(pa);gl.vertexAttribPointer(pa,2,gl.FLOAT,false,0,0);
+  const ut=gl.getUniformLocation(pg,'t'),ur=gl.getUniformLocation(pg,'r');
+  function draw(ms){gl.uniform1f(ut,ms*0.001);gl.uniform2f(ur,c.width,c.height);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);requestAnimationFrame(draw);}
+  draw(0);
+})();
+document.addEventListener('DOMContentLoaded',()=>{
+  if(typeof AudivueVoiceAssistant!=='undefined'){
+    const va=new AudivueVoiceAssistant({rate:1.05,pitch:1.0});
+    setTimeout(()=>va.speak('Welcome to AUDIVUE. Tap Sign in with Google to start.','high'),700);
+  }
+});
 </script>
 </body>
 </html>

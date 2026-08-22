@@ -1,120 +1,145 @@
 <!DOCTYPE html>
-<html class="dark" lang="en">
+<html lang="en">
 <head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>AUDIVUE - Audio Status Monitor</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AUDIVUE — Audio Monitor</title>
+<link rel="stylesheet" href="../assets/audivue.css"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "primary": "#adc6ff",
-                        "primary-container": "#4d8eff",
-                        "secondary": "#d0bcff",
-                        "background": "#0B1220",
-                        "surface": "#121414",
-                        "surface-container": "#1e2020",
-                        "on-surface": "#e2e2e2",
-                        "on-surface-variant": "#c2c6d6"
-                    }
-                }
-            }
-        }
-    </script>
 <style>
-        body { background-color: #0B1220; min-height: max(884px, 100dvh); font-family: 'Inter', sans-serif; }
-        .glass-panel { background-color: rgba(18, 20, 20, 0.75); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .electric-border { border: 3px solid #3b82f6; }
-        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-    </style>
+  body{margin:0;background:#0B1220;min-height:100dvh;display:flex;flex-direction:column;font-family:Inter,sans-serif;}
+  .top-bar{position:sticky;top:0;z-index:50;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:rgba(11,18,32,0.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.07);}
+  .logo-link{display:flex;align-items:center;gap:8px;text-decoration:none;}
+  .logo-link .ms{font-size:26px;color:#adc6ff;font-family:'Material Symbols Outlined';font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;}
+  .logo-link h1{font-size:20px;font-weight:900;color:#adc6ff;margin:0;}
+  .state-card{background:rgba(18,20,20,0.78);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,0.09);border-radius:20px;overflow:hidden;}
+  .waveform-box{display:flex;align-items:center;gap:4px;height:32px;justify-content:center;padding:0 20px;}
+  .wv{width:4px;border-radius:3px;}
+  .wv1{animation:wvA 1s 0s ease-in-out infinite;height:30%;}
+  .wv2{animation:wvA 1.2s 0.1s ease-in-out infinite;height:60%;}
+  .wv3{animation:wvA 0.9s 0.2s ease-in-out infinite;height:100%;}
+  .wv4{animation:wvA 1.1s 0.3s ease-in-out infinite;height:50%;}
+  .wv5{animation:wvA 1.3s 0.4s ease-in-out infinite;height:80%;}
+  .wv6{animation:wvA 1s 0.15s ease-in-out infinite;height:40%;}
+  .wv7{animation:wvA 0.85s 0.05s ease-in-out infinite;height:70%;}
+  @keyframes wvA{0%,100%{height:15%}50%{height:100%}}
+  .bottom-nav{position:fixed;bottom:0;left:0;right:0;height:72px;z-index:50;display:flex;align-items:center;justify-content:space-around;background:rgba(10,13,13,0.97);backdrop-filter:blur(24px);border-top:1px solid rgba(255,255,255,0.06);padding:0 6px;}
+  .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;background:transparent;color:#6b7280;font-size:10px;font-weight:600;font-family:Inter,sans-serif;padding:6px 2px;border-radius:10px;cursor:pointer;transition:all 0.15s;}
+  .nav-btn:hover{background:rgba(255,255,255,0.04);color:#c2c6d6;}
+  .nav-btn.active{background:#adc6ff;color:#001a42;font-weight:700;}
+  .nav-btn .ms{font-size:22px;font-family:'Material Symbols Outlined';}
+</style>
 </head>
-<body class="bg-background text-on-background min-h-screen flex flex-col font-body-lg pb-[120px]">
-<!-- TopAppBar -->
-<header class="flex justify-between items-center px-6 h-16 w-full z-50 bg-background/90 backdrop-blur-md border-b border-white/10 sticky top-0">
-<div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
-<button aria-label="Menu" class="h-10 w-10 flex items-center justify-center text-primary hover:bg-surface-container transition-colors rounded-full">
-<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">visibility</span>
-</button>
-<h1 class="font-black text-2xl tracking-tight text-primary">AUDIVUE</h1>
-</div>
-<button onclick="window.location.href='audio_detected.html'" aria-label="Live Status" class="h-10 px-4 flex items-center justify-center text-primary font-bold hover:bg-surface-container transition-colors rounded-xl text-sm gap-2 border border-primary/30">
-    <span class="w-2.5 h-2.5 bg-emerald-400 rounded-full animate-pulse"></span> ● LIVE MONITOR
-</button>
+<body>
+<header class="top-bar">
+  <a class="logo-link" href="index.html">
+    <span class="ms material-symbols-outlined">visibility</span>
+    <h1>AUDIVUE</h1>
+  </a>
+  <button onclick="window.location.href='audio_detected.html'" style="display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;background:rgba(52,211,153,0.12);border:1px solid rgba(52,211,153,0.35);color:#34d399;cursor:pointer;font-family:Inter,sans-serif;border-width:1px;">
+    <span style="width:7px;height:7px;border-radius:50%;background:#34d399;display:inline-block;animation:pAnim 1.5s ease-in-out infinite;"></span>LIVE MONITOR
+  </button>
 </header>
 
-<!-- Main Content Area -->
-<main class="flex-grow p-6 flex flex-col gap-6 max-w-4xl mx-auto w-full pt-6">
-<div class="mb-2">
-<h2 class="text-3xl font-extrabold mb-2 text-primary">Audio Status Monitor</h2>
-<p class="text-base text-on-surface-variant">Persistent state components for auditory feedback and environmental awareness.</p>
-</div>
+<main style="flex:1;padding:20px 16px 96px;max-width:520px;margin:0 auto;width:100%;">
+  <div style="margin-bottom:16px;">
+    <h2 style="font-size:22px;font-weight:800;color:#adc6ff;margin:0 0 4px;">Audio Status Monitor</h2>
+    <p style="font-size:13px;color:#6b7280;margin:0;">Live auditory feedback states for voice guidance system</p>
+  </div>
 
-<!-- State A: Speaking -->
-<section class="glass-panel rounded-3xl p-6 electric-border shadow-2xl relative overflow-hidden flex flex-col gap-4 min-h-[250px]">
-<div class="flex items-center gap-3 z-10 relative">
-<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">volume_up</span>
-<span class="text-2xl text-primary font-extrabold">State A: Speaking...</span>
-</div>
-
-<div class="flex-grow relative w-full rounded-2xl overflow-hidden min-h-[100px] bg-black/40 flex items-center justify-center border border-white/5 p-4">
-    <div class="flex items-center gap-2 h-12 w-full justify-center">
-        <div class="w-2.5 bg-[#3b82f6] rounded-full h-1/2 animate-pulse"></div>
-        <div class="w-2.5 bg-[#a855f7] rounded-full h-full animate-pulse"></div>
-        <div class="w-2.5 bg-[#3b82f6] rounded-full h-3/4 animate-pulse"></div>
-        <div class="w-2.5 bg-[#a855f7] rounded-full h-full animate-pulse"></div>
-        <div class="w-2.5 bg-[#3b82f6] rounded-full h-1/2 animate-pulse"></div>
+  <!-- State A: Speaking -->
+  <div class="state-card" style="margin-bottom:14px;border:2px solid #4d8eff;">
+    <div style="padding:16px 18px 12px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(77,142,255,0.15);">
+      <span class="ms material-symbols-outlined" style="font-size:26px;color:#4d8eff;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;animation:pAnim 2s ease-in-out infinite;">volume_up</span>
+      <div>
+        <div style="font-size:10px;color:#4d8eff;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;">State A</div>
+        <div style="font-size:16px;font-weight:800;color:#e2e2e2;">Speaking...</div>
+      </div>
+      <div style="margin-left:auto;width:10px;height:10px;border-radius:50%;background:#4d8eff;animation:pAnim 0.8s ease-in-out infinite;"></div>
     </div>
-</div>
 
-<div class="z-10 relative bg-surface-container/90 p-4 rounded-2xl border-l-4 border-primary shadow-md">
-<p class="text-xl text-on-background font-bold">"Vehicle approaching from your right."</p>
-</div>
-</section>
+    <!-- Waveform Visualization -->
+    <div style="padding:14px 18px;background:rgba(0,0,0,0.25);">
+      <div class="waveform-box">
+        <div class="wv" style="background:#4d8eff;" class="wv1"></div>
+        <div class="wv wv2" style="background:#5c9aff;"></div>
+        <div class="wv wv3" style="background:#4d8eff;"></div>
+        <div class="wv wv4" style="background:#7ab0ff;"></div>
+        <div class="wv wv5" style="background:#4d8eff;"></div>
+        <div class="wv wv6" style="background:#5c9aff;"></div>
+        <div class="wv wv7" style="background:#4d8eff;"></div>
+      </div>
+    </div>
 
-<!-- State B: Ready -->
-<section class="glass-panel rounded-3xl p-6 shadow-xl relative overflow-hidden flex flex-col gap-4 min-h-[160px]">
-<div class="flex items-center gap-3 z-10 relative opacity-90">
-<span class="material-symbols-outlined text-on-surface text-3xl">mic</span>
-<span class="text-2xl text-on-surface font-extrabold">State B: Ready</span>
-</div>
-<div class="flex-grow flex items-center justify-center py-6">
-<!-- Steady horizontal bar -->
-<div class="w-full h-1.5 bg-surface-container-high rounded-full overflow-hidden relative">
-<div class="absolute inset-0 bg-gradient-to-r from-transparent via-primary to-transparent animate-[pulse_2s_ease-in-out_infinite]"></div>
-</div>
-</div>
-</section>
+    <!-- Audio Caption -->
+    <div style="padding:12px 18px;border-top:1px solid rgba(255,255,255,0.06);display:flex;align-items:flex-start;gap:10px;">
+      <span class="ms material-symbols-outlined" style="font-size:18px;color:#adc6ff;margin-top:1px;">chat_bubble</span>
+      <p style="font-size:15px;font-weight:800;color:#e2e2e2;margin:0;line-height:1.35;">"Vehicle approaching from your right side. Move left."</p>
+    </div>
+  </div>
+
+  <!-- State B: Ready -->
+  <div class="state-card" style="margin-bottom:14px;">
+    <div style="padding:16px 18px;display:flex;align-items:center;gap:12px;">
+      <span class="ms material-symbols-outlined" style="font-size:26px;color:#6b7280;">mic</span>
+      <div>
+        <div style="font-size:10px;color:#6b7280;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;">State B</div>
+        <div style="font-size:16px;font-weight:800;color:#c2c6d6;">Ready — Listening</div>
+      </div>
+      <div style="margin-left:auto;">
+        <div style="width:48px;height:3px;border-radius:3px;background:rgba(255,255,255,0.08);overflow:hidden;">
+          <div style="height:100%;background:linear-gradient(90deg,transparent,rgba(173,198,255,0.5),transparent);animation:shimmer 2s ease-in-out infinite;"></div>
+        </div>
+      </div>
+    </div>
+    <div style="padding:0 18px 14px;margin-top:-4px;">
+      <p style="font-size:13px;color:#424754;margin:0;font-style:italic;">Microphone active. Waiting for a spatial event or voice command...</p>
+    </div>
+  </div>
+
+  <!-- Voice Commands Reference -->
+  <div style="background:rgba(77,142,255,0.06);border:1px solid rgba(77,142,255,0.14);border-radius:14px;padding:14px;">
+    <div style="font-size:11px;color:#adc6ff;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:10px;">Voice Commands</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+      <div style="font-size:12px;color:#c2c6d6;padding:6px 10px;background:rgba(255,255,255,0.04);border-radius:8px;">"obstacle mode"</div>
+      <div style="font-size:12px;color:#c2c6d6;padding:6px 10px;background:rgba(255,255,255,0.04);border-radius:8px;">"currency mode"</div>
+      <div style="font-size:12px;color:#c2c6d6;padding:6px 10px;background:rgba(255,255,255,0.04);border-radius:8px;">"repeat"</div>
+      <div style="font-size:12px;color:#c2c6d6;padding:6px 10px;background:rgba(255,255,255,0.04);border-radius:8px;">"stop" / "mute"</div>
+    </div>
+  </div>
 </main>
 
-<!-- Bottom Navigation Bar -->
-<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 h-24 bg-surface/95 backdrop-blur-xl border-t border-white/10 rounded-t-2xl shadow-2xl">
-<button onclick="window.location.href='../voice_assistant/index.html'" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container rounded-xl flex-1">
-<span class="material-symbols-outlined text-2xl mb-1">mic</span>
-<span class="text-xs font-semibold">Ready</span>
-</button>
-<button onclick="window.location.href='env_mode.html'" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container rounded-xl flex-1">
-<span class="material-symbols-outlined text-2xl mb-1">settings_suggest</span>
-<span class="text-xs font-semibold">Processing</span>
-</button>
-<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl p-2 px-5 border border-primary flex-1 shadow-lg">
-<span class="material-symbols-outlined text-2xl mb-1" style="font-variation-settings: 'FILL' 1;">volume_up</span>
-<span class="text-xs font-bold">Speaking</span>
-</button>
+<style>
+  @keyframes pAnim{0%,100%{opacity:1}50%{opacity:0.3}}
+  @keyframes shimmer{0%,100%{transform:translateX(-100%)}50%{transform:translateX(100%)}}</style>
+
+<nav class="bottom-nav">
+  <button class="nav-btn" onclick="window.location.href='env_mode.html'">
+    <span class="ms material-symbols-outlined">visibility</span>Vision
+  </button>
+  <button class="nav-btn" onclick="window.location.href='alerts.html'">
+    <span class="ms material-symbols-outlined">crisis_alert</span>Alerts
+  </button>
+  <button class="nav-btn" onclick="window.location.href='currency_mode.html'">
+    <span class="ms material-symbols-outlined">payments</span>Currency
+  </button>
+  <button class="nav-btn active" onclick="window.location.href='audio_detected.html'">
+    <span class="ms material-symbols-outlined">graphic_eq</span>Audio
+  </button>
+  <button class="nav-btn" onclick="window.location.href='../voice_assistant/index.html'">
+    <span class="ms material-symbols-outlined">settings</span>Settings
+  </button>
 </nav>
 
 <script src="../voice_assistant/voice_assistant.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const assistant = new AudivueVoiceAssistant({ rate: 1.05, pitch: 1.0 });
-        setTimeout(() => {
-            assistant.speak("Vehicle approaching from your right.", "high");
-        }, 500);
-    });
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof AudivueVoiceAssistant !== 'undefined') {
+    const va = new AudivueVoiceAssistant({ rate: 1.05, pitch: 1.0 });
+    setTimeout(() => va.speak('Vehicle approaching from your right side. Move left.', 'high'), 500);
+  }
+});
 </script>
 </body>
 </html>

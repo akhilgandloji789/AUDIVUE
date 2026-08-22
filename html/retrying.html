@@ -1,124 +1,122 @@
 <!DOCTYPE html>
-<html class="dark" lang="en">
+<html lang="en">
 <head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>AUDIVUE - Processing Error Retry</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AUDIVUE — Retrying Connection</title>
+<link rel="stylesheet" href="../assets/audivue.css"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "primary": "#adc6ff",
-                        "primary-container": "#4d8eff",
-                        "background": "#0B1220",
-                        "surface": "#121414",
-                        "surface-container": "#1e2020",
-                        "on-surface": "#e2e2e2",
-                        "on-surface-variant": "#c2c6d6"
-                    }
-                }
-            }
-        }
-    </script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <style>
-        .spin-slow { animation: spin 3s linear infinite; }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        .pulse-amber { animation: pulse-amber 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-        @keyframes pulse-amber { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
-        body { font-family: 'Inter', sans-serif; background-color: #0B1220; min-height: max(884px, 100dvh); }
-        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-        .glass-card {
-            background: rgba(18, 20, 20, 0.85);
-            backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-    </style>
+  body{margin:0;background:#0B1220;min-height:100dvh;display:flex;flex-direction:column;font-family:Inter,sans-serif;}
+  @keyframes slideUpAnim{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+  @keyframes spinAnim{to{transform:rotate(360deg)}}
+  @keyframes dashAnim{0%{stroke-dasharray:1,150;stroke-dashoffset:0}50%{stroke-dasharray:90,150;stroke-dashoffset:-35}100%{stroke-dasharray:90,150;stroke-dashoffset:-124}}
+  @keyframes fillBar{from{width:0}to{width:100%}}
+  .slide-up{animation:slideUpAnim 0.45s cubic-bezier(0.16,1,0.3,1) both;}
+  .spin-svg{animation:spinAnim 1.4s linear infinite;transform-origin:center;}
+  .dash-ring{animation:dashAnim 1.5s ease-in-out infinite;}
+  .timer-fill{animation:fillBar 5s linear forwards;}
+  .top-bar{position:sticky;top:0;z-index:50;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:rgba(11,18,32,0.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.07);}
+  .logo-link{display:flex;align-items:center;gap:8px;text-decoration:none;}
+  .logo-link .ms{font-size:26px;color:#adc6ff;font-family:'Material Symbols Outlined';font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;}
+  .logo-link h1{font-size:20px;font-weight:900;color:#adc6ff;margin:0;}
+  .btn-p{width:100%;height:56px;background:#4d8eff;color:#001a42;font-weight:700;font-size:16px;font-family:Inter,sans-serif;border:none;border-radius:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all 0.15s;box-shadow:0 4px 20px rgba(77,142,255,0.3);}
+  .btn-p:hover{background:#5a97ff;}.btn-p:active{transform:scale(0.97);}
+  .btn-s{width:100%;height:48px;background:transparent;color:#c2c6d6;font-weight:600;font-size:14px;font-family:Inter,sans-serif;border:1px solid rgba(255,255,255,0.15);border-radius:12px;cursor:pointer;transition:all 0.15s;margin-top:10px;}
+  .bottom-nav{position:fixed;bottom:0;left:0;right:0;height:72px;z-index:50;display:flex;align-items:center;justify-content:space-around;background:rgba(10,13,13,0.97);backdrop-filter:blur(24px);border-top:1px solid rgba(255,255,255,0.06);padding:0 6px;}
+  .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;background:transparent;color:#6b7280;font-size:10px;font-weight:600;font-family:Inter,sans-serif;padding:6px 2px;border-radius:10px;cursor:pointer;transition:all 0.15s;}
+  .nav-btn:hover{background:rgba(255,255,255,0.04);color:#c2c6d6;}
+  .nav-btn .ms{font-size:22px;font-family:'Material Symbols Outlined';}
+</style>
 </head>
-<body class="bg-background text-on-background min-h-screen flex flex-col relative overflow-hidden">
-
-<!-- Live Camera Feed Background (Simulated) -->
-<div class="absolute inset-0 z-0 bg-[#0B1220] flex items-center justify-center">
-    <video id="retryWebcamFeed" autoplay playsinline muted class="w-full h-full object-cover opacity-30 blur-sm scale-105"></video>
-    <div class="absolute inset-0 z-0 bg-gradient-to-b from-background/80 via-background/40 to-background/90"></div>
-</div>
-
-<!-- TopAppBar -->
-<header class="relative z-10 top-0 bg-surface-container/90 backdrop-blur-md text-primary flex justify-between items-center w-full px-6 h-16 border-b border-white/10">
-<div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
-<button aria-label="Menu" class="h-10 w-10 flex items-center justify-center rounded-full hover:bg-white/5 text-primary">
-<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">visibility</span>
-</button>
-<span class="font-extrabold text-2xl text-primary tracking-tight">AUDIVUE</span>
-</div>
-<div class="bg-amber-900/30 border border-amber-500/50 rounded-full px-4 py-1.5 flex items-center gap-2 backdrop-blur-sm shadow">
-<span class="material-symbols-outlined text-amber-500 text-sm">warning</span>
-<span class="text-xs text-amber-400 font-extrabold tracking-wider uppercase">SYSTEM ERROR</span>
-</div>
+<body>
+<header class="top-bar">
+  <a class="logo-link" href="index.html">
+    <span class="ms material-symbols-outlined">visibility</span>
+    <h1>AUDIVUE</h1>
+  </a>
+  <div style="display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.35);color:#f59e0b;font-family:Inter,sans-serif;">
+    <span style="width:7px;height:7px;border-radius:50%;background:#f59e0b;display:inline-block;animation:pAnim 1s ease-in-out infinite;"></span>RETRYING
+  </div>
 </header>
 
-<!-- Main Content Canvas -->
-<main class="relative z-10 flex-grow flex flex-col items-center justify-center px-6 pb-24">
-<!-- Error Overlay Card -->
-<div class="w-full max-w-sm glass-card rounded-3xl p-8 flex flex-col items-center text-center shadow-2xl relative overflow-hidden border border-white/10">
-<div class="h-20 w-20 rounded-full bg-amber-900/40 border-2 border-amber-500/50 flex items-center justify-center mb-6 relative">
-<span class="material-symbols-outlined text-4xl text-amber-500 pulse-amber">report_problem</span>
-<!-- Circular Retry Timer Animation -->
-<svg class="absolute inset-0 w-full h-full spin-slow" viewbox="0 0 100 100">
-<circle class="text-amber-500/20" cx="50" cy="50" fill="none" r="48" stroke="currentColor" stroke-width="4"></circle>
-<circle class="text-amber-500" cx="50" cy="50" fill="none" r="48" stroke="currentColor" stroke-dasharray="75 300" stroke-linecap="round" stroke-width="4"></circle>
-</svg>
-</div>
+<main style="flex:1;display:flex;align-items:center;justify-content:center;padding:24px 16px 96px;">
+  <div class="glass slide-up" style="border-radius:24px;padding:36px 24px;max-width:420px;width:100%;text-align:center;position:relative;overflow:hidden;">
+    <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,#f59e0b,transparent);"></div>
 
-<h2 class="text-2xl font-extrabold text-on-surface mb-3">AI Processing Unavailable</h2>
-<p class="text-base text-on-surface-variant mb-8">
-    AUDIVUE can't analyze your surroundings right now. Retrying automatically...
-</p>
+    <!-- Spinning Ring Loader -->
+    <div style="position:relative;width:76px;height:76px;margin:0 auto 24px;display:flex;align-items:center;justify-content:center;">
+      <svg class="spin-svg" width="76" height="76" viewBox="0 0 76 76" fill="none" style="position:absolute;inset:0;">
+        <circle cx="38" cy="38" r="32" stroke="rgba(245,158,11,0.15)" stroke-width="5"/>
+        <circle cx="38" cy="38" r="32" stroke="#f59e0b" stroke-width="5" stroke-linecap="round" class="dash-ring"/>
+      </svg>
+      <span style="position:relative;font-size:30px;color:#f59e0b;font-family:'Material Symbols Outlined';font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;">warning</span>
+    </div>
 
-<button onclick="window.location.href='env_mode.html'" class="w-full py-4 bg-primary-container text-on-primary-container font-extrabold text-lg rounded-2xl flex items-center justify-center gap-3 transition-all hover:bg-primary-fixed shadow-xl active:scale-95 border border-primary/40">
-<span class="material-symbols-outlined text-2xl">refresh</span>
-<span>Retry Now</span>
-</button>
-</div>
+    <h2 style="font-size:22px;font-weight:800;color:#e2e2e2;margin:0 0 8px;">Reconnecting to AI...</h2>
+    <p style="font-size:14px;color:#8c909f;line-height:1.6;margin:0 0 24px;">Attempting to restore AI vision processing. Returning to Vision Mode in <strong id="countdownSec" style="color:#f59e0b;">5</strong> seconds.</p>
+
+    <!-- Auto-progress bar -->
+    <div style="height:6px;border-radius:6px;background:rgba(245,158,11,0.12);overflow:hidden;margin-bottom:20px;">
+      <div class="timer-fill" style="height:100%;background:#f59e0b;border-radius:6px;"></div>
+    </div>
+
+    <!-- Attempt Counter -->
+    <div style="font-size:12px;color:#424754;margin-bottom:20px;" id="attemptText">Attempt 1 of 3 · Checking AI endpoint...</div>
+
+    <button onclick="clearInterval(window._retryTimer);window.location.href='env_mode.html'" class="btn-p">
+      <span style="font-family:'Material Symbols Outlined';font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;font-size:22px;">play_arrow</span>
+      Resume Now
+    </button>
+    <button onclick="window.location.href='ai_unavailable.html'" class="btn-s">View Error Details</button>
+  </div>
 </main>
 
-<!-- Audio Status Indicator -->
-<div class="fixed bottom-0 left-0 w-full z-50 bg-surface-container/95 backdrop-blur-xl border-t border-white/10 py-4 px-6 flex flex-col items-center shadow-2xl">
-<div class="flex items-center gap-3 mb-1">
-<div class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"></div>
-<span class="text-sm text-on-surface font-extrabold">🔊 Speaking Error Telemetry...</span>
-</div>
-<p class="text-sm text-on-surface-variant/90 text-center max-w-[90%] font-semibold">
-    "AI processing unavailable, please wait. Retrying automatically."
-</p>
-</div>
+<nav class="bottom-nav">
+  <button class="nav-btn" onclick="window.location.href='env_mode.html'">
+    <span class="ms material-symbols-outlined">visibility</span>Vision
+  </button>
+  <button class="nav-btn" onclick="window.location.href='alerts.html'">
+    <span class="ms material-symbols-outlined">crisis_alert</span>Alerts
+  </button>
+  <button class="nav-btn" onclick="window.location.href='currency_mode.html'">
+    <span class="ms material-symbols-outlined">payments</span>Currency
+  </button>
+  <button class="nav-btn" onclick="window.location.href='audio_detected.html'">
+    <span class="ms material-symbols-outlined">graphic_eq</span>Audio
+  </button>
+  <button class="nav-btn" onclick="window.location.href='../voice_assistant/index.html'">
+    <span class="ms material-symbols-outlined">settings</span>Settings
+  </button>
+</nav>
+
+<style>@keyframes pAnim{0%,100%{opacity:1}50%{opacity:0.3}}</style>
 
 <script src="../voice_assistant/voice_assistant.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', async () => {
-        try {
-            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-                document.getElementById('retryWebcamFeed').srcObject = stream;
-            }
-        } catch (e) {
-            console.log('Webcam preview fallback');
-        }
+let remaining = 5;
+const cd = document.getElementById('countdownSec');
+const attempts = ['Attempt 1 of 3 · Checking AI endpoint...', 'Attempt 2 of 3 · Testing vision pipeline...', 'Attempt 3 of 3 · Verifying model response...'];
+let attempt = 0;
+const attemptEl = document.getElementById('attemptText');
 
-        const assistant = new AudivueVoiceAssistant({ rate: 1.05, pitch: 1.0 });
-        setTimeout(() => {
-            assistant.speak("AI processing unavailable, please wait. Retrying automatically.", "high");
-        }, 500);
+window._retryTimer = setInterval(() => {
+  remaining--;
+  if (cd) cd.textContent = remaining;
+  if (remaining <= 3 && attempt < 2) { attempt++; if(attemptEl) attemptEl.textContent = attempts[attempt]; }
+  if (remaining <= 0) {
+    clearInterval(window._retryTimer);
+    window.location.href = 'env_mode.html';
+  }
+}, 1000);
 
-        // Auto retry transition after 5s
-        setTimeout(() => {
-            window.location.href = 'env_mode.html';
-        }, 5000);
-    });
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof AudivueVoiceAssistant !== 'undefined') {
+    const va = new AudivueVoiceAssistant({ rate: 1.05, pitch: 1.0 });
+    setTimeout(() => va.speak('Reconnecting to AI. Returning to Vision Mode in 5 seconds.', 'high'), 400);
+  }
+});
 </script>
 </body>
 </html>
