@@ -8,14 +8,15 @@
  *   4. Backend FastAPI Token Validation & Session Registration
  */
 
-// Firebase Client App Configuration for project: audivue
+// Firebase Official Client App Configuration for project: audivue-258930
 const firebaseConfig = {
-    apiKey: "AIzaSyAUDIVUE-Vision-Key-2026",
-    authDomain: "audivue.firebaseapp.com",
-    projectId: "audivue",
-    storageBucket: "audivue.appspot.com",
-    messagingSenderId: "987654321012",
-    appId: "1:987654321012:web:audivue2026"
+    apiKey: "AIzaSyAv2jbA-UWZi6ugljUvogc0C3h_S8eTzSs",
+    authDomain: "audivue-258930.firebaseapp.com",
+    projectId: "audivue-258930",
+    storageBucket: "audivue-258930.firebasestorage.app",
+    messagingSenderId: "392216653435",
+    appId: "1:392216653435:web:338f07b5194e27a1e37cde",
+    measurementId: "G-2HFWRNG9WL"
 };
 
 // Initialize Firebase App

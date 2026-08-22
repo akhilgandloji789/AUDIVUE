@@ -43,8 +43,8 @@ from firebase_admin import auth as firebase_auth
 
 try:
     if not firebase_admin._apps:
-        firebase_admin.initialize_app(options={'projectId': 'audivue'})
-        print("[AUDIVUE Backend] Firebase Admin SDK connected to project: audivue")
+        firebase_admin.initialize_app(options={'projectId': 'audivue-258930'})
+        print("[AUDIVUE Backend] Firebase Admin SDK connected to project: audivue-258930")
 except Exception as e:
     print(f"[AUDIVUE Backend] Firebase Admin init notice: {e}")
 
