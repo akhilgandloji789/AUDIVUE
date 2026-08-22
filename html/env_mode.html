@@ -63,17 +63,7 @@
 </div>
 
 <!-- AR Bounding Box Overlay -->
-<div class="ar-layer" id="arLayer">
-  <div class="ar-box" style="top:28%;left:10%;width:24%;height:40%;" id="boxChair">
-    <div class="ar-label"><span class="ar-dot"></span>Chair — 89%</div>
-  </div>
-  <div class="ar-box" style="top:17%;left:52%;width:14%;height:58%;" id="boxPerson">
-    <div class="ar-label"><span class="ar-dot"></span>Person — 95%</div>
-  </div>
-  <div class="ar-box" style="top:9%;left:72%;width:16%;height:73%;" id="boxDoor">
-    <div class="ar-label"><span class="ar-dot"></span>Door — 92%</div>
-  </div>
-</div>
+<div class="ar-layer" id="arLayer"></div>
 
 <!-- Top App Bar -->
 <header class="top-bar">
@@ -82,7 +72,7 @@
     <h1>AUDIVUE</h1>
   </a>
   <div class="hdr-right">
-    <span class="badge-mode" id="engineBadge">RF-DETR Transformer + ByteTrack</span>
+    <span class="badge-mode" id="engineBadge">FastAPI + YOLO11 (PyTorch) Stream</span>
     <div class="badge-live"><span class="live-dot"></span>LIVE</div>
     <button class="icon-btn" id="muteBtn" title="Mute / Unmute voice">
       <span class="ms material-symbols-outlined" id="muteIcon">volume_up</span>
@@ -90,18 +80,13 @@
   </div>
 </header>
 
-<!-- FAB: Currency Mode -->
-<button class="fab" onclick="window.location.href='mode_transition.html'" title="Switch to Currency Mode">
-  <span class="ms material-symbols-outlined">payments</span>
-</button>
-
 <!-- Spatial Caption Card -->
 <div class="bottom-overlay">
   <div class="caption-card">
     <div class="cap-icon"><span class="ms material-symbols-outlined">volume_up</span></div>
     <div style="flex:1;">
       <div class="cap-meta">Spatial Quadrant Telemetry</div>
-      <p class="cap-text" id="captionText">"Chair ahead left, close. Person center. Door right, open."</p>
+      <p class="cap-text" id="captionText">"Scanning environment for real-time obstacles..."</p>
       <div class="waveform">
         <div class="wv wv1"></div><div class="wv wv2"></div><div class="wv wv3"></div>
         <div class="wv wv4"></div><div class="wv wv5"></div><div class="wv wv6"></div>
