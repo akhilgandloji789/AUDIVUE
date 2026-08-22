@@ -56,11 +56,15 @@ def get_yolo11_model():
     if yolo11_model is None:
         print("[AUDIVUE FastAPI] Loading Ultralytics YOLO11 Model...")
         try:
-            yolo11_model = YOLO("yolo11x.pt")
-            print("[AUDIVUE FastAPI] YOLO11x (PyTorch) loaded successfully!")
-        except Exception as e:
-            print(f"[AUDIVUE FastAPI] Fallback loading yolo11n.pt ({e})...")
+            # Load lightweight YOLO11n Nano model (5.3MB) for instant inference
             yolo11_model = YOLO("yolo11n.pt")
+            print("[AUDIVUE FastAPI] YOLO11n Nano PyTorch model loaded successfully!")
+        except Exception as e:
+            print(f"[AUDIVUE FastAPI] Model init notice: {e}")
+            try:
+                yolo11_model = YOLO("yolov8n.pt")
+            except Exception:
+                pass
     return yolo11_model
 
 # Constants for Spatial Telemetry

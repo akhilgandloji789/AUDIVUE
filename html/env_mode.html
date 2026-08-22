@@ -96,6 +96,8 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 <script src="../assets/firebase_auth.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.10.0/dist/tf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.3/dist/coco-ssd.min.js"></script>
 
 <!-- Spatial Caption Card -->
 <div class="bottom-overlay">
@@ -259,6 +261,74 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
   initWebSocket();
+
+  // Initialize Client-Side In-Browser AI Engine (COCO-SSD / TensorFlow.js)
+  let cocoModel = null;
+  if (typeof cocoSsd !== 'undefined') {
+    cocoSsd.load().then(m => {
+      cocoModel = m;
+      console.log('[AUDIVUE Client AI] In-Browser COCO-SSD Model Loaded Ready!');
+      if (document.getElementById('engineBadge') && (!ws || ws.readyState !== WebSocket.OPEN)) {
+        document.getElementById('engineBadge').textContent = "IN-BROWSER AI ENGINE READY";
+      }
+    }).catch(e => console.warn(e));
+  }
+
+  // Client-Side Real-Time Inference Loop
+  async function runClientInference() {
+    if (!cocoModel || !videoEl || videoEl.paused || videoEl.ended || !videoEl.videoWidth) return;
+    try {
+      const predictions = await cocoModel.detect(videoEl);
+      if (predictions && predictions.length > 0) {
+        const vW = videoEl.videoWidth || 640;
+        const vH = videoEl.videoHeight || 480;
+        
+        const detections = predictions.map(p => {
+          const [x, y, w, h] = p.bbox;
+          const leftPct = (x / vW) * 100;
+          const topPct = (y / vH) * 100;
+          const widthPct = (w / vW) * 100;
+          const heightPct = (h / vH) * 100;
+          
+          const centerX = (x + w / 2) / vW;
+          const areaPct = (w * h) / (vW * vH);
+          
+          let position = 'Center';
+          if (centerX < 0.38) position = 'Left';
+          else if (centerX > 0.62) position = 'Right';
+          
+          let proximity = 'Far';
+          if (areaPct > 0.12) proximity = 'Close';
+          else if (areaPct > 0.03) proximity = 'Medium';
+          
+          return {
+            label: p.class.toUpperCase(),
+            confidence: p.score,
+            position: position,
+            proximity: proximity,
+            bbox_pct: { left: leftPct, top: topPct, width: widthPct, height: heightPct }
+          };
+        });
+        
+        const topDet = detections[0];
+        const spoken = `${topDet.label} detected in ${topDet.position} quadrant — ${topDet.proximity} proximity.`;
+        
+        handleDetectionData({
+          status: 'success',
+          engine: 'IN-BROWSER AI ENGINE (REAL-TIME)',
+          detections: detections,
+          spoken_summary: spoken
+        });
+      }
+    } catch(err){}
+  }
+
+  setInterval(() => {
+    // Run client-side AI detection if server WebSocket is connecting/unavailable
+    if (!ws || ws.readyState !== WebSocket.OPEN) {
+      runClientInference();
+    }
+  }, 180);
 
   // Dual Frame Streamer: Primary WebSocket (12 FPS) + Fallback HTTP REST POST
   setInterval(async () => {
