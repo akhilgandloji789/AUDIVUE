@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AUDIVUE - Processing Error</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                            "secondary": "#d0bcff",
+                            "on-tertiary-fixed": "#151b2a",
+                            "on-primary-fixed": "#001a42",
+                            "primary-fixed": "#d8e2ff",
+                            "on-error-container": "#ffdad6",
+                            "surface-container": "#1e2020",
+                            "surface-container-highest": "#333535",
+                            "on-surface-variant": "#c2c6d6",
+                            "tertiary-container": "#8a90a3",
+                            "tertiary-fixed": "#dce2f6",
+                            "on-tertiary-container": "#232a39",
+                            "error": "#ffb4ab",
+                            "on-primary-fixed-variant": "#004395",
+                            "on-secondary-container": "#c4abff",
+                            "inverse-on-surface": "#2f3131",
+                            "surface-dim": "#121414",
+                            "outline-variant": "#424754",
+                            "on-background": "#e2e2e2",
+                            "on-secondary-fixed-variant": "#5516be",
+                            "secondary-fixed": "#e9ddff",
+                            "surface-tint": "#adc6ff",
+                            "surface-variant": "#333535",
+                            "surface": "#121414",
+                            "surface-bright": "#37393a",
+                            "secondary-container": "#571bc1",
+                            "on-primary-container": "#00285d",
+                            "on-error": "#690005",
+                            "on-secondary": "#3c0091",
+                            "inverse-primary": "#005ac2",
+                            "background": "#121414",
+                            "on-tertiary": "#2a3040",
+                            "primary": "#adc6ff",
+                            "on-secondary-fixed": "#23005c",
+                            "surface-container-high": "#282a2b",
+                            "surface-container-low": "#1a1c1c",
+                            "on-surface": "#e2e2e2",
+                            "outline": "#8c909f",
+                            "on-primary": "#002e6a",
+                            "inverse-surface": "#e2e2e2",
+                            "primary-fixed-dim": "#adc6ff",
+                            "error-container": "#93000a",
+                            "on-tertiary-fixed-variant": "#404757",
+                            "tertiary": "#c0c6da",
+                            "primary-container": "#4d8eff",
+                            "secondary-fixed-dim": "#d0bcff",
+                            "tertiary-fixed-dim": "#c0c6da",
+                            "surface-container-lowest": "#0c0f0f"
+                    },
+                    "borderRadius": {
+                            "DEFAULT": "0.25rem",
+                            "lg": "0.5rem",
+                            "xl": "0.75rem",
+                            "full": "9999px"
+                    },
+                    "spacing": {
+                            "touch-target-min": "64px",
+                            "margin-desktop": "40px",
+                            "stack-gap": "16px",
+                            "margin-mobile": "20px",
+                            "gutter": "24px"
+                    },
+                    "fontFamily": {
+                            "headline-md": ["Inter"],
+                            "label-lg": ["Inter"],
+                            "headline-lg": ["Inter"],
+                            "body-lg": ["Inter"],
+                            "label-md": ["Inter"],
+                            "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                            "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                            "label-lg": ["20px", {"lineHeight": "24px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                            "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                            "body-lg": ["20px", {"lineHeight": "30px", "fontWeight": "400"}],
+                            "label-md": ["18px", {"lineHeight": "22px", "fontWeight": "600"}],
+                            "body-md": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .spin-slow {
+            animation: spin 3s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .pulse-amber {
+            animation: pulse-amber 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse-amber {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+        body { min-height: max(884px, 100dvh); background-color: #0B1220; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-headline-md min-h-screen flex flex-col relative overflow-hidden">
+
+<!-- Live Camera Feed Background (Simulated) -->
+<div class="absolute inset-0 z-0 bg-[#0B1220] flex items-center justify-center">
+    <video id="retryWebcamFeed" autoplay playsinline muted class="w-full h-full object-cover opacity-30 blur-sm scale-105"></video>
+    <div class="absolute inset-0 z-0 bg-gradient-to-b from-background/80 via-background/40 to-background/90"></div>
+</div>
+
+<!-- TopAppBar -->
+<header class="relative z-10 docked full-width top-0 bg-surface/90 backdrop-blur-md text-primary font-headline-md text-headline-md flat no shadows transition-colors duration-200 flex justify-between items-center w-full px-margin-mobile h-touch-target-min border-b border-white/10">
+<div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
+<button aria-label="Menu" class="h-12 w-12 flex items-center justify-center rounded-full hover:bg-surface-bright text-primary">
+<span class="material-symbols-outlined text-[32px]" style="font-variation-settings: 'FILL' 1;">visibility</span>
+</button>
+<span class="font-headline-md text-headline-md font-bold text-primary tracking-tight">AUDIVUE</span>
+</div>
+<div class="bg-amber-900/30 border border-amber-500/50 rounded-full px-4 py-1.5 flex items-center gap-2 backdrop-blur-sm shadow">
+<span class="material-symbols-outlined text-[18px] text-amber-500">warning</span>
+<span class="font-label-md text-[13px] text-amber-400 font-bold tracking-wider">SYSTEM ERROR</span>
+</div>
+</header>
+
+<!-- Main Content Canvas -->
+<main class="relative z-10 flex-grow flex flex-col items-center justify-center px-margin-mobile pb-32">
+<!-- Error Overlay Card -->
+<div class="w-full max-w-sm bg-surface-container/80 backdrop-blur-xl border border-white/10 rounded-3xl p-8 flex flex-col items-center text-center shadow-2xl relative overflow-hidden">
+<!-- Decorative blurred glow -->
+<div class="absolute -top-20 -right-20 w-40 h-40 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+<div class="h-20 w-20 rounded-full bg-amber-900/40 border-2 border-amber-500/50 flex items-center justify-center mb-6 relative">
+<span class="material-symbols-outlined text-[40px] text-amber-500 pulse-amber">report_problem</span>
+<!-- Circular Retry Timer Animation -->
+<svg class="absolute inset-0 w-full h-full spin-slow" viewbox="0 0 100 100">
+<circle class="text-amber-500/20" cx="50" cy="50" fill="none" r="48" stroke="currentColor" stroke-width="4"></circle>
+<circle class="text-amber-500" cx="50" cy="50" fill="none" r="48" stroke="currentColor" stroke-dasharray="75 300" stroke-linecap="round" stroke-width="4"></circle>
+</svg>
+</div>
+
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-4 font-bold">AI processing unavailable</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-10">
+    AUDIVUE can't analyze your surroundings right now. Retrying automatically...
+</p>
+
+<button onclick="window.location.href='env_mode.html'" class="w-full h-touch-target-min bg-primary-container text-on-primary-container rounded-2xl flex items-center justify-center gap-3 font-label-lg text-label-lg font-bold transition-transform active:scale-95 hover:bg-primary-container/90 shadow-xl border-2 border-primary/50">
+<span class="material-symbols-outlined text-[28px]">refresh</span>
+<span>Retry Now</span>
+</button>
+</div>
+</main>
+
+<!-- Audio Status Indicator -->
+<div class="fixed bottom-0 left-0 w-full z-50 bg-surface-container-lowest/90 backdrop-blur-xl border-t border-white/10 py-4 px-margin-mobile flex flex-col items-center shadow-2xl">
+<div class="flex items-center gap-3 mb-1">
+<div class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"></div>
+<span class="font-label-lg text-label-lg text-on-surface font-bold">🔊 Speaking Error Telemetry...</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant/80 text-center max-w-[90%] font-semibold">
+    "AI processing unavailable, please wait. Retrying automatically."
+</p>
+</div>
+
+<script src="voice_assistant/voice_assistant.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        try {
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+                document.getElementById('retryWebcamFeed').srcObject = stream;
+            }
+        } catch (e) {
+            console.log('Webcam preview fallback');
+        }
+
+        const assistant = new AudivueVoiceAssistant({ rate: 1.05, pitch: 1.0 });
+        setTimeout(() => {
+            assistant.speak("AI processing unavailable, please wait. Retrying automatically.", "high");
+        }, 500);
+
+        // Auto retry transition after 5 seconds
+        setTimeout(() => {
+            window.location.href = 'env_mode.html';
+        }, 5000);
+    });
+</script>
+</body>
+</html>
