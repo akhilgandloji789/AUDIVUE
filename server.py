@@ -351,7 +351,7 @@ def detect_currency():
 # Static File Routes for Website Frontend
 @app.route("/")
 def index():
-    return send_from_directory(".", "index.html")
+    return send_from_directory("html", "index.html")
 
 @app.route("/<path:path>")
 def serve_static(path):
