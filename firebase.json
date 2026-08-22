@@ -1,0 +1,31 @@
+{
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      ".firebaserc",
+      "**/.*",
+      "**/.git/**",
+      "**/node_modules/**",
+      "scratch/**",
+      "*.pt",
+      "*.pth",
+      "*.py",
+      "__pycache__"
+    ],
+    "rewrites": [
+      {
+        "source": "/",
+        "destination": "/html/index.html"
+      },
+      {
+        "source": "/index.html",
+        "destination": "/html/index.html"
+      },
+      {
+        "source": "/env_mode.html",
+        "destination": "/html/env_mode.html"
+      }
+    ]
+  }
+}
