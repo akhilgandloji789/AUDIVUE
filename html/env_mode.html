@@ -216,13 +216,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   function getBackendWsUrls() {
     if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
       return [
-        `${location.protocol === 'https:' ? 'wss:' : 'ws:'}//${location.host}/ws/detect`,
-        `ws://localhost:8000/ws/detect`
+        `ws://localhost:8000/ws/detect`,
+        `wss://audivue-backend-kray.onrender.com/ws/detect`
       ];
     }
     return [
-      `ws://localhost:8000/ws/detect`,
-      `ws://127.0.0.1:8000/ws/detect`
+      `wss://audivue-backend-kray.onrender.com/ws/detect`,
+      `ws://localhost:8000/ws/detect`
     ];
   }
 
@@ -285,7 +285,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const dataUrl = hiddenCanvas.toDataURL('image/jpeg', 0.5);
         const restEndpoint = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
           ? '/api/detect_obstacle'
-          : 'http://localhost:8000/api/detect_obstacle';
+          : 'https://audivue-backend-kray.onrender.com/api/detect_obstacle';
 
         const res = await fetch(restEndpoint, {
           method: 'POST',
