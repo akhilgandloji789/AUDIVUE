@@ -38,15 +38,15 @@ currency_detector = None
 def get_obstacle_detector():
     global obstacle_detector
     if obstacle_detector is None and ObstacleDetectorPipeline is not None:
-        print("[AUDIVUE Server] Initializing YOLOv8 Obstacle Detector...")
-        obstacle_detector = ObstacleDetectorPipeline("yolov8n.pt")
+        print("[AUDIVUE Server] Initializing Flagship YOLOv8x High-Accuracy Detector...")
+        obstacle_detector = ObstacleDetectorPipeline("yolov8x.pt")
     return obstacle_detector
 
 def get_currency_detector():
     global currency_detector
     if currency_detector is None and CurrencyDetectorPipeline is not None:
-        print("[AUDIVUE Server] Initializing YOLOv8 Currency Detector...")
-        currency_detector = CurrencyDetectorPipeline("yolov8n.pt")
+        print("[AUDIVUE Server] Initializing Flagship YOLOv8x Currency Detector...")
+        currency_detector = CurrencyDetectorPipeline("yolov8x.pt")
     return currency_detector
 
 
