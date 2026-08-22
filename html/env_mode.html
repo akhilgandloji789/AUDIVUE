@@ -68,11 +68,33 @@
     <button class="icon-btn" id="muteBtn" title="Mute / Unmute voice">
       <span class="ms material-symbols-outlined" id="muteIcon">volume_up</span>
     </button>
-    <button class="icon-btn" onclick="window.location.href='index.html'" title="Sign Out / Profile" style="background:rgba(77,142,255,0.15);border:1px solid rgba(77,142,255,0.35);">
-      <span class="ms material-symbols-outlined" style="color:#adc6ff;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;">account_circle</span>
-    </button>
+    <div style="position:relative;">
+      <button class="icon-btn" id="profileBtn" title="Profile / Account" style="background:rgba(77,142,255,0.15);border:1px solid rgba(77,142,255,0.35);">
+        <span class="ms material-symbols-outlined" style="color:#adc6ff;font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;">account_circle</span>
+      </button>
+
+      <!-- Profile Dropdown Menu -->
+      <div id="profileDropdown" style="display:none;position:absolute;top:48px;right:0;width:240px;background:rgba(12,17,30,0.96);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,0.12);border-radius:16px;padding:16px;box-shadow:0 10px 30px rgba(0,0,0,0.5);z-index:100;font-family:Inter,sans-serif;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.08);">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(77,142,255,0.2);display:flex;align-items:center;justify-content:center;color:#4d8eff;font-weight:700;font-size:16px;" id="userAvatar">A</div>
+          <div style="overflow:hidden;text-align:left;">
+            <div style="font-size:14px;font-weight:700;color:#e2e2e2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" id="userName">Alex Morgan</div>
+            <div style="font-size:11px;color:#8c909f;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" id="userEmail">alex@audivue.ai</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:#34d399;font-weight:700;margin-bottom:14px;background:rgba(52,211,153,0.1);padding:4px 8px;border-radius:8px;">
+          <span style="width:6px;height:6px;border-radius:50%;background:#34d399;display:inline-block;"></span>Firebase Auth Active
+        </div>
+        <button id="logoutBtn" onclick="handleGoogleSignOut()" style="width:100%;height:40px;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.35);color:#f87171;font-weight:700;font-size:13px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.15s;">
+          <span class="ms material-symbols-outlined" style="font-size:18px;">logout</span>Sign Out / Logout
+        </button>
+      </div>
+    </div>
   </div>
 </header>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="../assets/firebase_auth.js"></script>
 
 <!-- Spatial Caption Card -->
 <div class="bottom-overlay">
@@ -113,6 +135,29 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     });
     va.startListening();
+  }
+
+  // Profile dropdown menu toggle & user profile setup
+  const profileBtn = document.getElementById('profileBtn');
+  const profileDropdown = document.getElementById('profileDropdown');
+  if (profileBtn && profileDropdown) {
+    profileBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      profileDropdown.style.display = profileDropdown.style.display === 'none' ? 'block' : 'none';
+    });
+    document.addEventListener('click', () => {
+      profileDropdown.style.display = 'none';
+    });
+  }
+
+  // Populate Firebase / User details
+  if (typeof getAudivueUser === 'function') {
+    const u = getAudivueUser();
+    if (u) {
+      if (document.getElementById('userName')) document.getElementById('userName').textContent = u.name;
+      if (document.getElementById('userEmail')) document.getElementById('userEmail').textContent = u.email;
+      if (document.getElementById('userAvatar')) document.getElementById('userAvatar').textContent = u.name.charAt(0).toUpperCase();
+    }
   }
 
   // Mute button
