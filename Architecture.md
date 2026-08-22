@@ -24,13 +24,13 @@ flowchart TD
         F -->|Long-Press| J[Opt-In Face Recognition Module]
     end
 
-    G --> K[Audio Queue & Synthesis Engine]
+    G --> K[Alert Queue & Telemetry Engine]
     H --> K
     I --> K
     J --> K
 
-    E -->|Preempt / Cut Off Narration| K
-    K --> L[Audio Output: Bone-Conduction Headset / Speaker]
+    E -->|Preempt / Cut Off Lower Priority Alerts| K
+    K --> L[Real-Time Telemetry Alert Output]
 ```
 
 ---
@@ -39,7 +39,7 @@ flowchart TD
 
 ### 🚀 1. App Launch & Booting
 - **Default Mode:** Upon launch, the app boots directly into **"Walk Mode"** (Obstacle & Safety Detection Active).
-- **Audio Feedback on Boot:** Speaks a short status line immediately:
+- **Status Signal on Boot:** Emits a short system status telemetry line immediately:
   > *"Ready. Obstacle detection on."*
 
 ### 🛡️ 2. Continuous Background Safety Pass
@@ -48,9 +48,9 @@ flowchart TD
 - **Zero Touch Required:** Operates continuously without requiring user prompts or screen interaction.
 
 ### 🖐️ 3. On-Demand Heavy Modules (Gesture Triggers)
-Because deeper models (OCR, multi-note currency summation, scene description) are compute-heavy, they are loaded on-demand via simple, intuitive touch/voice gestures:
+Because deeper models (OCR, multi-note currency summation, scene description) are compute-heavy, they are loaded on-demand via simple, intuitive gestures:
 
-| Gesture | Mode | Spoken Trigger / Action | Model Engine |
+| Gesture | Mode | Trigger Action | Model Engine |
 | :--- | :--- | :--- | :--- |
 | **Double-Tap** | **Scene Description** | *"What's around me?"* | Fast Scene Classifier / ViT |
 | **Triple-Tap** | **OCR Reading** | *"Read this"* | Text Detection + OCR (PaddleOCR / EasyOCR) |
@@ -58,13 +58,9 @@ Because deeper models (OCR, multi-note currency summation, scene description) ar
 | **Long-Press** | **Face Recognition** | *"Toggle face recognition"* *(Opt-In Only)* | Facial Embeddings (ArcFace / MediaPipe) |
 
 ### ⚠️ 4. High-Priority Safety Interrupt System
-- **Preemptive Audio Overriding:** Safety alerts **always** take maximum priority over ongoing narration.
-- **Behavior:** If a close obstacle or imminent hazard is detected mid-sentence while reading text or describing a scene, the app **instantly cuts off current narration** and issues the safety warning immediately.
-  > **Example:** While reading a book (*"Chapter 1: The journey..."*) $\rightarrow$ **INTERRUPTED** $\rightarrow$ *"Warning! Step down ahead, 2 feet."*
-
-### 🎧 5. Audio Output Routing
-- **Ambient Awareness First:** Audio is routed specifically through **Bone-Conduction Headsets** or the device's main speaker.
-- **Ear Canal Preservation:** By avoiding in-ear headphones, the user's ear canal remains unobstructed to hear crucial environmental ambient sounds (traffic, voices, sirens).
+- **Preemptive Alert Overriding:** Safety alerts **always** take maximum priority over ongoing lower-priority outputs.
+- **Behavior:** If a close obstacle or imminent hazard is detected while reading text or describing a scene, the app **instantly interrupts ongoing output** and issues the safety warning immediately.
+  > **Example:** While reading text $\rightarrow$ **INTERRUPTED** $\rightarrow$ *"Warning! Step down ahead, 2 feet."*
 
 ---
 
@@ -79,9 +75,7 @@ Because deeper models (OCR, multi-note currency summation, scene description) ar
 | **Face Recognition (Opt-In)** | MediaPipe Face Mesh / ArcFace | Opt-in facial recognition for familiar contacts |
 | **Edge Optimization** | ONNX Runtime Mobile / TFLite | Low-latency, offline edge inference on mobile NPU/GPU |
 | **Gesture & Touch Input** | Native Gesture Handler | Multi-tap, swipe, and long-press event listeners |
-| **Text-to-Speech (TTS)** | Native OS Speech Synthesis / `pyttsx3` | Low-latency voice output engine |
-| **Audio Priority Queue** | Custom Async Priority Queue (`PriorityQueue`) | Manages safety interrupt overrides over regular narration |
-| **Audio Routing Engine** | Native Audio Session Manager | Directs audio output to Bone-Conduction Headset / Speaker |
+| **Alert Priority Queue** | Custom Async Priority Queue (`PriorityQueue`) | Manages safety interrupt overrides over regular output |
 
 ---
 
@@ -96,7 +90,7 @@ AUDIVUE/
 ├── assets/
 │   └── logo.png
 ├── config/
-│   ├── settings.py           # App configuration, thresholds & audio speeds
+│   ├── settings.py           # App configuration & thresholds
 │   └── classes.py            # COCO & Currency denomination mappings
 ├── models/
 │   ├── weights/
@@ -116,10 +110,8 @@ AUDIVUE/
 │   │   └── face_rec.py       # Opt-in face recognition module
 │   ├── gestures/
 │   │   └── handler.py        # Listener for double-tap, triple-tap, swipe, long-press
-│   ├── audio/
-│   │   ├── tts_engine.py     # Local Text-to-Speech synthesizer
-│   │   ├── priority_queue.py # Priority Queue with preemption for safety interrupts
-│   │   └── router.py         # Audio routing manager (Bone-Conduction / Speaker)
+│   ├── alerts/
+│   │   └── priority_queue.py # Priority Queue with preemption for safety interrupts
 │   └── utils/
 │       ├── spatial_math.py   # Bounding box quadrant & proximity estimation
 │       └── logger.py         # Telemetry & performance metric logger

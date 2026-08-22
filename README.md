@@ -5,7 +5,7 @@
 <h1 align="center">AUDIVUE</h1>
 <p align="center">
   <b>Real-Time AI Vision & Currency Assistant for the Visually Impaired</b><br>
-  <i>Transforming Live Camera Feeds into Spoken Spatial Intelligence and Automated Currency Calculations</i>
+  <i>Transforming Live Camera Feeds into Real-Time Spatial Intelligence and Automated Currency Calculations</i>
 </p>
 
 <p align="center">
@@ -32,7 +32,7 @@ Over **2.2 billion people worldwide** live with vision impairment or blindness (
 
 ## 💡 Our Solution
 
-**AUDIVUE** is a real-time AI Vision Assistant designed to run on smartphone camera feeds or webcams. It uses local computer vision models to "see" the world on the user's behalf and translates visual observations into immediate, hands-free spoken audio feedback — with **zero manual input or screen interaction required**.
+**AUDIVUE** is a real-time AI Vision Assistant designed to run on smartphone camera feeds or webcams. It uses local computer vision models to "see" the world on the user's behalf and translates visual observations into immediate spatial detection alerts and telemetry — with **zero manual input or screen interaction required**.
 
 ---
 
@@ -41,20 +41,20 @@ Over **2.2 billion people worldwide** live with vision impairment or blindness (
 AUDIVUE runs two focused, high-performance vision pipelines:
 
 ```
-Camera Feed ──► CV Model (YOLOv8) ──► Telemetry / Spatial Detection ──► Spoken Audio Feedback
+Camera Feed ──► CV Model (YOLOv8) ──► Telemetry / Spatial Detection Alerts
 ```
 
 ### 1️⃣ Pipeline 1: Obstacle & Object Awareness
 - **Input:** Live camera feed.
 - **CV Architecture:** YOLOv8 (pretrained on the COCO dataset — detecting people, chairs, doors, stairs, vehicles, etc.).
 - **Detection & Spatial Mapping:** Identifies objects and maps their relative spatial position (`Left`, `Center`, `Right`) and distance proximity (`Close`, `Medium`, `Far`).
-- **Output:** Spoken audio alerts (*"Chair ahead, slightly left, close"*).
+- **Output:** Spatial telemetry alerts (*"Chair ahead, slightly left, close"*).
 
 ### 2️⃣ Pipeline 2: Currency Detection & Counting
 - **Input:** Live camera feed focused on currency notes.
 - **CV Architecture:** YOLOv8 fine-tuned on Indian Currency dataset (denominated from ₹10 to ₹2000).
 - **Detection & Calculation:** Detects all notes in frame simultaneously, extracts individual values, and automatically computes the total monetary sum ($\sum \text{notes}$).
-- **Output:** Spoken aggregate audio summary (*"500, 200, and 100 rupees detected — total 800 rupees"*).
+- **Output:** Aggregate detection summary (*"500, 200, and 100 rupees detected — total 800 rupees"*).
 
 ---
 
