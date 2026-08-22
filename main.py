@@ -100,17 +100,17 @@ def process_frame_sync(frame: np.ndarray, mode: str = "obstacle") -> Dict:
     note_counter = {}
 
     for idx, box in enumerate(results.boxes):
-        x1, y1, x2, y2 = box.xyxy[0].cpu().numpy()
+        x1, y1, x2, y2 = [float(v) for v in box.xyxy[0].cpu().numpy()]
         conf = float(box.conf[0].cpu().numpy())
         cls_id = int(box.cls[0].cpu().numpy())
-        raw_label = model.names[cls_id]
+        raw_label = str(model.names[cls_id])
 
-        bw = x2 - x1
-        bh = y2 - y1
-        cx = (x1 + x2) / 2.0
-        norm_cx = cx / w
-        area_ratio = (bw * bh) / (w * h)
-        height_ratio = bh / h
+        bw = float(x2 - x1)
+        bh = float(y2 - y1)
+        cx = float((x1 + x2) / 2.0)
+        norm_cx = float(cx / w)
+        area_ratio = float((bw * bh) / (w * h))
+        height_ratio = float(bh / h)
 
         pos_label, pos_phrase = calculate_spatial_position(norm_cx)
         prox_label, prox_phrase = calculate_proximity(area_ratio, height_ratio)
@@ -128,16 +128,16 @@ def process_frame_sync(frame: np.ndarray, mode: str = "obstacle") -> Dict:
 
         det_info = {
             "label": f"₹{val}" if mode == "currency" and val > 0 else raw_label,
-            "confidence": round(conf, 2),
-            "track_id": idx + 1,
+            "confidence": float(round(conf, 2)),
+            "track_id": int(idx + 1),
             "position": pos_label,
             "proximity": prox_label,
-            "priority": raw_label.lower() in PRIORITY_OBSTACLES,
+            "priority": bool(raw_label.lower() in PRIORITY_OBSTACLES),
             "bbox_pct": {
-                "left": round((x1 / w) * 100, 2),
-                "top": round((y1 / h) * 100, 2),
-                "width": round((bw / w) * 100, 2),
-                "height": round((bh / h) * 100, 2)
+                "left": float(round((x1 / w) * 100, 2)),
+                "top": float(round((y1 / h) * 100, 2)),
+                "width": float(round((bw / w) * 100, 2)),
+                "height": float(round((bh / h) * 100, 2))
             }
         }
         detections_list.append(det_info)
