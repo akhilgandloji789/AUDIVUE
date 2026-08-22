@@ -197,24 +197,21 @@ document.addEventListener('DOMContentLoaded', async () => {
           document.getElementById('engineBadge').textContent = data.engine;
         }
         if (data.status === 'success' && Array.isArray(data.detections)) {
-          // If real detections found from backend YOLO model
-          if (data.detections.length > 0) {
-            arLayer.innerHTML = '';
-            data.detections.forEach(det => {
-              const box = document.createElement('div');
-              box.className = 'ar-box';
-              box.style.top = det.bbox_pct.top + '%';
-              box.style.left = det.bbox_pct.left + '%';
-              box.style.width = det.bbox_pct.width + '%';
-              box.style.height = det.bbox_pct.height + '%';
-              if (det.proximity === 'Close') {
-                box.style.borderColor = '#ffb4ab';
-                box.style.boxShadow = '0 0 18px rgba(255,180,171,0.6)';
-              }
-              box.innerHTML = `<div class="ar-label"><span class="ar-dot"></span>${det.label} — ${Math.round(det.confidence * 100)}% (${det.position}, ${det.proximity})</div>`;
-              arLayer.appendChild(box);
-            });
-          }
+          arLayer.innerHTML = '';
+          data.detections.forEach(det => {
+            const box = document.createElement('div');
+            box.className = 'ar-box';
+            box.style.top = det.bbox_pct.top + '%';
+            box.style.left = det.bbox_pct.left + '%';
+            box.style.width = det.bbox_pct.width + '%';
+            box.style.height = det.bbox_pct.height + '%';
+            if (det.proximity === 'Close') {
+              box.style.borderColor = '#ffb4ab';
+              box.style.boxShadow = '0 0 18px rgba(255,180,171,0.6)';
+            }
+            box.innerHTML = `<div class="ar-label"><span class="ar-dot"></span>${det.label} — ${Math.round(det.confidence * 100)}% (${det.position}, ${det.proximity})</div>`;
+            arLayer.appendChild(box);
+          });
 
           if (data.spoken_summary && data.spoken_summary !== lastSpokenText) {
             captionEl.textContent = `"${data.spoken_summary}"`;

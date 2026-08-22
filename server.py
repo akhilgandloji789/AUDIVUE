@@ -168,7 +168,7 @@ def detect_obstacle():
                 cls_id = int(tracked_detections.class_id[i]) if tracked_detections.class_id is not None else 0
                 track_id = int(tracked_detections.tracker_id[i]) if hasattr(tracked_detections, 'tracker_id') and tracked_detections.tracker_id is not None else (i + 1)
 
-                label = COCO_CLASSES[cls_id] if cls_id < len(COCO_CLASSES) else f"Object_{cls_id}"
+                label = COCO_CLASSES.get(cls_id) or COCO_CLASSES.get(cls_id + 1) or f"Object_{cls_id}"
                 x1, y1, x2, y2 = xyxy
 
                 bw = x2 - x1

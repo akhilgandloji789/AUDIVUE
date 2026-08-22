@@ -193,19 +193,17 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (response.ok) {
         const data = await response.json();
         if (data.status === 'success' && Array.isArray(data.detections)) {
-          if (data.detections.length > 0) {
-            arLayer.innerHTML = '';
-            data.detections.forEach(det => {
-              const box = document.createElement('div');
-              box.className = 'ar-box-violet';
-              box.style.top = det.bbox_pct.top + '%';
-              box.style.left = det.bbox_pct.left + '%';
-              box.style.width = det.bbox_pct.width + '%';
-              box.style.height = det.bbox_pct.height + '%';
-              box.innerHTML = `<div class="ar-label-violet">${det.label} — ${Math.round(det.confidence * 100)}%</div>`;
-              arLayer.appendChild(box);
-            });
-          }
+          arLayer.innerHTML = '';
+          data.detections.forEach(det => {
+            const box = document.createElement('div');
+            box.className = 'ar-box-violet';
+            box.style.top = det.bbox_pct.top + '%';
+            box.style.left = det.bbox_pct.left + '%';
+            box.style.width = det.bbox_pct.width + '%';
+            box.style.height = det.bbox_pct.height + '%';
+            box.innerHTML = `<div class="ar-label-violet">${det.label} — ${Math.round(det.confidence * 100)}%</div>`;
+            arLayer.appendChild(box);
+          });
 
           if (data.spoken_summary && data.spoken_summary !== lastSpokenText) {
             currencyTextEl.textContent = `"${data.spoken_summary}"`;

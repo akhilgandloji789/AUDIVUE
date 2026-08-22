@@ -1,5 +1,7 @@
-# Ignore model weights
+# Ignore model weights and bytecodes
 *.pt
 *.onnx
 *.engine
 *.tflite
+__pycache__/
+*.pyc
