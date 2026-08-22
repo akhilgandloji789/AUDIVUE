@@ -91,6 +91,18 @@
   draw(0);
 })();
 document.addEventListener('DOMContentLoaded',()=>{
+  // Check if user is already logged in
+  const user = typeof getAudivueUser === 'function' ? getAudivueUser() : null;
+  if (user && user.email) {
+    const googleBtn = document.querySelector('.btn-google');
+    if (googleBtn) {
+      googleBtn.innerHTML = `<span class="material-symbols-outlined" style="font-size:22px;">arrow_forward</span> Continue as ${user.name || 'User'}`;
+      googleBtn.onclick = () => { window.location.href = 'env_mode.html'; };
+    }
+    setTimeout(() => { window.location.href = 'env_mode.html'; }, 400);
+    return;
+  }
+
   if(typeof AudivueVoiceAssistant!=='undefined'){
     const va=new AudivueVoiceAssistant({rate:1.05,pitch:1.0});
     setTimeout(()=>va.speak('Welcome to AUDIVUE. Tap Sign in with Google to start.','high'),700);

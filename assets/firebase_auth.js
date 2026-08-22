@@ -279,6 +279,11 @@ if (typeof firebase !== 'undefined' && firebase.auth) {
             };
             localStorage.setItem('audivue_user', JSON.stringify(profile));
             await saveUserToFirebaseConsole(user);
+
+            // Auto redirect logged in user if on landing page
+            if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/')) {
+                window.location.href = 'env_mode.html';
+            }
         }
     });
 }
