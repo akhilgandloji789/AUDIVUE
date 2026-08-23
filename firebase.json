@@ -25,6 +25,10 @@
       {
         "source": "/env_mode.html",
         "destination": "/html/env_mode.html"
+      },
+      {
+        "source": "/currency_mode.html",
+        "destination": "/html/currency_mode.html"
       }
     ]
   }
