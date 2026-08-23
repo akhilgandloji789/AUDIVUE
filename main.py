@@ -9,9 +9,26 @@ Tech Stack:
 
 import os
 import sys
+import gc
 import asyncio
 import base64
 import time
+
+# Restrict PyTorch / OpenMP memory & thread bloat for 512MB RAM cloud servers (Render)
+os.environ["OMP_NUM_THREADS"] = "1"
+os.environ["MKL_NUM_THREADS"] = "1"
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
+os.environ["VECLIB_MAXIMUM_THREADS"] = "1"
+os.environ["NUMEXPR_NUM_THREADS"] = "1"
+
+try:
+    import torch
+    torch.set_num_threads(1)
+    if hasattr(torch, "set_num_interop_threads"):
+        torch.set_num_interop_threads(1)
+except Exception:
+    pass
+
 import numpy as np
 import cv2
 from typing import List, Dict
